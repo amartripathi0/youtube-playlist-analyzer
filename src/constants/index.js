@@ -1,5 +1,6 @@
+import logo from './logo.png'
 
-
+export const websiteLogo = logo;
 export const socialMediaIconWithLinks = [
     {
         label : "LinkedIn" , 
@@ -10,5 +11,9 @@ export const socialMediaIconWithLinks = [
         label : "Github" , 
         link : "https://github.com/amartripathi0",
   
+    },
+    {
+        label : "Email",
+        link : "mailto:theamartripathi@gmail.com"
     }
 ]
