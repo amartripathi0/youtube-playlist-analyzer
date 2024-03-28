@@ -25,7 +25,7 @@ React, Vite, Tailwind CSS, GitHub Pages, API Data Fetching.
 
 1. **Setup**:
     ```bash
-    git clone https://github.com/yourusername/youtube-playlist-analyzer.git
+    git clone [https://github.com/amartripathi0/youtube-playlist-analyzer.git]
     cd youtube-playlist-analyzer
 
     npm install
