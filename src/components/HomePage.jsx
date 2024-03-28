@@ -176,7 +176,7 @@ function getVideoDurationInDiifSpeed(nrmlTimeObj){
           onKeyUp={(e) => e.key === 'Enter' && handleGetData}
           onClick={handleGetData}
         >
-          <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+          <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
 Analyze</span>
         </button>
 
@@ -224,7 +224,7 @@ Analyze</span>
         <h1>Total videos in the playlist : <Container text={vidLen} /> </h1>
 
         <h1> 
-          Length of playlist from video no. <Container styles="underline font-base" text={from}/>  to <Container styles="underline font-base" text={to}/> is : <Container text={ `${playListDetail.hr} hours, ${playListDetail.min} minutes, ${playListDetail.sec} seconds`}/>
+          Length of playlist from video no. <Container additionalStyles="underline font-base" text={from}/>  to <Container additionalStyles="underline font-base" text={to}/> is : <Container text={ `${playListDetail.hr} hours, ${playListDetail.min} minutes, ${playListDetail.sec} seconds`}/>
         </h1>
 
         

@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 
-const Container = ({text , styles }) => {
+const Container = ({text , additionalStyles }) => {
   return (
     <span
-    className={`${styles} font-semibold`}>{text}</span>
+    className={`${additionalStyles} font-semibold`}>{text}</span>
   ) 
 }
 
