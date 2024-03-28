@@ -1,4 +1,5 @@
 {
+  "homepage": "http://amartripathi0.github.io/youtube-playlist-analyzer",
   "name": "youtube-playlist-analyzer",
   "private": true,
   "version": "0.0.0",
@@ -14,6 +15,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.14",
     "axios": "^1.5.1",
+    "framer-motion": "^11.0.23",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.47.0",
