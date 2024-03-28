@@ -1,4 +1,5 @@
 import  { useState } from "react";
+import "./home.css";
 import axios from "axios";
 import Container from "./Container";
 
@@ -151,8 +152,7 @@ function getVideoDurationInDiifSpeed(nrmlTimeObj){
   }
 
   return (
-    <div className="mt-24  text-black  font-semibold px-20 max-sm:px-5 flex flex-col gap-5  
-    ">
+    <div className="mt-24  text-black  font-semibold px-20 max-sm:px-5 flex flex-col gap-5  ">
 
       {/* Input Heading:Enter YouTube playlist link below :-  */}
       <h1 className=" text-2xl max-sm:text-base">
@@ -167,6 +167,9 @@ function getVideoDurationInDiifSpeed(nrmlTimeObj){
           className="border-2  border-black w-4/5 h-10  text-md pl-3 rounded-md max-sm:text-sm  text-clip"
           placeholder="https://www.youtube.com/playlist?list=PL3Y15344T8045DroPBjkYJQCz9tndR17tSSmG"
         />
+
+
+
         <button
         className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800"        
           
