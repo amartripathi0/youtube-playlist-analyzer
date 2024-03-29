@@ -16,16 +16,11 @@ React, Vite, Tailwind CSS, GitHub Pages, API Data Fetching.
 - Additionally, users can preview the time required to watch the playlist at various YouTube playback speeds, offering flexibility and convenience in managing viewing preferences.
 
 
-
-
-
-
-
 ## Getting Started
 
 1. **Setup**:
     ```bash
-    git clone https://github.com/yourusername/youtube-playlist-analyzer.git
+    git clone https://github.com/amartripathi0/youtube-playlist-analyzer.git
     cd youtube-playlist-analyzer
 
     npm install
@@ -34,7 +29,7 @@ React, Vite, Tailwind CSS, GitHub Pages, API Data Fetching.
 2. **API Key Configuration**:
     - Obtain a YouTube Data API key.
     - Create a `.env` file in the root directory.
-    - Add `VITE_API_KEY=your_api_key_here`.
+    - Add `VITE_YT_API_KEY=your_api_key_here`.
 
 3. **Launch**:
     ```bash
@@ -54,4 +49,4 @@ Feel free to fork the project, make improvements, and submit a pull request. We 
 
 ## Deployment
 
-Check out the live application [here](https://amartripathi0.github.io/youtube-playlist-analyzer/).
+Check out the live application [here](https://youtube-playlist-analyzer-teal.vercel.app/).
