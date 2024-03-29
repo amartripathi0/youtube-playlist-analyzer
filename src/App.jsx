@@ -3,7 +3,9 @@ import './App.css'
 import HomePage from './components/HomePage'
 import NavBar from './components/NavBar'
 import SocialHandles from './components/SocialHandles'
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+  
 function App() {
   // const [count, setCount] = useState(0)
 
@@ -13,6 +15,7 @@ function App() {
 bg-gradient-to-r from-rose-100 to-teal-100       
      '>
 
+    <ToastContainer  className="mt-10"/>
     <NavBar/>
     <HomePage/>
 
