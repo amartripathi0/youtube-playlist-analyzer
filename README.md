@@ -1,6 +1,6 @@
 # YouTube Playlist Analyzer
 
-A web application to calculate the total watch time of YouTube playlists at various playback speeds, developed to explore React, Vite, Tailwind CSS, Google Youtube API data fetching, and deployment with GitHub Pages.
+A web application to calculate the total watch time of YouTube playlists at various playback speeds, developed to explore React, Vite, Tailwind CSS, Google Youtube API data fetching, and deployment with Vercel.
 
 ## Project Background
 
