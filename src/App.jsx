@@ -22,7 +22,7 @@ bg-gradient-to-r from-rose-100 to-teal-100
     
     <footer  className=' bg-black h-14 flex items-center justify-center gap-6 fixed w-screen bottom-0'>
 
-      <h1 className='font-medium text-lg'>
+      <h1 className='font-medium text-base'>
       Made By - Amar Tripathi
 
       </h1>

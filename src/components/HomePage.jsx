@@ -139,7 +139,7 @@ function HomePage() {
     "
     >
       {/* Input Heading:Enter YouTube playlist link below :-  */}
-      <h1 className=" text-2xl max-sm:text-base">
+      <h1 className=" text-xl max-sm:text-base">
         Enter YouTube playlist link below-
       </h1>
 
@@ -148,7 +148,7 @@ function HomePage() {
         <input
           type="text"
           onChange={handlePlaylistLinkInputChange}
-          className="border-2  border-black w-4/5 h-10  text-md pl-3 rounded-md max-sm:text-sm  text-clip"
+          className="border-2  border-black w-4/5 h-10  text-sm pl-3 rounded-md max-sm:text-sm  text-clip"
           placeholder="https://www.youtube.com/playlist?list=PL3Y15344T8045DroPBjkYJQCz9tndR17tSSmG"
         />
         <button
@@ -162,13 +162,13 @@ function HomePage() {
         </button>
       </div>
 
-      <div className="flex items-center  text-xl gap-10">
+      <div className="flex items-center  text-md gap-10">
         <div className="flex gap-6 max-sm:text-base max-sm:justify-between max-sm:w-full pr-5">
           <div className=" flex items-center  gap-3 ">
             <label htmlFor="from">From : </label>
             <input
               type="number"
-              className="border-2  border-black w-16 h-9   pl-3 rounded-md  flex  text-lg max-sm:text-sm"
+              className="border-2  border-black w-16 h-9   pl-3 rounded-md  flex  text-md max-sm:text-sm"
               placeholder="1"
               onChange={handleLowerRangeFromInput}
             />
@@ -178,7 +178,7 @@ function HomePage() {
             <label htmlFor="from">To : </label>
             <input
               type="number"
-              className="border-2  border-black w-16 h-9   pl-3 rounded-md  flex  text-lg max-sm:text-sm"
+              className="border-2  border-black w-16 h-9   pl-3 rounded-md  flex  text-md max-sm:text-sm"
               placeholder={totalVideosInPlaylist ? totalVideosInPlaylist : "50"}
               onChange={handleUpperRangeToInput}
             />
@@ -187,7 +187,7 @@ function HomePage() {
       </div>
 
       {showVideoPlaybackDuration && (
-        <div className=" w-[100%]  mr-10 font-medium flex flex-col gap-3 text-lg max-sm:text-base">
+        <div className=" w-[100%]  mr-10 font-medium flex flex-col gap-3 text-md max-sm:text-base">
           <h1>
             Total videos in the playlist :{" "}
             <Container text={totalVideosInPlaylist} />{" "}
@@ -207,7 +207,7 @@ function HomePage() {
             />
           </h1>
 
-          <h2 className="flex p-1 px-3 w-1/5 hover:bg-slate-200 transition-all gap-10 bg-slate-100 max-sm:w-full justify-between">
+          <h2 className="flex p-1 px-3 w-1/4 hover:bg-slate-200 transition-all gap-10 bg-slate-100 max-sm:w-full justify-between">
             At 1.25x :{" "}
             <span className=" font-semibold">
               {vidPlaybackTimeInDiffSpeed["1.25"]?.hr} hrs,{" "}
@@ -216,7 +216,7 @@ function HomePage() {
             </span>
           </h2>
 
-          <h2 className="flex p-1 px-3 w-1/5 hover:bg-slate-200 transition-all gap-10 bg-slate-100 max-sm:w-full justify-between">
+          <h2 className="flex p-1 px-3 w-1/4 hover:bg-slate-200 transition-all gap-10 bg-slate-100 max-sm:w-full justify-between">
             At 1.50x :{" "}
             <span className=" font-semibold">
               {vidPlaybackTimeInDiffSpeed["1.5"]?.hr} hrs,{" "}
@@ -225,7 +225,7 @@ function HomePage() {
             </span>
           </h2>
 
-          <h2 className="flex p-1 px-3 w-1/5 hover:bg-slate-200 transition-all gap-10 bg-slate-100 max-sm:w-full justify-between">
+          <h2 className="flex p-1 px-3 w-1/4 hover:bg-slate-200 transition-all gap-10 bg-slate-100 max-sm:w-full justify-between">
             At 1.75x :{" "}
             <span className=" font-semibold">
               {" "}
@@ -235,7 +235,7 @@ function HomePage() {
             </span>
           </h2>
 
-          <h2 className="flex p-1 px-3 w-1/5 hover:bg-slate-200 transition-all gap-10 bg-slate-100 max-sm:w-full justify-between">
+          <h2 className="flex p-1 px-3 w-1/4 hover:bg-slate-200 transition-all gap-10 bg-slate-100 max-sm:w-full justify-between">
             At 2.00x :{" "}
             <span className=" font-semibold">
               {vidPlaybackTimeInDiffSpeed["2"]?.hr} hrs, {vidPlaybackTimeInDiffSpeed["2"]?.min}{" "}
@@ -243,7 +243,7 @@ function HomePage() {
             </span>
           </h2>
 
-          <p className="  p-3 rounded-md mt-10 max-sm:mt-6 bg-slate-200 font-light  text-xl max-sm:text-base">
+          <p className="  p-3 rounded-md mt-10 max-sm:mt-6 bg-slate-200 font-light  text-md max-sm:text-base">
             YouTube Playlist Analyzer evaluates your playlist&apos;s total
             duration, then breaks down viewing times at speeds of 1.25x, 1.5x,
             1.75x, and 2x. Streamline your viewing experience and optimize your
