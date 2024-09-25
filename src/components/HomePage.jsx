@@ -19,7 +19,7 @@ function HomePage() {
   const [totalTimeDurationOfPlaylist, setTotalTimeDurationOfPlaylist] =
     useState({});
   const [vidPlaybackTimeInDiffSpeed, setVidPlaybackTimeInDiffSpeed] = useState(
-    {},
+    {}
   );
   const [showVideoPlaybackDuration, setShowVideoPlaybackDuration] =
     useState(false);
@@ -32,7 +32,7 @@ function HomePage() {
     if (
       playlistLink.length === 0 ||
       !/https?:\/\/(www\.)?youtube\.com\/playlist\?list=[a-zA-Z0-9_-]+/.test(
-        playlistLink,
+        playlistLink
       )
     ) {
       toast.error("Please enter a valid youtube playlist link.", {
@@ -53,7 +53,7 @@ function HomePage() {
         // storing array having videoId of all videos in the playlist
         const playlistAllVideosIdArray = await getAllVideosIdInPlaylist(
           playlistId,
-          API_KEY,
+          API_KEY
         );
 
         setAllVideosId(playlistAllVideosIdArray);
@@ -112,13 +112,13 @@ function HomePage() {
   async function handlePlaylistDataProcessing() {
     const eachVideoDurationArray = await getEachVideoDurationArray(
       allVideosId,
-      API_KEY,
+      API_KEY
     );
     const totalTimeDuration = getTotalTimeDuration(
       eachVideoDurationArray,
       startVideoNumber,
       endVideoNumber,
-      totalVideosInPlaylist,
+      totalVideosInPlaylist
     );
     setTotalTimeDurationOfPlaylist(totalTimeDuration);
 
