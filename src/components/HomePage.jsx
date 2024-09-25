@@ -100,7 +100,14 @@ function HomePage() {
       toast.error("Please enter a valid lower limit.", {
         position: "top-center",
       });
-    } else {
+    }
+     else if (e.target.value > 50) {
+       toast.error("Maximum video limit is 50 :(", {
+         position: "top-center",
+       });
+       setStartVideoNumber(50);
+    } 
+     else {
       setStartVideoNumber(parseInt(e.target.value, 10));
     }
   }
@@ -109,6 +116,12 @@ function HomePage() {
       toast.error("Please enter a valid upper limit.", {
         position: "top-center",
       });
+    } 
+    else if (e.target.value > 50) {
+       toast.error("Maximum video limit is 50 :(", {
+         position: "top-center",
+       });
+       setEndVideoNumber(50);
     } else {
       setEndVideoNumber(parseInt(e.target.value, 10));
       setEndVideoInputChanged(true);
@@ -132,8 +145,8 @@ function HomePage() {
       getVideoDurationInDiffSpeed(totalTimeDuration);
     setVidPlaybackTimeInDiffSpeed(playbackTimeInDiffSpeed);
     setShowVideoPlaybackDuration(true);
-    console.log(showVideoPlaybackDuration);
-    console.log(endVideoNumber);
+    // console.log(showVideoPlaybackDuration);
+    // console.log(endVideoNumber);
   }
   return (
     <div
@@ -173,12 +186,16 @@ function HomePage() {
               className="border-2  border-black w-16 h-9   pl-3 rounded-md  flex  text-md max-sm:text-sm"
               placeholder="1"
               onChange={handleLowerRangeFromInput}
+              min={1}
+              max={50}
             />
           </div>
 
           <div className="flex items-center  gap-3">
             <label htmlFor="from">To : </label>
             <input
+              min={1}
+              max={50}
               type="number"
               className="border-2  border-black w-16 h-9   pl-3 rounded-md  flex  text-md max-sm:text-sm"
               placeholder={totalVideosInPlaylist ? totalVideosInPlaylist : "50"}
