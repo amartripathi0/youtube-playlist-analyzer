@@ -136,7 +136,7 @@ function HomePage() {
     >
       {/* Input Heading:Enter YouTube playlist link below :-  */}
       <h1 className=" text-xl max-sm:text-base">
-        Enter YouTube playlist link below-
+        Enter a YouTube playlist link below-
       </h1>
 
       {/* Input field and Analyze button */}
