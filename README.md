@@ -10,31 +10,31 @@ React, Vite, Tailwind CSS, GitHub Pages, API Data Fetching.
 
 ## Features
 
-
 - The YouTube Playlist Analyzer simplifies playlist consumption by calculating the total duration of videos within a given YouTube playlist.
 
 - Additionally, users can preview the time required to watch the playlist at various YouTube playback speeds, offering flexibility and convenience in managing viewing preferences.
 
-
 ## Getting Started
 
 1. **Setup**:
-    ```bash
-    git clone https://github.com/amartripathi0/youtube-playlist-analyzer.git
-    cd youtube-playlist-analyzer
 
-    npm install
-    ```
+   ```bash
+   git clone https://github.com/amartripathi0/youtube-playlist-analyzer.git
+   cd youtube-playlist-analyzer
+
+   npm install
+   ```
 
 2. **API Key Configuration**:
-    - Obtain a YouTube Data API key.
-    - Create a `.env` file in the root directory.
-    - Add `VITE_YT_API_KEY=your_api_key_here`.
+
+   - Obtain a YouTube Data API key.
+   - Create a `.env` file in the root directory.
+   - Add `VITE_YT_API_KEY=your_api_key_here`.
 
 3. **Launch**:
-    ```bash
-    npm run dev
-    ```
+   ```bash
+   npm run dev
+   ```
 
 Navigate to `http://localhost:5173` to explore the application.
 

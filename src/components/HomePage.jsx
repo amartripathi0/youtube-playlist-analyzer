@@ -16,50 +16,48 @@ function HomePage() {
   const [startVideoNumber, setStartVideoNumber] = useState(1);
   const [endVideoNumber, setEndVideoNumber] = useState(1);
   const [totalVideosInPlaylist, setTotalVideosInPlaylist] = useState(0);
-  const [totalTimeDurationOfPlaylist, setTotalTimeDurationOfPlaylist] = useState({});
-  const [vidPlaybackTimeInDiffSpeed, setVidPlaybackTimeInDiffSpeed] = useState({});
-  const [showVideoPlaybackDuration, setShowVideoPlaybackDuration] = useState(false);
+  const [totalTimeDurationOfPlaylist, setTotalTimeDurationOfPlaylist] =
+    useState({});
+  const [vidPlaybackTimeInDiffSpeed, setVidPlaybackTimeInDiffSpeed] = useState(
+    {},
+  );
+  const [showVideoPlaybackDuration, setShowVideoPlaybackDuration] =
+    useState(false);
   const [playlistInputChanged, setPlaylistInputChanged] = useState(false);
   const [endVideoInputChanged, setEndVideoInputChanged] = useState(false);
   const API_KEY = import.meta.env.VITE_YT_API_KEY;
 
-
-
   async function handleFetchAndStoreVideoId() {
-    // check for : invalid playlist link 
+    // check for : invalid playlist link
     if (
       playlistLink.length === 0 ||
       !/https?:\/\/(www\.)?youtube\.com\/playlist\?list=[a-zA-Z0-9_-]+/.test(
-        playlistLink
+        playlistLink,
       )
     ) {
       toast.error("Please enter a valid youtube playlist link.", {
         position: "top-center",
       });
-    } 
+    }
     // check for : lower and upper limit video number
     else if (startVideoNumber > endVideoNumber) {
       toast.error("From Video Number cannot be greater than To Video Number.", {
         position: "top-center",
       });
-    } 
-
-    else {
+    } else {
       // extract playlistID from input playlist link by user
       const playlistId = getPlaylistId(playlistLink);
 
-      // if there is new input to playlist link 
+      // if there is new input to playlist link
       if (allVideosId.length === 0 || playlistInputChanged) {
         // storing array having videoId of all videos in the playlist
         const playlistAllVideosIdArray = await getAllVideosIdInPlaylist(
           playlistId,
-          API_KEY
+          API_KEY,
         );
 
         setAllVideosId(playlistAllVideosIdArray);
-        
-      } 
-      else {
+      } else {
         /*if there is already playlist data stored in the state then there is no need to 
           fetch again, this reduces number of api calls, just process the data
         */
@@ -69,15 +67,13 @@ function HomePage() {
   }
 
   useEffect(() => {
-    
     if (allVideosId.length !== 0) {
       setTotalVideosInPlaylist(allVideosId.length);
 
-      if(!endVideoInputChanged){
+      if (!endVideoInputChanged) {
         // default case : no user input for (upper range / to range) of video
-          setEndVideoNumber(parseInt(allVideosId.length));
+        setEndVideoNumber(parseInt(allVideosId.length));
       }
-      
 
       if (totalVideosInPlaylist > 0) {
         handlePlaylistDataProcessing();
@@ -86,13 +82,12 @@ function HomePage() {
     }
   }, [allVideosId, totalVideosInPlaylist]);
 
-
   function handlePlaylistLinkInputChange(e) {
     setPlaylistLink(e.target.value);
     setPlaylistInputChanged(true);
     setStartVideoNumber(1);
     setEndVideoNumber(1);
-    setEndVideoInputChanged(false)
+    setEndVideoInputChanged(false);
   }
   function handleLowerRangeFromInput(e) {
     if (e.target.value <= 0) {
@@ -110,24 +105,25 @@ function HomePage() {
       });
     } else {
       setEndVideoNumber(parseInt(e.target.value));
-      setEndVideoInputChanged(true)
+      setEndVideoInputChanged(true);
     }
   }
 
   async function handlePlaylistDataProcessing() {
     const eachVideoDurationArray = await getEachVideoDurationArray(
       allVideosId,
-      API_KEY
+      API_KEY,
     );
     const totalTimeDuration = getTotalTimeDuration(
       eachVideoDurationArray,
       startVideoNumber,
       endVideoNumber,
-      totalVideosInPlaylist
+      totalVideosInPlaylist,
     );
     setTotalTimeDurationOfPlaylist(totalTimeDuration);
 
-    const playbackTimeInDiffSpeed = getVideoDurationInDiffSpeed(totalTimeDuration);
+    const playbackTimeInDiffSpeed =
+      getVideoDurationInDiffSpeed(totalTimeDuration);
     setVidPlaybackTimeInDiffSpeed(playbackTimeInDiffSpeed);
     setShowVideoPlaybackDuration(true);
     console.log(showVideoPlaybackDuration);
@@ -200,7 +196,10 @@ function HomePage() {
               text={startVideoNumber}
             />{" "}
             to{" "}
-            <Container additionalStyles="underline font-base" text={endVideoNumber} />{" "}
+            <Container
+              additionalStyles="underline font-base"
+              text={endVideoNumber}
+            />{" "}
             is :{" "}
             <Container
               text={`${totalTimeDurationOfPlaylist.hr} hours, ${totalTimeDurationOfPlaylist.min} minutes, ${totalTimeDurationOfPlaylist.sec} seconds`}
@@ -238,8 +237,9 @@ function HomePage() {
           <h2 className="flex p-1 px-3 w-1/4 hover:bg-slate-200 transition-all gap-10 bg-slate-100 max-sm:w-full justify-between">
             At 2.00x :{" "}
             <span className=" font-semibold">
-              {vidPlaybackTimeInDiffSpeed["2"]?.hr} hrs, {vidPlaybackTimeInDiffSpeed["2"]?.min}{" "}
-              min, {vidPlaybackTimeInDiffSpeed["2"]?.sec} sec{" "}
+              {vidPlaybackTimeInDiffSpeed["2"]?.hr} hrs,{" "}
+              {vidPlaybackTimeInDiffSpeed["2"]?.min} min,{" "}
+              {vidPlaybackTimeInDiffSpeed["2"]?.sec} sec{" "}
             </span>
           </h2>
 
