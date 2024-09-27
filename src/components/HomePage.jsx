@@ -9,8 +9,11 @@ import {
   getTotalTimeDuration,
   getVideoDurationInDiffSpeed,
 } from "../utils";
-import {  IoMdTime } from "react-icons/io";
+import { IoMdTime } from "react-icons/io";
 import { PiVideoLight } from "react-icons/pi";
+import PlaybackSpeedWatchtime from "./playback-speed-watchtime";
+import SemiboldSpanContainer from "./Container";
+import VideoRangeInput from "./video-range-input";
 
 function HomePage() {
   const [playlistLink, setPlaylistLink] = useState("");
@@ -37,13 +40,14 @@ function HomePage() {
         playlistLink
       )
     ) {
-      toast.error("Please enter a valid youtube playlist link.", {
-      });
+      toast.error("Please enter a valid youtube playlist link.", {});
     }
     // check for : lower and upper limit video number
     else if (startVideoNumber > endVideoNumber) {
-      toast.error("From Video Number cannot be greater than To Video Number.", {
-      });
+      toast.error(
+        "From Video Number cannot be greater than To Video Number.",
+        {}
+      );
     } else {
       // extract playlistID from input playlist link by user
       const playlistId = getPlaylistId(playlistLink);
@@ -59,8 +63,7 @@ function HomePage() {
 
           setAllVideosId(playlistAllVideosIdArray);
         } catch (error) {
-          toast.error("Error fetching video IDs. Please try again.", {
-              });
+          toast.error("Error fetching video IDs. Please try again.", {});
         }
       } else {
         /*if there is already playlist data stored in the state then there is no need to 
@@ -96,27 +99,20 @@ function HomePage() {
   }
   function handleLowerRangeFromInput(e) {
     if (e.target.value <= 0) {
-      toast.error("Please enter a valid lower limit.", {
-      });
-    }
-     else if (e.target.value > 50) {
-       toast.error("Maximum video limit is 50 :(", {
-        });
-       setStartVideoNumber(50);
-    } 
-     else {
+      toast.error("Please enter a valid lower limit.", {});
+    } else if (e.target.value > 50) {
+      toast.error("Maximum video limit is 50 :(", {});
+      setStartVideoNumber(50);
+    } else {
       setStartVideoNumber(parseInt(e.target.value, 10));
     }
   }
   function handleUpperRangeToInput(e) {
     if (e.target.value <= 0) {
-      toast.error("Please enter a valid upper limit.", {
-      });
-    } 
-    else if (e.target.value > 50) {
-       toast.error("Maximum video limit is 50 :(", {
-        });
-       setEndVideoNumber(50);
+      toast.error("Please enter a valid upper limit.", {});
+    } else if (e.target.value > 50) {
+      toast.error("Maximum video limit is 50 :(", {});
+      setEndVideoNumber(50);
     } else {
       setEndVideoNumber(parseInt(e.target.value, 10));
       setEndVideoInputChanged(true);
@@ -144,22 +140,25 @@ function HomePage() {
     // console.log(endVideoNumber);
   }
   return (
-    <div className="mt-24 text-black font-semibold mx-48 max-sm:px-5 flex flex-col gap-4">
-      {/* Input Heading:Enter YouTube playlist link below :-  */}
-      <h1 className=" text-xl max-sm:text-base">
-        Enter a YouTube playlist link below-
+    <div className="mt-24 text-black mx-48 font-medium max-sm:px-5 flex flex-col gap-5"> 
+
+    <div className="flex flex-col gap-2">
+
+      {/* Input Heading:Enter a YouTube playlist link below :-  */}
+      <h1 className=" text-lg max-sm:text-base">
+        Enter a YouTube playlist link below:-
       </h1>
 
       {/* Input field and Analyze button */}
-      <div className="flex items-center justify-between  rounded border border-red-900">
+      <div className="flex items-center justify-between  rounded border-neutral-400 focus-within:border-purple-800 border-2">
         <input
           type="text"
           onChange={handlePlaylistLinkInputChange}
-          className="outline-none w-full h-10  text-sm pl-3 rounded-md max-sm:text-sm  text-clip "
+          className="outline-none w-full h-10  text-sm pl-3 rounded-md max-sm:text-sm font-normal text-clip bg-neutral-100"
           placeholder="https://www.youtube.com/playlist?list=PL3Y15344T8045DroPBjkYJQCz9tndR17tSSmG"
         />
         <button
-          className="p-2 px-4 flex items-center gap-2 h-full text-sm bg-gradient-to-b to-purple-900 via-neutral-800 border-neutral-400 rounded-r from-black hover:scale-105  duration-150 text-neutral-100"
+          className="p-2 px-4 flex items-center gap-2 h-full text-sm bg-gradient-to-b to-purple-950 via-neutral-800 border-neutral-400 rounded-r from-black hover:scale-105  duration-150 text-neutral-100"
           onKeyUp={(e) => e.key === "Enter" && handleFetchAndStoreVideoId()}
           onClick={handleFetchAndStoreVideoId}
         >
@@ -169,14 +168,13 @@ function HomePage() {
           </span>
         </button>
       </div>
+    </div>
 
       <div className="flex items-center  text-md gap-10">
         <div className="flex gap-6 max-sm:text-base max-sm:justify-between max-sm:w-full pr-5">
           <div className=" flex items-center  gap-3 ">
             <label htmlFor="from">From : </label>
-            <input
-              type="number"
-              className="border-2  border-black w-16 h-9   pl-3 rounded-md  flex  text-md max-sm:text-sm"
+            <VideoRangeInput
               placeholder="1"
               onChange={handleLowerRangeFromInput}
               min={1}
@@ -186,11 +184,9 @@ function HomePage() {
 
           <div className="flex items-center  gap-3">
             <label htmlFor="from">To : </label>
-            <input
+            <VideoRangeInput
               min={1}
               max={50}
-              type="number"
-              className="border-2  border-black w-16 h-9   pl-3 rounded-md  flex  text-md max-sm:text-sm"
               placeholder={totalVideosInPlaylist ? totalVideosInPlaylist : "50"}
               onChange={handleUpperRangeToInput}
             />
@@ -199,68 +195,44 @@ function HomePage() {
       </div>
 
       {showVideoPlaybackDuration && (
-        <div className=" w-[100%]  mr-10 font-medium flex flex-col gap-3 text-md max-sm:text-base">
-          <h1>
-            Total videos in the playlist :{" "}
-            <Container text={totalVideosInPlaylist} />{" "}
-          </h1>
+        <div className="font-normal flex flex-col gap-5 text-base">
+          <div className="flex flex-col gap-2">
+            <h1>
+              Total videos in the playlist :{" "}
+              <SemiboldSpanContainer text={`${totalVideosInPlaylist} videos`} />
+            </h1>
 
-          <h1>
-            Length of playlist from video no.{" "}
-            <Container
-              additionalStyles="underline font-base"
-              text={startVideoNumber}
-            />{" "}
-            to{" "}
-            <Container
-              additionalStyles="underline font-base"
-              text={endVideoNumber}
-            />{" "}
-            is :{" "}
-            <Container
-              text={`${totalTimeDurationOfPlaylist.hr} hours, ${totalTimeDurationOfPlaylist.min} minutes, ${totalTimeDurationOfPlaylist.sec} seconds`}
+            <h1>
+              Length of playlist from video no.{" "}
+              <SemiboldSpanContainer text={startVideoNumber} /> to{" "}
+              <SemiboldSpanContainer text={endVideoNumber} /> is :{" "}
+              <SemiboldSpanContainer
+                text={`${totalTimeDurationOfPlaylist.hr} hours, ${totalTimeDurationOfPlaylist.min} minutes, ${totalTimeDurationOfPlaylist.sec} seconds.`}
+              />
+            </h1>
+          </div>
+
+          {/*Watchtime at various Playback Speeds */}
+          <div className="flex flex-col gap-2">
+            <PlaybackSpeedWatchtime
+              speed="1.25"
+              vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed}
             />
-          </h1>
-
-          <h2 className="flex p-1 px-3 w-1/4 hover:bg-slate-200 transition-all gap-10 bg-slate-100 max-sm:w-full justify-between">
-            At 1.25x :{" "}
-            <span className=" font-semibold">
-              {vidPlaybackTimeInDiffSpeed["1.25"]?.hr} hrs,{" "}
-              {vidPlaybackTimeInDiffSpeed["1.25"]?.min} min,{" "}
-              {vidPlaybackTimeInDiffSpeed["1.25"]?.sec} sec
-            </span>
-          </h2>
-
-          <h2 className="flex p-1 px-3 w-1/4 hover:bg-slate-200 transition-all gap-10 bg-slate-100 max-sm:w-full justify-between">
-            At 1.50x :{" "}
-            <span className=" font-semibold">
-              {vidPlaybackTimeInDiffSpeed["1.5"]?.hr} hrs,{" "}
-              {vidPlaybackTimeInDiffSpeed["1.5"]?.min} min,{" "}
-              {vidPlaybackTimeInDiffSpeed["1.5"]?.sec} sec
-            </span>
-          </h2>
-
-          <h2 className="flex p-1 px-3 w-1/4 hover:bg-slate-200 transition-all gap-10 bg-slate-100 max-sm:w-full justify-between">
-            At 1.75x :{" "}
-            <span className=" font-semibold">
-              {" "}
-              {vidPlaybackTimeInDiffSpeed["1.75"]?.hr} hrs,{" "}
-              {vidPlaybackTimeInDiffSpeed["1.75"]?.min} min,{" "}
-              {vidPlaybackTimeInDiffSpeed["1.75"]?.sec} sec
-            </span>
-          </h2>
-
-          <h2 className="flex p-1 px-3 w-1/4 hover:bg-slate-200 transition-all gap-10 bg-slate-100 max-sm:w-full justify-between">
-            At 2.00x :{" "}
-            <span className=" font-semibold">
-              {vidPlaybackTimeInDiffSpeed["2"]?.hr} hrs,{" "}
-              {vidPlaybackTimeInDiffSpeed["2"]?.min} min,{" "}
-              {vidPlaybackTimeInDiffSpeed["2"]?.sec} sec{" "}
-            </span>
-          </h2>
+            <PlaybackSpeedWatchtime
+              speed="1.5"
+              vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed}
+            />
+            <PlaybackSpeedWatchtime
+              speed="1.75"
+              vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed}
+            />
+            <PlaybackSpeedWatchtime
+              speed="2"
+              vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed}
+            />
+          </div>
         </div>
       )}
-
     </div>
   );
 }

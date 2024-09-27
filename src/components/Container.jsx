@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 
-const Container = ({ text, additionalStyles }) => {
-  return <span className={`${additionalStyles} font-semibold`}>{text}</span>;
+const SemiboldSpanContainer = ({ text, additionalStyles }) => {
+  return <span className={`${additionalStyles} font-medium`}>{text}</span>;
 };
 
-export default Container;
+export default SemiboldSpanContainer;
