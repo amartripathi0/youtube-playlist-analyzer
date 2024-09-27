@@ -4,6 +4,7 @@ import NavBar from "./components/NavBar";
 import SocialHandles from "./components/SocialHandles";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Analytics } from "@vercel/analytics/react";
 
 function App() {
   // const [count, setCount] = useState(0)
@@ -14,6 +15,7 @@ function App() {
      "
     >
       <ToastContainer className="mt-10" />
+      <Analytics />
       <NavBar />
       <HomePage />
 
