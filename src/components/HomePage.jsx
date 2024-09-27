@@ -140,7 +140,7 @@ function HomePage() {
     // console.log(setTotalTimeDurationOfPlaylist);
   }
   return (
-    <div className="mt-10 text-black mx-64 font-medium max-sm:px-5 flex flex-col gap-5 border">
+    <div className="mt-6 sm:mt-8 md:mt-10 text-black  mx-6 md:mx-28 lg:mx-64 font-medium flex flex-col gap-5 border">
       <div className="flex flex-col gap-2">
         {/* Input Heading:Enter a YouTube playlist link below :-  */}
         <h1 className=" text-lg max-sm:text-base">
@@ -152,25 +152,25 @@ function HomePage() {
           <input
             type="text"
             onChange={handlePlaylistLinkInputChange}
-            className="outline-none w-full h-10  text-sm pl-3 rounded-md max-sm:text-sm font-normal text-clip bg-neutral-100"
+            className="outline-none w-full h-8 sm:h-10 text-xs sm:text-sm px-2 sm:px-3 rounded-md font-normal text-clip bg-neutral-100"
             placeholder="https://www.youtube.com/playlist?list=PL3Y15344T8045DroPBjkYJQCz9tndR17tSSmG"
           />
           <button
-            className="p-2 px-4 flex items-center gap-2 h-full text-sm bg-gradient-to-b from-purple-400 to-pink-300 hover:from-purple-500 hover:to-pink-400 transition-all duration-300 text-neutral-800 hover-text-neutral-950"
+            className="p-2 sm:px-4 flex items-center gap-1 sm:gap-2 h-full text-sm bg-gradient-to-b from-purple-400 to-pink-300 hover:from-purple-500 hover:to-pink-400 transition-all duration-300 text-neutral-800 hover-text-neutral-950"
             onKeyUp={(e) => e.key === "Enter" && handleFetchAndStoreVideoId()}
             onClick={handleFetchAndStoreVideoId}
           >
             Analyze{" "}
             <span className="flex gap-1">
-              <PiVideoLight size={20} /> <IoMdTime size={18} />
+              <PiVideoLight size={20} className="max-sm:hidden"/> <IoMdTime size={18} />
             </span>
           </button>
         </div>
       </div>
 
-      <div className="flex items-center  text-md gap-10">
-        <div className="flex gap-6 max-sm:text-base max-sm:justify-between max-sm:w-full pr-5">
-          <div className=" flex items-center  gap-3 ">
+      <div className="flex items-center  text-base gap-10">
+        <div className="flex gap-6 text-sm max-sm:justify-between max-sm:w-full pr-5">
+          <div className=" flex items-center gap-2 sm:gap-3 ">
             <label htmlFor="from">From : </label>
             <VideoRangeInput
               placeholder="1"
@@ -180,8 +180,8 @@ function HomePage() {
             />
           </div>
 
-          <div className="flex items-center  gap-3">
-            <label htmlFor="from">To : </label>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <label htmlFor="to">To : </label>
             <VideoRangeInput
               min={1}
               max={50}

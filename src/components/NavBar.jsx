@@ -7,12 +7,12 @@ import SocialHandles from "./SocialHandles";
 export default function NavBar() {
   return (
     <nav
-      className="rounded-lg h-14  px-6
-     flex items-center justify-between sm:text-lg text-base mx-44 max-sm:px-5 
+      className="rounded-lg h-12 md:h-14 md:px-6 px-2
+     flex items-center justify-between sm:text-lg text-base mx-4 md:mx-20 lg:mx-44 
      bg-gradient-to-r from-pink-200  to-purple-100
      font-medium max-sm:gap-10 border border-neutral-300 shadow-md text-neutral-800"
     >
-      <a href="/" k className="flex items-center justify-center gap-4 h-4/5 ">
+      <a href="/" k className="flex items-center justify-center gap-4 h-4/5">
         {/* <FaYoutube size={20} color="#FF0000" /> */}
         <img
           src={websiteLogo}
@@ -20,7 +20,7 @@ export default function NavBar() {
           alt=""
         />
 
-        <h1 className="text-base hover:text-neutral-900 transition-colors duration-150">Youtube Playlist Analyzer</h1>
+        <h1 className="text-base hover:text-neutral-900 transition-colors duration-150 max-sm:hidden">Youtube Playlist Analyzer</h1>
       </a>
       <div className="flex">
         <SocialHandles />
