@@ -36,13 +36,11 @@ function HomePage() {
       )
     ) {
       toast.error("Please enter a valid youtube playlist link.", {
-        position: "top-center",
       });
     }
     // check for : lower and upper limit video number
     else if (startVideoNumber > endVideoNumber) {
       toast.error("From Video Number cannot be greater than To Video Number.", {
-        position: "top-center",
       });
     } else {
       // extract playlistID from input playlist link by user
@@ -60,8 +58,7 @@ function HomePage() {
           setAllVideosId(playlistAllVideosIdArray);
         } catch (error) {
           toast.error("Error fetching video IDs. Please try again.", {
-            position: "top-center",
-          });
+              });
         }
       } else {
         /*if there is already playlist data stored in the state then there is no need to 
@@ -98,13 +95,11 @@ function HomePage() {
   function handleLowerRangeFromInput(e) {
     if (e.target.value <= 0) {
       toast.error("Please enter a valid lower limit.", {
-        position: "top-center",
       });
     }
      else if (e.target.value > 50) {
        toast.error("Maximum video limit is 50 :(", {
-         position: "top-center",
-       });
+        });
        setStartVideoNumber(50);
     } 
      else {
@@ -114,13 +109,11 @@ function HomePage() {
   function handleUpperRangeToInput(e) {
     if (e.target.value <= 0) {
       toast.error("Please enter a valid upper limit.", {
-        position: "top-center",
       });
     } 
     else if (e.target.value > 50) {
        toast.error("Maximum video limit is 50 :(", {
-         position: "top-center",
-       });
+        });
        setEndVideoNumber(50);
     } else {
       setEndVideoNumber(parseInt(e.target.value, 10));
