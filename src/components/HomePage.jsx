@@ -158,7 +158,7 @@ function HomePage() {
           placeholder="https://www.youtube.com/playlist?list=PL3Y15344T8045DroPBjkYJQCz9tndR17tSSmG"
         />
         <button
-          className="p-2 px-4 flex items-center gap-2 h-full text-sm bg-gradient-to-b to-purple-950 via-neutral-800 border-neutral-400 rounded-r from-black hover:scale-105  duration-150 text-neutral-100"
+          className="p-2 px-4 flex items-center gap-2 h-full text-sm bg-gradient-to-b to-purple-950 via-neutral-800 border-neutral-400 hover:rounded-r from-black hover:scale-105  duration-150 text-neutral-100"
           onKeyUp={(e) => e.key === "Enter" && handleFetchAndStoreVideoId()}
           onClick={handleFetchAndStoreVideoId}
         >

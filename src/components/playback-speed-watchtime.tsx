@@ -8,7 +8,7 @@ function PlaybackSpeedWatchtime({
   vidPlaybackTimeInDiffSpeed: any;
 }) {
   return (
-    <div className="flex py-1.5 px-3 sm:w-1/3 font-medium hover:font-semibold hover:bg-slate-300 transition-all rounded bg-slate-200 w-full justify-between hover:scale-105 duration-200">
+    <div className="flex py-1.5 px-3 sm:w-1/4 font-medium hover:font-semibold hover:bg-slate-300 transition-all rounded bg-slate-200 w-full justify-between hover:scale-105 duration-200">
       <h3>At {speed}x :</h3>
       <span>
         {vidPlaybackTimeInDiffSpeed[speed]?.hr} hrs,{" "}
