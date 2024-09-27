@@ -144,7 +144,7 @@ function HomePage() {
     // console.log(endVideoNumber);
   }
   return (
-    <div className="mt-24 text-black font-semibold mx-20 max-sm:px-5 flex flex-col gap-4">
+    <div className="mt-24 text-black font-semibold mx-48 max-sm:px-5 flex flex-col gap-4">
       {/* Input Heading:Enter YouTube playlist link below :-  */}
       <h1 className=" text-xl max-sm:text-base">
         Enter a YouTube playlist link below-
@@ -260,12 +260,7 @@ function HomePage() {
           </h2>
         </div>
       )}
-      <p className="absolute bottom-24 p-3 mr-20 rounded-md  max-sm:mt-6 bg-slate-200 font-normal max-sm:text-base text-neutral-950">
-        YouTube Playlist Analyzer evaluates your playlist&apos;s total duration,
-        then breaks down viewing times at speeds of 1.25x, 1.5x, 1.75x, and 2x.
-        Streamline your viewing experience and optimize your binge-watching
-        sessions with precise insights!
-      </p>
+
     </div>
   );
 }
