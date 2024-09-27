@@ -9,6 +9,8 @@ import {
   getTotalTimeDuration,
   getVideoDurationInDiffSpeed,
 } from "../utils";
+import {  IoMdTime } from "react-icons/io";
+import { PiVideoLight } from "react-icons/pi";
 
 function HomePage() {
   const [playlistLink, setPlaylistLink] = useState("");
@@ -142,30 +144,28 @@ function HomePage() {
     // console.log(endVideoNumber);
   }
   return (
-    <div
-      className="mt-24  text-black  font-semibold px-20 max-sm:px-5 flex flex-col gap-5  
-    "
-    >
+    <div className="mt-24 text-black font-semibold mx-20 max-sm:px-5 flex flex-col gap-4">
       {/* Input Heading:Enter YouTube playlist link below :-  */}
       <h1 className=" text-xl max-sm:text-base">
         Enter a YouTube playlist link below-
       </h1>
 
       {/* Input field and Analyze button */}
-      <div className="flex items-center justify-between  ">
+      <div className="flex items-center justify-between  rounded border border-red-900">
         <input
           type="text"
           onChange={handlePlaylistLinkInputChange}
-          className="border-2  border-black w-4/5 h-10  text-sm pl-3 rounded-md max-sm:text-sm  text-clip"
+          className="outline-none w-full h-10  text-sm pl-3 rounded-md max-sm:text-sm  text-clip "
           placeholder="https://www.youtube.com/playlist?list=PL3Y15344T8045DroPBjkYJQCz9tndR17tSSmG"
         />
         <button
-          className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800"
+          className="p-2 px-4 flex items-center gap-2 h-full text-sm bg-gradient-to-b to-purple-900 via-neutral-800 border-neutral-400 rounded-r from-black hover:scale-105  duration-150 text-neutral-100"
           onKeyUp={(e) => e.key === "Enter" && handleFetchAndStoreVideoId()}
           onClick={handleFetchAndStoreVideoId}
         >
-          <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-            Analyze
+          Analyze{" "}
+          <span className="flex gap-1">
+            <PiVideoLight size={20} /> <IoMdTime size={18} />
           </span>
         </button>
       </div>
@@ -258,15 +258,14 @@ function HomePage() {
               {vidPlaybackTimeInDiffSpeed["2"]?.sec} sec{" "}
             </span>
           </h2>
-
-          <p className="  p-3 rounded-md mt-10 max-sm:mt-6 bg-slate-200 font-light  text-md max-sm:text-base">
-            YouTube Playlist Analyzer evaluates your playlist&apos;s total
-            duration, then breaks down viewing times at speeds of 1.25x, 1.5x,
-            1.75x, and 2x. Streamline your viewing experience and optimize your
-            binge-watching sessions with precise insights!
-          </p>
         </div>
       )}
+      <p className="absolute bottom-24 p-3 mr-20 rounded-md  max-sm:mt-6 bg-slate-200 font-normal max-sm:text-base text-neutral-950">
+        YouTube Playlist Analyzer evaluates your playlist&apos;s total duration,
+        then breaks down viewing times at speeds of 1.25x, 1.5x, 1.75x, and 2x.
+        Streamline your viewing experience and optimize your binge-watching
+        sessions with precise insights!
+      </p>
     </div>
   );
 }
