@@ -140,7 +140,7 @@ function HomePage() {
     // console.log(endVideoNumber);
   }
   return (
-    <div className="mt-24 text-black mx-48 font-medium max-sm:px-5 flex flex-col gap-5"> 
+    <div className="mt-24 text-black mx-64 font-medium max-sm:px-5 flex flex-col gap-5"> 
 
     <div className="flex flex-col gap-2">
 
