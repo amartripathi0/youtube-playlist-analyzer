@@ -1,3 +1,4 @@
+import { BsArrowRight } from "react-icons/bs";
 import { websiteLogo } from "../constants";
 import SocialHandles from "./SocialHandles";
 
@@ -20,8 +21,19 @@ export default function NavBar() {
 
         <h1>Youtube Playlist Analyzer</h1>
       </a>
-
-      <SocialHandles />
+      <div className="flex">
+        <SocialHandles />
+        <button>
+          <a
+            href="https://amartripathi.vercel.app"
+            target="_blank"
+            rel="noreferrer"
+            className="ml-4 text-sm bg-gradient-to-b to-purple-900 via-neutral-800 opacity-90 border-neutral-400 hover:opacity-100 from-black hover:scale-105 border p-2 py-1.5 rounded-md duration-150 flex justify-center items-center gap-1 text-neutral-100"
+          >
+            My Portfolio <BsArrowRight className="-rotate-45" />{" "}
+          </a>
+        </button>
+      </div>
     </nav>
   );
 }
