@@ -140,7 +140,7 @@ function HomePage() {
     // console.log(setTotalTimeDurationOfPlaylist);
   }
   return (
-    <div className="mt-24 text-black mx-64 font-medium max-sm:px-5 flex flex-col gap-5">
+    <div className="mt-10 text-black mx-64 font-medium max-sm:px-5 flex flex-col gap-5 border">
       <div className="flex flex-col gap-2">
         {/* Input Heading:Enter a YouTube playlist link below :-  */}
         <h1 className=" text-lg max-sm:text-base">
@@ -156,7 +156,7 @@ function HomePage() {
             placeholder="https://www.youtube.com/playlist?list=PL3Y15344T8045DroPBjkYJQCz9tndR17tSSmG"
           />
           <button
-            className="p-2 px-4 flex items-center gap-2 h-full text-sm bg-gradient-to-b to-purple-950 via-neutral-800 border-neutral-400 hover:rounded-r from-black hover:scale-105  duration-150 text-neutral-100"
+            className="p-2 px-4 flex items-center gap-2 h-full text-sm bg-gradient-to-b from-purple-400 to-pink-300 hover:from-purple-500 hover:to-pink-400 transition-all duration-300 text-neutral-800 hover-text-neutral-950"
             onKeyUp={(e) => e.key === "Enter" && handleFetchAndStoreVideoId()}
             onClick={handleFetchAndStoreVideoId}
           >
@@ -196,8 +196,7 @@ function HomePage() {
         <div className="font-normal flex flex-col gap-5 text-base">
           <div className="flex flex-col gap-2">
             <h1>
-              Channel Name :{" "}
-              <SemiboldSpanContainer text={`${channelName}`} />
+              Channel Name : <SemiboldSpanContainer text={`${channelName}`} />
             </h1>
             <h1>
               Total videos in the playlist :{" "}

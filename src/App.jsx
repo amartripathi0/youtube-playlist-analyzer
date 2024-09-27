@@ -10,7 +10,7 @@ import About from "./components/about";
 function App() {
 
   return (
-    <div className="flex flex-col gap-3 relative w-screen h-screen bg-gradient-to-r from-rose-100 to-teal-100">
+    <div className="flex flex-col gap-3 relative w-screen h-screen bg-gradient-to-r from-rose-100 to-teal-100 ">
       <ToastContainer position="bottom-right" className={"bottom-10 text-sm"} />
       <Analytics />
       <NavBar />

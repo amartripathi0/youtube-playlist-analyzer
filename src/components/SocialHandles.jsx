@@ -12,7 +12,7 @@ function SocialHandles() {
           target="_blank"
           key={link.label}
           rel="noopener noreferrer"
-          className="hover:scale-105 hover:transition-all opacity-80 hover:opacity-100 hover:shadow-sm ease-in-out duration-400 hover:text-pink-200"
+          className="hover:scale-110 hover:transition-all opacity-80 hover:opacity-100 hover:shadow-sm ease-in-out duration-200"
         >
           {link.label === "LinkedIn" ? (
             <FaLinkedin size={18} />
