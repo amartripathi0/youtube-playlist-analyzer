@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Container from "./Container";
 import { toast } from "react-toastify";
 
 import {
@@ -17,6 +16,7 @@ import VideoRangeInput from "./video-range-input";
 
 function HomePage() {
   const [playlistLink, setPlaylistLink] = useState("");
+  const [channelName, setChannelName] = useState("");
   const [allVideosId, setAllVideosId] = useState([]);
   const [startVideoNumber, setStartVideoNumber] = useState(1);
   const [endVideoNumber, setEndVideoNumber] = useState(1);
@@ -56,12 +56,11 @@ function HomePage() {
       if (allVideosId.length === 0 || playlistInputChanged) {
         // storing array having videoId of all videos in the playlist
         try {
-          const playlistAllVideosIdArray = await getAllVideosIdInPlaylist(
-            playlistId,
-            API_KEY
-          );
+          const { playlistAllVideosIdArray, channelTitle } =
+            await getAllVideosIdInPlaylist(playlistId, API_KEY);
 
           setAllVideosId(playlistAllVideosIdArray);
+          setChannelName(channelTitle);
         } catch (error) {
           toast.error("Error fetching video IDs. Please try again.", {});
         }
@@ -138,37 +137,36 @@ function HomePage() {
     setShowVideoPlaybackDuration(true);
     // console.log(showVideoPlaybackDuration);
     // console.log(endVideoNumber);
+    // console.log(setTotalTimeDurationOfPlaylist);
   }
   return (
-    <div className="mt-24 text-black mx-64 font-medium max-sm:px-5 flex flex-col gap-5"> 
+    <div className="mt-24 text-black mx-64 font-medium max-sm:px-5 flex flex-col gap-5">
+      <div className="flex flex-col gap-2">
+        {/* Input Heading:Enter a YouTube playlist link below :-  */}
+        <h1 className=" text-lg max-sm:text-base">
+          Enter a YouTube playlist link below:-
+        </h1>
 
-    <div className="flex flex-col gap-2">
-
-      {/* Input Heading:Enter a YouTube playlist link below :-  */}
-      <h1 className=" text-lg max-sm:text-base">
-        Enter a YouTube playlist link below:-
-      </h1>
-
-      {/* Input field and Analyze button */}
-      <div className="flex items-center justify-between  rounded border-neutral-400 focus-within:border-purple-800 border-2">
-        <input
-          type="text"
-          onChange={handlePlaylistLinkInputChange}
-          className="outline-none w-full h-10  text-sm pl-3 rounded-md max-sm:text-sm font-normal text-clip bg-neutral-100"
-          placeholder="https://www.youtube.com/playlist?list=PL3Y15344T8045DroPBjkYJQCz9tndR17tSSmG"
-        />
-        <button
-          className="p-2 px-4 flex items-center gap-2 h-full text-sm bg-gradient-to-b to-purple-950 via-neutral-800 border-neutral-400 hover:rounded-r from-black hover:scale-105  duration-150 text-neutral-100"
-          onKeyUp={(e) => e.key === "Enter" && handleFetchAndStoreVideoId()}
-          onClick={handleFetchAndStoreVideoId}
-        >
-          Analyze{" "}
-          <span className="flex gap-1">
-            <PiVideoLight size={20} /> <IoMdTime size={18} />
-          </span>
-        </button>
+        {/* Input field and Analyze button */}
+        <div className="flex items-center justify-between  rounded border-neutral-400 focus-within:border-purple-800 border-2">
+          <input
+            type="text"
+            onChange={handlePlaylistLinkInputChange}
+            className="outline-none w-full h-10  text-sm pl-3 rounded-md max-sm:text-sm font-normal text-clip bg-neutral-100"
+            placeholder="https://www.youtube.com/playlist?list=PL3Y15344T8045DroPBjkYJQCz9tndR17tSSmG"
+          />
+          <button
+            className="p-2 px-4 flex items-center gap-2 h-full text-sm bg-gradient-to-b to-purple-950 via-neutral-800 border-neutral-400 hover:rounded-r from-black hover:scale-105  duration-150 text-neutral-100"
+            onKeyUp={(e) => e.key === "Enter" && handleFetchAndStoreVideoId()}
+            onClick={handleFetchAndStoreVideoId}
+          >
+            Analyze{" "}
+            <span className="flex gap-1">
+              <PiVideoLight size={20} /> <IoMdTime size={18} />
+            </span>
+          </button>
+        </div>
       </div>
-    </div>
 
       <div className="flex items-center  text-md gap-10">
         <div className="flex gap-6 max-sm:text-base max-sm:justify-between max-sm:w-full pr-5">
@@ -197,6 +195,10 @@ function HomePage() {
       {showVideoPlaybackDuration && (
         <div className="font-normal flex flex-col gap-5 text-base">
           <div className="flex flex-col gap-2">
+            <h1>
+              Channel Name :{" "}
+              <SemiboldSpanContainer text={`${channelName}`} />
+            </h1>
             <h1>
               Total videos in the playlist :{" "}
               <SemiboldSpanContainer text={`${totalVideosInPlaylist} videos`} />
