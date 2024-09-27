@@ -27,7 +27,7 @@ function HomePage() {
     {}
   );
   const [showVideoPlaybackDuration, setShowVideoPlaybackDuration] =
-    useState(false);
+    useState(true);
   const [playlistInputChanged, setPlaylistInputChanged] = useState(false);
   const [endVideoInputChanged, setEndVideoInputChanged] = useState(false);
   const API_KEY = import.meta.env.VITE_YT_API_KEY;
@@ -140,7 +140,7 @@ function HomePage() {
     // console.log(setTotalTimeDurationOfPlaylist);
   }
   return (
-    <div className="mt-6 sm:mt-8 md:mt-10 text-black  mx-6 md:mx-28 lg:mx-64 font-medium flex flex-col gap-5 border">
+    <div className="mt-6 sm:mt-8 md:mt-10 text-black  mx-6 md:mx-28 lg:mx-64 font-medium flex flex-col gap-4 sm:gap-5 border">
       <div className="flex flex-col gap-2">
         {/* Input Heading:Enter a YouTube playlist link below :-  */}
         <h1 className=" text-lg max-sm:text-base">
@@ -156,13 +156,14 @@ function HomePage() {
             placeholder="https://www.youtube.com/playlist?list=PL3Y15344T8045DroPBjkYJQCz9tndR17tSSmG"
           />
           <button
-            className="p-2 sm:px-4 flex items-center gap-1 sm:gap-2 h-full text-sm bg-gradient-to-b from-purple-400 to-pink-300 hover:from-purple-500 hover:to-pink-400 transition-all duration-300 text-neutral-800 hover-text-neutral-950"
+            className="p-2 px-1.5 sm:px-4 flex items-center gap-1 sm:gap-2 h-full text-sm bg-gradient-to-b from-purple-400 to-pink-300 hover:from-purple-500 hover:to-pink-400 transition-all duration-300 text-neutral-800 hover-text-neutral-950"
             onKeyUp={(e) => e.key === "Enter" && handleFetchAndStoreVideoId()}
             onClick={handleFetchAndStoreVideoId}
           >
             Analyze{" "}
             <span className="flex gap-1">
-              <PiVideoLight size={20} className="max-sm:hidden"/> <IoMdTime size={18} />
+              <PiVideoLight size={20} className="max-sm:hidden" />{" "}
+              <IoMdTime size={18} />
             </span>
           </button>
         </div>
@@ -193,8 +194,8 @@ function HomePage() {
       </div>
 
       {showVideoPlaybackDuration && (
-        <div className="font-normal flex flex-col gap-5 text-base">
-          <div className="flex flex-col gap-2">
+        <div className="font-normal flex flex-col gap-5 text-sm sm:text-base">
+          <div className="flex flex-col gap-1 sm:gap-2">
             <h1>
               Channel Name : <SemiboldSpanContainer text={`${channelName}`} />
             </h1>
@@ -214,7 +215,7 @@ function HomePage() {
           </div>
 
           {/*Watchtime at various Playback Speeds */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1 sm:gap-2">
             <PlaybackSpeedWatchtime
               speed="1.25"
               vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed}
