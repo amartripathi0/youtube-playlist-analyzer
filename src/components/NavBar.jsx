@@ -7,9 +7,10 @@ import SocialHandles from "./SocialHandles";
 export default function NavBar() {
   return (
     <nav
-      className="fixed top-0 left-0 backdrop:blur-md w-screen h-16 
-    bg-gradient-to-r from-gray-900 via-purple-800 to-indigo-900  
-    flex items-center justify-between text-lg max-md:text-lg max-sm:text-base px-48 max-sm:px-5 font-medium max-sm:gap-10 text-white"
+      className="rounded-lg h-14  px-6
+     flex items-center justify-between sm:text-lg text-base mx-44 max-sm:px-5 
+     bg-gradient-to-r from-pink-200  to-purple-100
+     font-medium max-sm:gap-10 border border-neutral-300 shadow-md text-neutral-800"
     >
       <a href="/" k className="flex items-center justify-center gap-4 h-4/5 ">
         {/* <FaYoutube size={20} color="#FF0000" /> */}
@@ -19,7 +20,7 @@ export default function NavBar() {
           alt=""
         />
 
-        <h1>Youtube Playlist Analyzer</h1>
+        <h1 className="text-base hover:text-neutral-900 transition-colors duration-150">Youtube Playlist Analyzer</h1>
       </a>
       <div className="flex">
         <SocialHandles />
@@ -28,7 +29,7 @@ export default function NavBar() {
             href="https://amartripathi.vercel.app"
             target="_blank"
             rel="noreferrer"
-            className="ml-4 text-sm bg-gradient-to-b to-purple-900 via-neutral-800 opacity-90 border-neutral-400 hover:opacity-100 from-black hover:scale-105 border p-2 py-1.5 rounded-md duration-150 flex justify-center items-center gap-1 text-neutral-100"
+            className="ml-4 text-sm bg-purple-200 hover:text-neutral-900 border-pink-300 hover:opacity-100  hover:scale-105 border p-2 py-1.5 rounded duration-150 flex justify-center items-center gap-1"
           >
             My Portfolio <BsArrowRight className="-rotate-45" />{" "}
           </a>
