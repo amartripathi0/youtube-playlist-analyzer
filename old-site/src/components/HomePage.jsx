@@ -27,7 +27,7 @@ function HomePage() {
     {}
   );
   const [showVideoPlaybackDuration, setShowVideoPlaybackDuration] =
-    useState(true);
+    useState(false);
   const [playlistInputChanged, setPlaylistInputChanged] = useState(false);
   const [endVideoInputChanged, setEndVideoInputChanged] = useState(false);
   const API_KEY = import.meta.env.VITE_YT_API_KEY;
