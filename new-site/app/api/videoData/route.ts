@@ -1,7 +1,7 @@
 import type { NextApiResponse } from "next";
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
-const API_KEY = process.env.NEXT_PUBLIC_YT_API_KEY;
+const API_KEY = process.env.YT_API_KEY;
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     }
 
     const { playlistAllVideosIdArray } = await req.json();
-
+    
     if (!playlistAllVideosIdArray || !Array.isArray(playlistAllVideosIdArray)) {
       return NextResponse.json({
         message: "Internal Server Error",
@@ -26,10 +26,12 @@ export async function POST(req: NextRequest) {
         allVideosIdStrings += eachVidId + ",";
       }
     });
-
+    
     const response = await axios.get(
       `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${allVideosIdStrings}&key=${API_KEY}`
     );
+    console.log(response);
+
     const allVideosTimeDurationArray = response.data?.items.map(
       ({
         contentDetails: { duration },
@@ -37,9 +39,10 @@ export async function POST(req: NextRequest) {
         contentDetails: { duration: string };
       }) => duration
     );
-
+    
     return NextResponse.json({ allVideosTimeDurationArray });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
   }
 }
