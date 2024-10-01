@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { all } from "axios";
 import { toast } from "react-toastify";
 
 export function getPlaylistId(playlistLink) {
@@ -28,15 +28,32 @@ export async function getEachVideoDurationArray(
   playlistAllVideosIdArray,
   API_KEY
 ) {
-  const promises = playlistAllVideosIdArray.map((id) =>
-    axios
-      .get(
-        `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${id}&key=${API_KEY}`
-      )
-      .then((res) => res.data.items[0]?.contentDetails?.duration)
-  );
+  let allVideosIdStrings = "";
 
-  const allVideosTimeDurationArray = await Promise.all(promises);
+  playlistAllVideosIdArray.map((eachVidId, index) => {
+    if (index === playlistAllVideosIdArray.length - 1) {
+      allVideosIdStrings += eachVidId;
+    } else {
+      allVideosIdStrings += eachVidId + ",";
+    }
+  });
+
+  // const promises = playlistAllVideosIdArray.map((id) =>
+  //   axios
+  //     .get(
+  //       `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${id}&key=${API_KEY}`
+  //     )
+  //     .then((res) => res.data.items[0]?.contentDetails?.duration)
+  // );
+
+  const response = await axios
+    .get(
+      `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${allVideosIdStrings}&key=${API_KEY}`
+    )
+
+  // const allVideosTimeDurationArray = await Promise.all(promises);
+
+  const allVideosTimeDurationArray = response.data?.items.map(({ contentDetails }) => contentDetails?.duration);
   // console.log(allVideosTimeDurationArray);
   return allVideosTimeDurationArray;
 }
