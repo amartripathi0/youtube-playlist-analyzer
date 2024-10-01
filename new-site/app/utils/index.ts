@@ -8,18 +8,12 @@ export function getPlaylistId(playlistLink: string): string {
 export async function getAllVideosIdInPlaylist(
   playlistId: string
 ): Promise<{ playlistAllVideosIdArray: string[]; channelTitle: string }> {
-  const response = await axios.post(`/api/playlistData`, {
-    data: playlistId,
-  });
+  const response = await axios.post(`/api/playlistData`, { playlistId });
 
   //return an array containing Id of all the videos present in the playlist
-  const playlistAllVideosIdArray: string[] = [];
-  response?.data.items.forEach(
-    (vid: { snippet: { resourceId: { videoId: string } } }) => {
-      playlistAllVideosIdArray.push(vid.snippet.resourceId.videoId);
-    }
-  );
-  const channelTitle = response?.data?.items[0].snippet.channelTitle;
+  const playlistAllVideosIdArray: string[] =
+    response.data?.playlistAllVideosIdArray;
+  const channelTitle: string = response.data?.channelTitle;
   return { playlistAllVideosIdArray, channelTitle };
 }
 
