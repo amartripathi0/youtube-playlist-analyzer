@@ -1,18 +1,21 @@
-import type { NextApiResponse } from "next";
 import axios from "axios";
-import { NextRequest } from "next/server";
-const API_KEY = process.env.NEXT_PUBLIC_YT_API_KEY;
+import { NextRequest, NextResponse } from "next/server";
+const API_KEY = process.env.YT_API_KEY;
 
-export async function POST(req: NextRequest, res: NextApiResponse) {
+export async function POST(req: NextRequest) {
   try {
     if (req.method !== "POST") {
-      return res.status(405).json({ message: "Method Not Allowed" });
+      return NextResponse.json({
+        message: "Method Not Allowed",
+      }, { status: 405 });
     }
 
     const { playlistId } = await req.json();
-
+    
     if (!playlistId) {
-      return res.status(400).json({ message: "Playlist ID is required" });
+      return NextResponse.json({
+        message: "Playlist ID is required",
+      }, { status: 400 });
     }
     const response = await axios.get(
       `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&key=${API_KEY}&maxResults=50`
@@ -21,12 +24,18 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
     const playlistAllVideosIdArray: string[] = [];
     response?.data.items.forEach(
       (vid: { snippet: { resourceId: { videoId: string } } }) => {
-        playlistAllVideosIdArray.push(vid.snippet.resourceId.videoId);
+        playlistAllVideosIdArray.push(vid.snippet.resourceId.videoId.toString());
       }
     );
-    const channelTitle = response?.data?.items[0].snippet.channelTitle;
-    return res.status(500).json({ playlistAllVideosIdArray, channelTitle });
+    const channelTitle:string = response?.data?.items[0].snippet.channelTitle;
+    return NextResponse.json({
+      "playlistAllVideosIdArray": playlistAllVideosIdArray, channelTitle
+    }, { status: 200 });
   } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error" });
+    console.log(error);
+    
+    return NextResponse.json({
+      message: "Internal Server Error",
+    }, { status: 500 });
   }
 }
