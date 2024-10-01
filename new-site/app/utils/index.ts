@@ -24,7 +24,7 @@ export async function getEachVideoDurationArray(
     playlistAllVideosIdArray,
   });
 
-  const allVideosTimeDurationArray = await response.data;
+  const { allVideosTimeDurationArray } = await response.data;
   return allVideosTimeDurationArray;
 }
 
@@ -34,6 +34,8 @@ export function getTotalTimeDuration(
   toVidNum: number,
   totalVideosInPlaylist: number
 ): { hr: number; min: number; sec: number } {
+  console.log(eachVideoDurationArray);
+
   let hr = 0,
     min = 0,
     sec = 0;
