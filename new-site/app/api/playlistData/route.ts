@@ -3,7 +3,7 @@ import axios from "axios";
 import { NextRequest } from "next/server";
 const API_KEY = process.env.NEXT_PUBLIC_YT_API_KEY;
 
-export default async function POST(req: NextRequest, res: NextApiResponse) {
+export async function POST(req: NextRequest, res: NextApiResponse) {
   try {
     if (req.method !== "POST") {
       return res.status(405).json({ message: "Method Not Allowed" });
