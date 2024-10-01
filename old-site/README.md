@@ -49,4 +49,4 @@ Feel free to fork the project, make improvements, and submit a pull request. We 
 
 ## Deployment
 
-Check out the live application [here](https://youtube-playlist-analyzer-teal.vercel.app/).
+Check out the live application [here](https://yt-playlist-analyzer.vercel.app/).
