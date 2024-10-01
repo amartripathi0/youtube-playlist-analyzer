@@ -34,8 +34,6 @@ export function getTotalTimeDuration(
   toVidNum: number,
   totalVideosInPlaylist: number
 ): { hr: number; min: number; sec: number } {
-  console.log(eachVideoDurationArray);
-
   let hr = 0,
     min = 0,
     sec = 0;
@@ -91,7 +89,6 @@ export function getTotalTimeDuration(
       min = min % 60;
     } else continue;
   }
-  console.log("hr", hr, min, sec);
   return { hr, min, sec };
 }
 
