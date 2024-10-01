@@ -21,7 +21,7 @@ export async function getEachVideoDurationArray(
   playlistAllVideosIdArray: string[]
 ): Promise<string[]> {
   const response = await axios.post(`/api/videoData`, {
-    data: playlistAllVideosIdArray,
+    playlistAllVideosIdArray,
   });
 
   const allVideosTimeDurationArray = await response.data;
