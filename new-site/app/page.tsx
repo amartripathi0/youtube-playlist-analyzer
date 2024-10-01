@@ -1,6 +1,5 @@
 import HomePage from "./components/HomePage";
 import NavBar from "./components/NavBar";
-// import { Analytics } from "@vercel/analytics/react";
 import Footer from "./components/footer";
 import About from "./components/about";
 

@@ -10,11 +10,14 @@ export async function POST(req: NextRequest) {
     }
 
     const { playlistAllVideosIdArray } = await req.json();
-    
+
     if (!playlistAllVideosIdArray || !Array.isArray(playlistAllVideosIdArray)) {
-      return NextResponse.json({
-        message: "Internal Server Error",
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          message: "Internal Server Error",
+        },
+        { status: 500 }
+      );
     }
 
     let allVideosIdStrings = "";
@@ -26,11 +29,10 @@ export async function POST(req: NextRequest) {
         allVideosIdStrings += eachVidId + ",";
       }
     });
-    
+
     const response = await axios.get(
       `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${allVideosIdStrings}&key=${API_KEY}`
     );
-    console.log(response);
 
     const allVideosTimeDurationArray = response.data?.items.map(
       ({
@@ -39,10 +41,12 @@ export async function POST(req: NextRequest) {
         contentDetails: { duration: string };
       }) => duration
     );
-    
+
     return NextResponse.json({ allVideosTimeDurationArray });
   } catch (error) {
-    console.log(error);
-    return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

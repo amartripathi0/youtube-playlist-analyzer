@@ -1,8 +1,9 @@
-'use client'
+"use client";
 import { useEffect, useState } from "react";
-// import { toast } from "react-toastify";
+import { GetServerSideProps } from "next";
 
 import {
+  checkPlaylistLinkValidity,
   getAllVideosIdInPlaylist,
   getEachVideoDurationArray,
   getPlaylistId,
@@ -14,6 +15,7 @@ import { PiVideoLight } from "react-icons/pi";
 import PlaybackSpeedWatchtime from "./playback-speed-watchtime";
 import SemiboldSpanContainer from "./Container";
 import VideoRangeInput from "./video-range-input";
+import { toast } from "sonner";
 
 function HomePage() {
   const [playlistLink, setPlaylistLink] = useState("");
@@ -35,39 +37,34 @@ function HomePage() {
 
   async function handleFetchAndStoreVideoId() {
     // check for : invalid playlist link
-    if (
-      playlistLink.length === 0 ||
-      !/https?:\/\/(www\.)?youtube\.com\/playlist\?list=[a-zA-Z0-9_-]+/.test(
-        playlistLink
-      )
-    ) {
-      // toast.error("Please enter a valid youtube playlist link.", {});
-    }
+    const isPlayListLinkValid = checkPlaylistLinkValidity(playlistLink);
+    if (!isPlayListLinkValid)
+      toast.error("Please enter a valid youtube playlist link.");
     // check for : lower and upper limit video number
+
     else if (startVideoNumber > endVideoNumber) {
-      // toast.error(
-      //   "From Video Number cannot be greater than To Video Number.",
-      //   {}
-      // );
-    } else {
+      toast.error("From Video Number cannot be greater than To Video Number.");
+    } 
+    else {
       // extract playlistID from input playlist link by user
       const playlistId = getPlaylistId(playlistLink);
 
-      // if there is new input to playlist link
+      // check if the data is fetched for the 1st time or is there any new input to playlist link
       if (allVideosId.length === 0 || playlistInputChanged) {
         // storing array having videoId of all videos in the playlist
         try {
           const { playlistAllVideosIdArray, channelTitle } =
-            await getAllVideosIdInPlaylist(playlistId, API_KEY);
+            await getAllVideosIdInPlaylist(playlistId);
 
           setAllVideosId(playlistAllVideosIdArray);
           setChannelName(channelTitle);
         } catch (error) {
-          // toast.error("Error fetching video IDs. Please try again.", {});
+          console.log(error);
+          toast.error("Error fetching video IDs. Please try again.");
         }
       } else {
         /*if there is already playlist data stored in the state then there is no need to 
-          fetch again, this reduces number of api calls, just process the data
+          fetch again, this reduces number of api calls
         */
         handlePlaylistDataProcessing();
       }
@@ -122,7 +119,6 @@ function HomePage() {
   async function handlePlaylistDataProcessing() {
     const eachVideoDurationArray = await getEachVideoDurationArray(
       allVideosId,
-      API_KEY
     );
     const totalTimeDuration = getTotalTimeDuration(
       eachVideoDurationArray,
@@ -130,6 +126,7 @@ function HomePage() {
       endVideoNumber,
       totalVideosInPlaylist
     );
+    console.log(totalTimeDuration);
     setTotalTimeDurationOfPlaylist(totalTimeDuration);
 
     const playbackTimeInDiffSpeed =
