@@ -1,7 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { GetServerSideProps } from "next";
-
 import {
   checkPlaylistLinkValidity,
   getAllVideosIdInPlaylist,
@@ -30,7 +28,7 @@ function HomePage() {
     {}
   );
   const [showVideoPlaybackDuration, setShowVideoPlaybackDuration] =
-    useState(true);
+    useState(false);
   const [playlistInputChanged, setPlaylistInputChanged] = useState(false);
   const [endVideoInputChanged, setEndVideoInputChanged] = useState(false);
   const API_KEY = process.env.NEXT_PUBLIC_YT_API_KEY;
@@ -41,11 +39,9 @@ function HomePage() {
     if (!isPlayListLinkValid)
       toast.error("Please enter a valid youtube playlist link.");
     // check for : lower and upper limit video number
-
     else if (startVideoNumber > endVideoNumber) {
       toast.error("From Video Number cannot be greater than To Video Number.");
-    } 
-    else {
+    } else {
       // extract playlistID from input playlist link by user
       const playlistId = getPlaylistId(playlistLink);
 
@@ -59,7 +55,6 @@ function HomePage() {
           setAllVideosId(playlistAllVideosIdArray);
           setChannelName(channelTitle);
         } catch (error) {
-          console.log(error);
           toast.error("Error fetching video IDs. Please try again.");
         }
       } else {
@@ -96,9 +91,9 @@ function HomePage() {
   }
   function handleLowerRangeFromInput(e) {
     if (e.target.value <= 0) {
-      // toast.error("Please enter a valid lower limit.", {});
+      toast.error("Please enter a valid lower limit.");
     } else if (e.target.value > 50) {
-      // toast.error("Maximum video limit is 50 :(", {});
+      toast.error("Maximum video limit is 50 :(");
       setStartVideoNumber(50);
     } else {
       setStartVideoNumber(parseInt(e.target.value, 10));
@@ -117,16 +112,13 @@ function HomePage() {
   }
 
   async function handlePlaylistDataProcessing() {
-    const eachVideoDurationArray = await getEachVideoDurationArray(
-      allVideosId,
-    );
+    const eachVideoDurationArray = await getEachVideoDurationArray(allVideosId);
     const totalTimeDuration = getTotalTimeDuration(
       eachVideoDurationArray,
       startVideoNumber,
       endVideoNumber,
       totalVideosInPlaylist
     );
-    console.log(totalTimeDuration);
     setTotalTimeDurationOfPlaylist(totalTimeDuration);
 
     const playbackTimeInDiffSpeed =
