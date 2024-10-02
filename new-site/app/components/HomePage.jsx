@@ -14,9 +14,10 @@ import PlaybackSpeedWatchtime from "./playback-speed-watchtime";
 import SemiboldSpanContainer from "./Container";
 import VideoRangeInput from "./video-range-input";
 import { toast } from "sonner";
-
+import { ScaleLoader } from "react-spinners";
 function HomePage() {
   const [playlistLink, setPlaylistLink] = useState("");
+  const [isLoading, setSsLoading] = useState(false);
   const [channelName, setChannelName] = useState("");
   const [allVideosId, setAllVideosId] = useState([]);
   const [startVideoNumber, setStartVideoNumber] = useState(1);
@@ -34,6 +35,7 @@ function HomePage() {
   const API_KEY = process.env.NEXT_PUBLIC_YT_API_KEY;
 
   async function handleFetchAndStoreVideoId() {
+    setSsLoading(true);
     // check for : invalid playlist link
     const isPlayListLinkValid = checkPlaylistLinkValidity(playlistLink);
     if (!isPlayListLinkValid)
@@ -125,6 +127,7 @@ function HomePage() {
       getVideoDurationInDiffSpeed(totalTimeDuration);
     setVidPlaybackTimeInDiffSpeed(playbackTimeInDiffSpeed);
     setShowVideoPlaybackDuration(true);
+    setSsLoading(false);
     // console.log(showVideoPlaybackDuration);
     // console.log(endVideoNumber);
     // console.log(setTotalTimeDurationOfPlaylist);
@@ -183,8 +186,8 @@ function HomePage() {
         </div>
       </div>
 
-      {showVideoPlaybackDuration && (
-        <div className="font-normal flex flex-col gap-4 sm:gap-5  text-sm sm:text-base">
+      {showVideoPlaybackDuration ? (
+        <div className="font-normal flex flex-col gap-4 sm:gap-5  text-sm sm:text-base h-80">
           <div className="flex flex-col gap-1 sm:gap-2">
             <h1>
               Channel Name : <SemiboldSpanContainer text={`${channelName}`} />
@@ -231,6 +234,15 @@ function HomePage() {
             1.75x, and 2x. Streamline your viewing experience and optimize your
             binge-watching sessions with precise insights!
           </p> */}
+        </div>
+      ) : (
+        <div className="h-80 flex justify-center pt-16">
+          {isLoading && (
+            <div className="opacity-70 flex flex-col">
+              <ScaleLoader size={40} className="mx-auto w-fit" />
+              <p className="text-purple-900">Fetching data..</p>
+            </div>
+          )}
         </div>
       )}
     </div>
