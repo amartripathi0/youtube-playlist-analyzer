@@ -1,3 +1,4 @@
+import Link from "next/link";
 import SocialHandles from "./SocialHandles";
 
 function Footer() {
@@ -5,7 +6,7 @@ function Footer() {
     <footer className=" bg-neutral-900 h-10 sm:h-12 flex items-center justify-center gap-4 fixed w-screen bottom-0 text-white">
       <h1 className="font-medium text-xs sm:text-sm opacity-80 hover:opacity-100">
         Made By -{" "}
-        <a
+        <Link
           href="https://amartripathi.vercel.app"
           target="_blank"
           rel="noreferrer"
@@ -13,7 +14,7 @@ function Footer() {
         >
           {" "}
           Amar Tripathi
-        </a> 
+        </Link> 
       </h1> |   
       <SocialHandles />
     </footer>

@@ -1,6 +1,7 @@
 import { BsArrowRight } from "react-icons/bs";
 import Image from "next/image";
 import SocialHandles from "./SocialHandles";
+import Link from "next/link";
 export default function NavBar() {
   return (
     <nav
@@ -9,7 +10,7 @@ export default function NavBar() {
      bg-gradient-to-r from-pink-200  to-purple-100
      font-medium max-sm:gap-10 border border-neutral-300 shadow-md text-neutral-800"
     >
-      <a href="/" className="flex items-center justify-center gap-2 h-4/5">
+      <Link href="/" className="flex items-center justify-center gap-2 h-4/5">
         {/* <FaYoutube size={20} color="#FF0000" /> */}
         <Image
           src={'/logo.png'}
@@ -22,7 +23,7 @@ export default function NavBar() {
         <h1 className="text-base hover:text-neutral-900 transition-colors duration-150 max-sm:hidden">
           Youtube Playlist Analyzer
         </h1>
-      </a>
+      </Link>
       <div className="flex">
         <SocialHandles additionalStyles={"max-sm:hidden"} />
         <button>
