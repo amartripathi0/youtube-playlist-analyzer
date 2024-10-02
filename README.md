@@ -10,7 +10,7 @@ React, Vite, Tailwind CSS, GitHub Pages, API Data Fetching.
 
 #### Update (Vite to Nextjs):
 
-- As it's not best practice to expose private API keys, I decided to rewrite the codebase using Next.js, which I had recently learned.
+- As it's bad practice to expose private API keys, I decided to rewrite the codebase using Next.js, which I had recently learned.
 
 By leveraging Next.js, I was able to handle the YouTube API requests on the server side instead of the client side, effectively protecting my API key from exposure. This transition not only enhanced security but also allowed me to improve the frontend with better structure and added type safety.
 
