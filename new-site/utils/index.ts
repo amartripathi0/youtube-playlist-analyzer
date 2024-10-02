@@ -1,52 +1,39 @@
 import axios from "axios";
-import { toast } from "react-toastify";
 
-export function getPlaylistId(playlistLink) {
+export function getPlaylistId(playlistLink: string): string {
   const playlistIDIndex = playlistLink.indexOf("list=") + 5;
   return playlistLink.slice(playlistIDIndex);
 }
-export async function getAllVideosIdInPlaylist(playlistId, API_KEY) {
-  // fetching playlist detail using api , playlistID and key
-  const response = await axios
-    .get(
-      `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&key=${API_KEY}&maxResults=50`
-    )
-    .catch(() =>
-      toast.error("Server Error", {
-        position: "top-center",
-      })
-    );
+
+export async function getAllVideosIdInPlaylist(
+  playlistId: string
+): Promise<{ playlistAllVideosIdArray: string[]; channelTitle: string }> {
+  const response = await axios.post(`/api/playlistData`, { playlistId });
+
   //return an array containing Id of all the videos present in the playlist
-  const playlistAllVideosIdArray = [];
-  response.data.items.forEach((vid) => {
-    playlistAllVideosIdArray.push(vid.snippet.resourceId.videoId);
-  });
-  const channelTitle = response.data?.items[0].snippet.channelTitle;
+  const playlistAllVideosIdArray: string[] =
+    response.data?.playlistAllVideosIdArray;
+  const channelTitle: string = response.data?.channelTitle;
   return { playlistAllVideosIdArray, channelTitle };
 }
-export async function getEachVideoDurationArray(
-  playlistAllVideosIdArray,
-  API_KEY
-) {
-  const promises = playlistAllVideosIdArray.map((id) =>
-    axios
-      .get(
-        `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${id}&key=${API_KEY}`
-      )
-      .then((res) => res.data.items[0]?.contentDetails?.duration)
-  );
 
-  const allVideosTimeDurationArray = await Promise.all(promises);
-  // console.log(allVideosTimeDurationArray);
+export async function getEachVideoDurationArray(
+  playlistAllVideosIdArray: string[]
+): Promise<string[]> {
+  const response = await axios.post(`/api/videoData`, {
+    playlistAllVideosIdArray,
+  });
+
+  const { allVideosTimeDurationArray } = await response.data;
   return allVideosTimeDurationArray;
 }
 
 export function getTotalTimeDuration(
-  eachVideoDurationArray,
-  fromVidNum,
-  toVidNum,
-  totalVideosInPlaylist
-) {
+  eachVideoDurationArray: string[],
+  fromVidNum: number,
+  toVidNum: number,
+  totalVideosInPlaylist: number
+): { hr: number; min: number; sec: number } {
   let hr = 0,
     min = 0,
     sec = 0;
@@ -102,11 +89,14 @@ export function getTotalTimeDuration(
       min = min % 60;
     } else continue;
   }
-  console.log("hr", hr, min, sec);
   return { hr, min, sec };
 }
 
-export function getVideoDurationInDiffSpeed(nrmlTimeObj) {
+export function getVideoDurationInDiffSpeed(nrmlTimeObj: {
+  hr: number;
+  min: number;
+  sec: number;
+}): { [key: number]: { hr: number; min: number; sec: number } } {
   const { hr, min, sec } = nrmlTimeObj;
 
   const totalSec = hr * 3600 + min * 60 + sec;
@@ -168,4 +158,15 @@ export function getVideoDurationInDiffSpeed(nrmlTimeObj) {
       ),
     },
   };
+}
+
+export function checkPlaylistLinkValidity(playlistLink: string): boolean {
+  if (
+    playlistLink.length === 0 ||
+    !/https?:\/\/(www\.)?youtube\.com\/playlist\?list=[a-zA-Z0-9_-]+/.test(
+      playlistLink
+    )
+  )
+    return false;
+  return true;
 }

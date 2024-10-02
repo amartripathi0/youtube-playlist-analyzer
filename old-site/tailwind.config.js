@@ -11,6 +11,10 @@ export default {
         "2xl": "1536px",
         "3xl": "1680px",
       },
+      fontFamily: {
+        montserrat: ["var(--font-montserrat)", "sans-serif"],
+        raleway: ["var(--font-raleway)", "sans-serif"],
+      },
     },
   },
   plugins: [],
