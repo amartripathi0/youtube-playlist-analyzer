@@ -136,7 +136,7 @@ function HomePage() {
     <div className="mt-4 md:mt-6 lg:mt-10 text-black  mx-6 md:mx-28 lg:mx-64 font-medium flex flex-col gap-4 sm:gap-5 ">
       <div className="flex flex-col gap-2">
         {/* Input Heading:Enter a YouTube playlist link below :-  */}
-        <h1 className=" text-lg max-sm:text-base">
+        <h1 className=" text-sm sm:text-base">
           Enter a YouTube playlist link below:-
         </h1>
 
@@ -162,8 +162,8 @@ function HomePage() {
         </div>
       </div>
 
-      <div className="flex items-center  text-base gap-10">
-        <div className="flex gap-6 text-sm max-sm:justify-between max-sm:w-full pr-5">
+      <div className="flex items-center text-sm sm:text-base gap-10">
+        <div className="flex gap-6 max-sm:justify-between max-sm:w-full pr-5">
           <div className=" flex items-center gap-2 sm:gap-3 ">
             <label htmlFor="from">From : </label>
             <VideoRangeInput
