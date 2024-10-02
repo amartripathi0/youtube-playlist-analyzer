@@ -1,3 +1,4 @@
+import { VidPlaybackTimeInDiffSpeedType } from '@/types';
 import React from 'react';
 
 function PlaybackSpeedWatchtime({
@@ -5,7 +6,7 @@ function PlaybackSpeedWatchtime({
   vidPlaybackTimeInDiffSpeed,
 }: {
   speed: "1.25" | "1.5" | "1.75" | "2";
-  vidPlaybackTimeInDiffSpeed: any;
+  vidPlaybackTimeInDiffSpeed: VidPlaybackTimeInDiffSpeedType;
 }) {
   return (
     <div className="flex py-1.5 px-3 sm:w-1/2 xl:w-1/3 font-medium hover:font-semibold hover:bg-slate-300 transition-all rounded bg-slate-200 w-full justify-between hover:scale-105 duration-200">

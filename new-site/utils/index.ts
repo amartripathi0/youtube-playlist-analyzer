@@ -1,3 +1,4 @@
+import { TotalTimeDurationType, VidPlaybackTimeInDiffSpeedType } from "@/types";
 import axios from "axios";
 
 export function getPlaylistId(playlistLink: string): string {
@@ -33,7 +34,7 @@ export function getTotalTimeDuration(
   fromVidNum: number,
   toVidNum: number,
   totalVideosInPlaylist: number
-): { hr: number; min: number; sec: number } {
+): TotalTimeDurationType {
   let hr = 0,
     min = 0,
     sec = 0;
@@ -92,12 +93,12 @@ export function getTotalTimeDuration(
   return { hr, min, sec };
 }
 
-export function getVideoDurationInDiffSpeed(nrmlTimeObj: {
+export function getVideoDurationInDiffSpeed(timeObj: {
   hr: number;
   min: number;
   sec: number;
-}): { [key: number]: { hr: number; min: number; sec: number } } {
-  const { hr, min, sec } = nrmlTimeObj;
+}): VidPlaybackTimeInDiffSpeedType {
+  const { hr, min, sec } = timeObj;
 
   const totalSec = hr * 3600 + min * 60 + sec;
 

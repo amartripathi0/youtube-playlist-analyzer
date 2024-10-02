@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       "playlistAllVideosIdArray": playlistAllVideosIdArray, channelTitle
     }, { status: 200 });
-  } catch (error) {
+  } catch{
     
     return NextResponse.json({
       message: "Internal Server Error",

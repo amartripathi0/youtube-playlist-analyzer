@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import {
   checkPlaylistLinkValidity,
   getAllVideosIdInPlaylist,
@@ -15,28 +15,30 @@ import SemiboldSpanContainer from "./Container";
 import VideoRangeInput from "./video-range-input";
 import { toast } from "sonner";
 import { ScaleLoader } from "react-spinners";
+import { TotalTimeDurationType, VidPlaybackTimeInDiffSpeedType } from "@/types";
+
 function HomePage() {
-  const [playlistLink, setPlaylistLink] = useState("");
-  const [isLoading, setSsLoading] = useState(false);
-  const [channelName, setChannelName] = useState("");
-  const [allVideosId, setAllVideosId] = useState([]);
+  const [playlistLink, setPlaylistLink] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [channelName, setChannelName] = useState<string>("");
+  const [allVideosId, setAllVideosId] = useState<string[]>([]);
   const [startVideoNumber, setStartVideoNumber] = useState(1);
   const [endVideoNumber, setEndVideoNumber] = useState(1);
   const [totalVideosInPlaylist, setTotalVideosInPlaylist] = useState(0);
   const [totalTimeDurationOfPlaylist, setTotalTimeDurationOfPlaylist] =
-    useState({});
-  const [vidPlaybackTimeInDiffSpeed, setVidPlaybackTimeInDiffSpeed] = useState(
-    {}
-  );
+    useState<TotalTimeDurationType>({ hr: 0, min: 0, sec: 0 });
+  const [vidPlaybackTimeInDiffSpeed, setVidPlaybackTimeInDiffSpeed] =
+    useState<VidPlaybackTimeInDiffSpeedType>({});
   const [showVideoPlaybackDuration, setShowVideoPlaybackDuration] =
-    useState(false);
-  const [playlistInputChanged, setPlaylistInputChanged] = useState(false);
-  const [endVideoInputChanged, setEndVideoInputChanged] = useState(false);
-  const API_KEY = process.env.NEXT_PUBLIC_YT_API_KEY;
+    useState<boolean>(false);
+  const [playlistInputChanged, setPlaylistInputChanged] =
+    useState<boolean>(false);
+  const [endVideoInputChanged, setEndVideoInputChanged] =
+    useState<boolean>(false);
 
   async function handleFetchAndStoreVideoId() {
-    setSsLoading(true);
-    // check for : invalid playlist link
+    setIsLoading(true);
+    // check for invalid playlist link
     const isPlayListLinkValid = checkPlaylistLinkValidity(playlistLink);
     if (!isPlayListLinkValid)
       toast.error("Please enter a valid youtube playlist link.");
@@ -56,7 +58,7 @@ function HomePage() {
 
           setAllVideosId(playlistAllVideosIdArray);
           setChannelName(channelTitle);
-        } catch (error) {
+        } catch {
           toast.error("Error fetching video IDs. Please try again.");
         }
       } else {
@@ -74,7 +76,7 @@ function HomePage() {
 
       if (!endVideoInputChanged) {
         // default case : no user input for (upper range / to range) of video
-        setEndVideoNumber(parseInt(allVideosId.length));
+        setEndVideoNumber(allVideosId.length);
       }
 
       if (totalVideosInPlaylist > 0) {
@@ -84,27 +86,27 @@ function HomePage() {
     }
   }, [allVideosId, totalVideosInPlaylist]);
 
-  function handlePlaylistLinkInputChange(e) {
+  function handlePlaylistLinkInputChange(e: ChangeEvent<HTMLInputElement>) {
     setPlaylistLink(e.target.value);
     setPlaylistInputChanged(true);
     setStartVideoNumber(1);
     setEndVideoNumber(1);
     setEndVideoInputChanged(false);
   }
-  function handleLowerRangeFromInput(e) {
-    if (e.target.value <= 0) {
+  function handleLowerRangeFromInput(e: ChangeEvent<HTMLInputElement>) {
+    if (parseInt(e.target.value) <= 0) {
       toast.error("Please enter a valid lower limit.");
-    } else if (e.target.value > 50) {
+    } else if (parseInt(e.target.value) > 50) {
       toast.error("Maximum video limit is 50 :(");
       setStartVideoNumber(50);
     } else {
       setStartVideoNumber(parseInt(e.target.value, 10));
     }
   }
-  function handleUpperRangeToInput(e) {
-    if (e.target.value <= 0) {
+  function handleUpperRangeToInput(e: ChangeEvent<HTMLInputElement>) {
+    if (parseInt(e.target.value) <= 0) {
       // toast.error("Please enter a valid upper limit.", {});
-    } else if (e.target.value > 50) {
+    } else if (parseInt(e.target.value) > 50) {
       // toast.error("Maximum video limit is 50 :(", {});
       setEndVideoNumber(50);
     } else {
@@ -127,7 +129,7 @@ function HomePage() {
       getVideoDurationInDiffSpeed(totalTimeDuration);
     setVidPlaybackTimeInDiffSpeed(playbackTimeInDiffSpeed);
     setShowVideoPlaybackDuration(true);
-    setSsLoading(false);
+    setIsLoading(false);
     // console.log(showVideoPlaybackDuration);
     // console.log(endVideoNumber);
     // console.log(setTotalTimeDurationOfPlaylist);
@@ -179,7 +181,7 @@ function HomePage() {
             <VideoRangeInput
               min={1}
               max={50}
-              placeholder={totalVideosInPlaylist ? totalVideosInPlaylist : "50"}
+              placeholder={totalVideosInPlaylist.toString() || "50"}
               onChange={handleUpperRangeToInput}
             />
           </div>
@@ -199,8 +201,8 @@ function HomePage() {
 
             <h1>
               Length of playlist from video no.{" "}
-              <SemiboldSpanContainer text={startVideoNumber} /> to{" "}
-              <SemiboldSpanContainer text={endVideoNumber} /> is :{" "}
+              <SemiboldSpanContainer text={startVideoNumber.toString()} /> to{" "}
+              <SemiboldSpanContainer text={endVideoNumber.toString()} /> is :{" "}
               <SemiboldSpanContainer
                 text={`${totalTimeDurationOfPlaylist.hr} hours, ${totalTimeDurationOfPlaylist.min} minutes, ${totalTimeDurationOfPlaylist.sec} seconds.`}
               />
@@ -237,12 +239,12 @@ function HomePage() {
         </div>
       ) : (
         <div className="h-80 flex justify-center pt-16">
-          {isLoading && (
-            <div className="opacity-70 flex flex-col">
-              <ScaleLoader size={40} className="mx-auto w-fit" />
-              <p className="text-purple-900">Fetching data..</p>
-            </div>
-          )}
+          {isLoading &&
+          <div className="opacity-70 flex flex-col">
+            <ScaleLoader className="mx-auto w-fit" />
+            <p className="text-purple-900">Fetching data..</p>
+          </div>
+          }
         </div>
       )}
     </div>
