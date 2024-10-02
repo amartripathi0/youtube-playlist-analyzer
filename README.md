@@ -1,6 +1,6 @@
 # YouTube Playlist Analyzer
 
-A web application to calculate the total watch time of YouTube playlists at various playback speeds, developed to explore React, Vite, Tailwind CSS, Google Youtube API data fetching, and deployment with Vercel.
+A web application to calculate the total watch time of YouTube playlists at various playback speeds, developed using Nextjs, Typescript, React, Vite, Tailwind CSS, Google Youtube API data fetching, Framer Motion and deployment with Vercel.
 
 ## Project Background
 
@@ -8,6 +8,14 @@ As a regular YouTube viewer, I've always been curious about the total time requi
 
 React, Vite, Tailwind CSS, GitHub Pages, API Data Fetching.
 
+#### Update (Vite to Nextjs):
+
+- As it's not best practice to expose private API keys, I decided to rewrite the codebase using Next.js, which I had recently learned.
+
+By leveraging Next.js, I was able to handle the YouTube API requests on the server side instead of the client side, effectively protecting my API key from exposure. This transition not only enhanced security but also allowed me to improve the frontend with better structure and added type safety.
+
+- #### new-site: NEXTJS codebase(deplopyed)
+- #### old-site: React VITE codebase
 ## Features
 
 - The YouTube Playlist Analyzer simplifies playlist consumption by calculating the total duration of videos within a given YouTube playlist.
@@ -20,7 +28,16 @@ React, Vite, Tailwind CSS, GitHub Pages, API Data Fetching.
 
    ```bash
    git clone https://github.com/amartripathi0/youtube-playlist-analyzer.git
+
    cd youtube-playlist-analyzer
+
+   # for Nextjs Codebase
+   cd new-site
+
+   or
+
+   # for Vite Codebase
+   cd old-site
 
    npm install
    ```
@@ -29,14 +46,23 @@ React, Vite, Tailwind CSS, GitHub Pages, API Data Fetching.
 
    - Obtain a YouTube Data API key.
    - Create a `.env` file in the root directory.
-   - Add `VITE_YT_API_KEY=your_api_key_here`.
+
+      - new-site
+         - Add `YT_API_KEY=your_api_key_here`.
+      - old-site
+         - Add `VITE_YT_API_KEY=your_api_key_here`.
 
 3. **Launch**:
    ```bash
    npm run dev
    ```
 
-Navigate to `http://localhost:5173` to explore the application.
+Navigate to to explore the application.
+ - new-site:
+ `http://localhost:3000`
+- old-site:  `http://localhost:5173`
+
+  
 
 ## Limitations
 
