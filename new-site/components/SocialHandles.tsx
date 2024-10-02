@@ -3,7 +3,7 @@ import { FaGithub } from "react-icons/fa";
 import { MdOutlineMail } from "react-icons/md";
 import { socialMediaIconWithLinks } from "../constants";
 
-function SocialHandles({ additionalStyles }) {
+function SocialHandles({ additionalStyles }: { additionalStyles ?: string}) {
   return (
     <div
       className={`${additionalStyles} flex sm:gap-4 gap-3 justify-between items-center`}

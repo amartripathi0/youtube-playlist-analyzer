@@ -1,6 +1,13 @@
 import React from "react";
 
-function VideoRangeInput({ onChange, min, max, placeholder }) {
+interface VideoRangeInputProps {
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  min: number;
+  max: number;
+  placeholder: string;
+}
+
+function VideoRangeInput({ onChange, min, max, placeholder }: VideoRangeInputProps) {
   return (
     <input
       type="number"

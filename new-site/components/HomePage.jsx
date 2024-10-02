@@ -7,7 +7,7 @@ import {
   getPlaylistId,
   getTotalTimeDuration,
   getVideoDurationInDiffSpeed,
-} from "../utils";
+} from "@/utils";
 import { IoMdTime } from "react-icons/io";
 import { PiVideoLight } from "react-icons/pi";
 import PlaybackSpeedWatchtime from "./playback-speed-watchtime";

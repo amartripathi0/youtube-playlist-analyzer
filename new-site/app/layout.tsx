@@ -3,6 +3,7 @@ import { Montserrat, Raleway } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { Analytics } from "@vercel/analytics/next";
+import Head from "next/head";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -26,6 +27,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />;
+      </Head>
       <body
         className={`${montserrat.variable} ${raleway.variable} font-montserrat antialiased`}
       >
