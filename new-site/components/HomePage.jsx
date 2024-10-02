@@ -149,7 +149,7 @@ function HomePage() {
             placeholder="https://www.youtube.com/playlist?list=PL3Y15344T8045DroPBjkYJQCz9tndR17tSSmG"
           />
           <button
-            className="p-2 sm:px-4 flex items-center gap-1 sm:gap-2 h-full text-sm bg-gradient-to-b from-purple-400 to-pink-300 hover:from-purple-500 hover:to-pink-400 transition-all duration-300 text-neutral-800 hover-text-neutral-950"
+            className="p-2.5 sm:px-4 flex items-center gap-1 sm:gap-2 h-full text-sm bg-gradient-to-b from-purple-400 to-pink-300 hover:from-purple-500 hover:to-pink-400 transition-all duration-300 text-neutral-800 hover-text-neutral-950"
             onKeyUp={(e) => e.key === "Enter" && handleFetchAndStoreVideoId()}
             onClick={handleFetchAndStoreVideoId}
           >
