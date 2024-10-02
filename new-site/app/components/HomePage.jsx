@@ -133,7 +133,7 @@ function HomePage() {
     // console.log(setTotalTimeDurationOfPlaylist);
   }
   return (
-    <div className="mt-6 sm:mt-8 md:mt-10 text-black  mx-6 md:mx-28 lg:mx-64 font-medium flex flex-col gap-4 sm:gap-5">
+    <div className="mt-4 md:mt-6 lg:mt-10 text-black  mx-6 md:mx-28 lg:mx-64 font-medium flex flex-col gap-4 sm:gap-5 ">
       <div className="flex flex-col gap-2">
         {/* Input Heading:Enter a YouTube playlist link below :-  */}
         <h1 className=" text-lg max-sm:text-base">
@@ -187,8 +187,8 @@ function HomePage() {
       </div>
 
       {showVideoPlaybackDuration ? (
-        <div className="font-normal flex flex-col gap-4 sm:gap-5  text-sm sm:text-base h-80">
-          <div className="flex flex-col gap-1 sm:gap-2">
+        <div className="font-normal flex flex-col gap-4 sm:gap-5  text-sm sm:text-base h-64 md:h-80">
+          <div className="flex flex-col gap-1 md:gap-2">
             <h1>
               Channel Name : <SemiboldSpanContainer text={`${channelName}`} />
             </h1>

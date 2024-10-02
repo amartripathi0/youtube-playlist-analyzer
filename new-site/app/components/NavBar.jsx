@@ -20,16 +20,18 @@ export default function NavBar() {
           alt=""
         />
 
-        <h1 className="text-base hover:text-neutral-900 transition-colors duration-150 max-sm:hidden">Youtube Playlist Analyzer</h1>
+        <h1 className="text-base hover:text-neutral-900 transition-colors duration-150 max-sm:hidden">
+          Youtube Playlist Analyzer
+        </h1>
       </a>
       <div className="flex">
-        <SocialHandles />
+        <SocialHandles additionalStyles={"max-sm:hidden"} />
         <button>
           <a
             href="https://amartripathi.vercel.app"
             target="_blank"
             rel="noreferrer"
-            className="ml-4 text-sm bg-purple-200 hover:text-neutral-900 border-pink-300 hover:opacity-100  hover:scale-105 border p-2 py-1.5 rounded duration-150 flex justify-center items-center gap-1"
+            className="ml-4 text-sm bg-purple-200 hover:text-neutral-900 border-pink-300 hover:opacity-100  hover:scale-105 border p-2 py-1.5 rounded duration-150 flex justify-center items-center gap-1 "
           >
             My Portfolio <BsArrowRight className="-rotate-45" />{" "}
           </a>

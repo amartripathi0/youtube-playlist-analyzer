@@ -3,9 +3,11 @@ import { FaGithub } from "react-icons/fa";
 import { MdOutlineMail } from "react-icons/md";
 import { socialMediaIconWithLinks } from "../constants";
 
-function SocialHandles() {
+function SocialHandles({ additionalStyles }) {
   return (
-    <div className="flex sm:gap-4 gap-3 justify-between items-center">
+    <div
+      className={`${additionalStyles} flex sm:gap-4 gap-3 justify-between items-center`}
+    >
       {socialMediaIconWithLinks.map((link) => (
         <a
           href={link.link}
@@ -18,7 +20,7 @@ function SocialHandles() {
             <FaLinkedin size={18} />
           ) : link.label === "Email" ? (
             <MdOutlineMail size={21} />
-          ) :  (
+          ) : (
             <FaGithub size={18} />
           )}
         </a>
