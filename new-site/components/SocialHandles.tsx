@@ -1,10 +1,13 @@
-import { FaLinkedin } from "react-icons/fa";
-import { FaGithub } from "react-icons/fa";
+import { FaLinkedin, FaGithub, FaTwitter } from "react-icons/fa";
 import { MdOutlineMail } from "react-icons/md";
 import { socialMediaIconWithLinks } from "../constants";
-import Link from "next/link";
+import Link from 'next/link';
 
-function SocialHandles({ additionalStyles }: { additionalStyles ?: string}) {
+interface SocialHandlesProps {
+  additionalStyles?: string;
+}
+
+const SocialHandles: React.FC<SocialHandlesProps> = ({ additionalStyles }: SocialHandlesProps) => {
   return (
     <div
       className={`${additionalStyles} flex sm:gap-4 gap-3 justify-between items-center`}
@@ -21,6 +24,8 @@ function SocialHandles({ additionalStyles }: { additionalStyles ?: string}) {
             <FaLinkedin size={18} />
           ) : link.label === "Email" ? (
             <MdOutlineMail size={21} />
+          ) : link.label === "Twitter" ? (
+            <FaTwitter size={18} />
           ) : (
             <FaGithub size={18} />
           )}
@@ -28,6 +33,6 @@ function SocialHandles({ additionalStyles }: { additionalStyles ?: string}) {
       ))}
     </div>
   );
-}
+};
 
 export default SocialHandles;

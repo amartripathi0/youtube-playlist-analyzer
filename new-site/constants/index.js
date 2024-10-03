@@ -57,6 +57,10 @@ export const siteKeywordsArray  = [
   ]
 export const socialMediaIconWithLinks = [
   {
+    label: "Twitter",
+    link: "https://twitter.com/amartripathi_",
+  },
+  {
     label: "LinkedIn",
     link: "https://www.linkedin.com/in/amar-tripathi/",
   },
