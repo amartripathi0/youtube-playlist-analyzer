@@ -1,5 +1,5 @@
 "use client";
-import { ChangeEvent, useEffect, useState, useRef } from "react";
+import { ChangeEvent, useEffect, useState, useRef, useCallback } from "react";
 import {
   checkPlaylistLinkValidity,
   getAllVideosIdInPlaylist,
@@ -14,6 +14,7 @@ import { BsArrowRight, BsYoutube, BsLightningCharge, BsShieldCheck, BsCcSquare, 
 import PlaybackSpeedWatchtime from "./playback-speed-watchtime";
 import VideoRangeInput from "./video-range-input";
 import VideoExplorer from "./VideoExplorer";
+import AdUnit from "./AdUnit";
 import { toast } from "sonner";
 import { ScaleLoader } from "react-spinners";
 import { TotalTimeDurationType, VidPlaybackTimeInDiffSpeedType, VideoMetadata, PlaylistInsights, SortOrder } from "@/types";
@@ -50,7 +51,47 @@ function HomePage() {
     }
   }, [showVideoPlaybackDuration]);
 
-  async function handleFetchAndStoreVideoId() {
+  const handlePlaylistDataProcessing = useCallback(async (
+    totalVideosUnits: number,
+    startOverride?: number,
+    endOverride?: number
+  ) => {
+    try {
+      const metadataArray = await getEachVideoMetadataArray(allVideosId);
+      setAllVideosMetadata(metadataArray);
+
+      const start = startOverride ?? startVideoNumber;
+      const end = endOverride ?? endVideoNumber;
+
+      const totalTimeDuration = getTotalTimeDuration(
+        metadataArray,
+        start,
+        end,
+        totalVideosUnits
+      );
+      setTotalTimeDurationOfPlaylist(totalTimeDuration);
+
+      const insights = getPlaylistInsights(
+        metadataArray,
+        start,
+        end,
+        totalVideosUnits
+      );
+      setPlaylistInsights(insights);
+
+      const playbackTimeInDiffSpeed =
+        getVideoDurationInDiffSpeed(totalTimeDuration);
+      setVidPlaybackTimeInDiffSpeed(playbackTimeInDiffSpeed);
+      setShowVideoPlaybackDuration(true);
+    } catch (error: unknown) {
+      const errMsg = error instanceof Error ? error.message : "Error processing playlist data.";
+      toast.error(errMsg);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [allVideosId, startVideoNumber, endVideoNumber]);
+
+  const handleFetchAndStoreVideoId = useCallback(async () => {
     setIsLoading(true);
     const isPlayListLinkValid = checkPlaylistLinkValidity(playlistLink);
     if (!isPlayListLinkValid) {
@@ -87,7 +128,7 @@ function HomePage() {
     } else {
       handlePlaylistDataProcessing(allVideosId.length);
     }
-  }
+  }, [playlistLink, startVideoNumber, endVideoNumber, allVideosId.length, playlistInputChanged, handlePlaylistDataProcessing]);
 
   useEffect(() => {
     if (allVideosId.length !== 0) {
@@ -100,7 +141,7 @@ function HomePage() {
         handlePlaylistDataProcessing(total, 1, total);
       }
     }
-  }, [allVideosId]);
+  }, [allVideosId, endVideoInputChanged, handlePlaylistDataProcessing]);
 
   function handlePlaylistLinkInputChange(e: ChangeEvent<HTMLInputElement>) {
     setPlaylistLink(e.target.value);
@@ -132,46 +173,6 @@ function HomePage() {
     } else {
       setEndVideoNumber(val);
       setEndVideoInputChanged(true);
-    }
-  }
-
-  async function handlePlaylistDataProcessing(
-    totalVideosUnits: number,
-    startOverride?: number,
-    endOverride?: number
-  ) {
-    try {
-      const metadataArray = await getEachVideoMetadataArray(allVideosId);
-      setAllVideosMetadata(metadataArray);
-
-      const start = startOverride ?? startVideoNumber;
-      const end = endOverride ?? endVideoNumber;
-
-      const totalTimeDuration = getTotalTimeDuration(
-        metadataArray,
-        start,
-        end,
-        totalVideosUnits
-      );
-      setTotalTimeDurationOfPlaylist(totalTimeDuration);
-
-      const insights = getPlaylistInsights(
-        metadataArray,
-        start,
-        end,
-        totalVideosUnits
-      );
-      setPlaylistInsights(insights);
-
-      const playbackTimeInDiffSpeed =
-        getVideoDurationInDiffSpeed(totalTimeDuration);
-      setVidPlaybackTimeInDiffSpeed(playbackTimeInDiffSpeed);
-      setShowVideoPlaybackDuration(true);
-    } catch (error: unknown) {
-      const errMsg = error instanceof Error ? error.message : "Error processing playlist data.";
-      toast.error(errMsg);
-    } finally {
-      setIsLoading(false);
     }
   }
 
@@ -341,6 +342,12 @@ function HomePage() {
                     </motion.div>
                   </div>
                 )}
+
+                <AdUnit
+                  slot="1234567890"
+                  className="mt-4"
+                  minHeight="100px"
+                />
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                   <PlaybackSpeedWatchtime speed="1.25" vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed} />

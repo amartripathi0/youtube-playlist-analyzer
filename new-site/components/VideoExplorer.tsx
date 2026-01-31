@@ -1,10 +1,12 @@
 import React, { useState, useMemo } from "react";
 import { VideoMetadata, TranscriptItem, SortOrder } from "@/types";
 import { motion, AnimatePresence } from "framer-motion";
-import { BsSearch, BsSortDown, BsLightningCharge, BsShieldCheck, BsCcSquare, BsDownload, BsFileEarmarkArrowDown, BsFileText } from "react-icons/bs";
+import { BsSearch, BsSortDown, BsShieldCheck, BsCcSquare, BsDownload, BsFileEarmarkArrowDown, BsFileText } from "react-icons/bs";
 import { getTranscriptAction, getBulkTranscriptsAction } from "@/app/actions";
 import { toast } from "sonner";
 import { BeatLoader } from "react-spinners";
+import AdUnit from "./AdUnit";
+import Image from "next/image";
 
 interface VideoExplorerProps {
     videos: VideoMetadata[];
@@ -247,98 +249,109 @@ export default function VideoExplorer({ videos, sortOrder, onSortChange }: Video
                 >
                     <AnimatePresence mode="popLayout">
                         {filteredAndSortedVideos.map((video: VideoMetadata, index: number) => (
-                            <motion.div
-                                layout
-                                key={video.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                transition={{ delay: Math.min(index * 0.05, 0.5), duration: 0.4 }}
-                                className="group flex flex-col bg-secondary/20 rounded-2xl border border-white/5 overflow-hidden hover:border-primary/30 transition-all hover:shadow-2xl hover:shadow-primary/5 relative"
-                            >
-                                <div className="relative aspect-video overflow-hidden">
-                                    <img
-                                        src={video.thumbnail}
-                                        alt={video.title}
-                                        className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
-                                    />
-                                    <div className="absolute top-2 right-2 flex gap-2 translate-y-[-10px] opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                                        <button
-                                            onClick={() => handleDownloadThumbnail(video.thumbnail, video.title)}
-                                            className="p-2 bg-black/60 backdrop-blur-md rounded-lg text-white hover:bg-primary transition-colors hover:scale-110 active:scale-95"
-                                            title="Download Thumbnail"
-                                        >
-                                            <BsDownload size={14} />
-                                        </button>
-                                        {video.caption && (
+                            <React.Fragment key={video.id}>
+                                <motion.div
+                                    layout
+                                    key={video.id}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, scale: 0.9 }}
+                                    transition={{ delay: Math.min(index * 0.05, 0.5), duration: 0.4 }}
+                                    className="group flex flex-col bg-secondary/20 rounded-2xl border border-white/5 overflow-hidden hover:border-primary/30 transition-all hover:shadow-2xl hover:shadow-primary/5 relative"
+                                >
+                                    <div className="relative aspect-video overflow-hidden">
+                                        <Image
+                                            src={video.thumbnail}
+                                            alt={video.title}
+                                            fill
+                                            className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
+                                        />
+                                        <div className="absolute top-2 right-2 flex gap-2 translate-y-[-10px] opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
                                             <button
-                                                onClick={() => handleDownloadTranscript(video.id, video.title)}
-                                                className="p-2 bg-black/60 backdrop-blur-md rounded-lg text-white hover:bg-green-500 transition-colors hover:scale-110 active:scale-95"
-                                                title="Download Transcript"
+                                                onClick={() => handleDownloadThumbnail(video.thumbnail, video.title)}
+                                                className="p-2 bg-black/60 backdrop-blur-md rounded-lg text-white hover:bg-primary transition-colors hover:scale-110 active:scale-95"
+                                                title="Download Thumbnail"
                                             >
-                                                <BsFileText size={14} />
+                                                <BsDownload size={14} />
                                             </button>
-                                        )}
-                                    </div>
-                                    <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/80 backdrop-blur-md rounded text-[10px] font-black text-white uppercase tracking-tighter">
-                                        {video.duration.replace("PT", "").replace("H", "H ").replace("M", "M ").replace("S", "S")}
-                                    </div>
-                                </div>
-
-                                <div className="p-4 flex flex-col gap-3 flex-1">
-                                    <h3 className="text-xs font-bold line-clamp-2 min-h-[2.5rem] leading-relaxed group-hover:text-primary transition-colors">
-                                        {video.title}
-                                    </h3>
-
-                                    <div className="flex items-center gap-4 mt-auto">
-                                        <div className={`flex items-center gap-1.5 ${video.definition === 'hd' ? 'text-blue-400' : 'text-muted-foreground/40'}`}>
-                                            <BsShieldCheck size={12} />
-                                            <span className="text-[9px] font-black uppercase tracking-widest">{video.definition}</span>
+                                            {video.caption && (
+                                                <button
+                                                    onClick={() => handleDownloadTranscript(video.id, video.title)}
+                                                    className="p-2 bg-black/60 backdrop-blur-md rounded-lg text-white hover:bg-green-500 transition-colors hover:scale-110 active:scale-95"
+                                                    title="Download Transcript"
+                                                >
+                                                    <BsFileText size={14} />
+                                                </button>
+                                            )}
                                         </div>
-                                        {video.caption && (
-                                            <div className="flex items-center gap-1.5 text-green-400">
-                                                <BsCcSquare size={12} />
-                                                <span className="text-[9px] font-black uppercase tracking-widest">CC</span>
+                                        <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/80 backdrop-blur-md rounded text-[10px] font-black text-white uppercase tracking-tighter">
+                                            {video.duration.replace("PT", "").replace("H", "H ").replace("M", "M ").replace("S", "S")}
+                                        </div>
+                                    </div>
+
+                                    <div className="p-4 flex flex-col gap-3 flex-1">
+                                        <h3 className="text-xs font-bold line-clamp-2 min-h-[2.5rem] leading-relaxed group-hover:text-primary transition-colors">
+                                            {video.title}
+                                        </h3>
+
+                                        <div className="flex items-center gap-4 mt-auto">
+                                            <div className={`flex items-center gap-1.5 ${video.definition === 'hd' ? 'text-blue-400' : 'text-muted-foreground/40'}`}>
+                                                <BsShieldCheck size={12} />
+                                                <span className="text-[9px] font-black uppercase tracking-widest">{video.definition}</span>
+                                            </div>
+                                            {video.caption && (
+                                                <div className="flex items-center gap-1.5 text-green-400">
+                                                    <BsCcSquare size={12} />
+                                                    <span className="text-[9px] font-black uppercase tracking-widest">CC</span>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {video.caption ? (
+                                            <button
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    handleDownloadTranscript(video.id, video.title);
+                                                }}
+                                                disabled={loadingIds.has(video.id)}
+                                                className="mt-2 w-full flex items-center justify-center gap-2 py-2 bg-green-500/10 hover:bg-green-500/20 text-green-500 rounded-lg border border-green-500/20 transition-all text-[10px] font-black uppercase tracking-widest group/dl-btn"
+                                            >
+                                                {loadingIds.has(video.id) ? (
+                                                    <BeatLoader size={4} color="currentColor" />
+                                                ) : (
+                                                    <>
+                                                        <BsFileText size={12} className="group-hover/dl-btn:scale-110 transition-transform" />
+                                                        DOWNLOAD SCRIPT
+                                                    </>
+                                                )}
+                                            </button>
                                             </div>
                                         )}
-                                    </div>
-
-                                    {video.caption ? (
-                                        <button
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                handleDownloadTranscript(video.id, video.title);
-                                            }}
-                                            disabled={loadingIds.has(video.id)}
-                                            className="mt-2 w-full flex items-center justify-center gap-2 py-2 bg-green-500/10 hover:bg-green-500/20 text-green-500 rounded-lg border border-green-500/20 transition-all text-[10px] font-black uppercase tracking-widest group/dl-btn"
-                                        >
-                                            {loadingIds.has(video.id) ? (
-                                                <BeatLoader size={4} color="currentColor" />
-                                            ) : (
-                                                <>
-                                                    <BsFileText size={12} className="group-hover/dl-btn:scale-110 transition-transform" />
-                                                    DOWNLOAD SCRIPT
-                                                </>
-                                            )}
-                                        </button>
-                                    ) : (
-                                        <div className="mt-2 w-full flex items-center justify-center gap-2 py-2 bg-secondary/10 text-muted-foreground/40 rounded-lg border border-white/5 text-[9px] font-black uppercase tracking-widest cursor-default">
-                                            <BsFileText size={12} className="opacity-20" />
-                                            Captions not available
-                                        </div>
-                                    )}
                                 </div>
                             </motion.div>
+                                {(index + 1) % 8 === 0 && (
+                                <div className="md:col-span-1 border border-white/5 bg-white/[0.02] rounded-3xl p-4 flex flex-col items-center justify-center min-h-[250px]">
+                                    <AdUnit
+                                        slot="1122334455"
+                                        format="fluid"
+                                        minHeight="180px"
+                                        className="my-0"
+                                    />
+                                </div>
+                            )}
+                    </React.Fragment>
                         ))}
-                    </AnimatePresence>
-                </motion.div>
-            </div>
-
-            {filteredAndSortedVideos.length === 0 && (
-                <div className="flex flex-col items-center justify-center py-20 text-muted-foreground gap-4">
-                    <p className="text-sm font-medium">No videos found matching your search.</p>
-                </div>
-            )}
+                </AnimatePresence>
+            </motion.div>
         </div>
+
+            {
+        filteredAndSortedVideos.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-20 text-muted-foreground gap-4">
+                <p className="text-sm font-medium">No videos found matching your search.</p>
+            </div>
+        )
+    }
+        </div >
     );
 }
