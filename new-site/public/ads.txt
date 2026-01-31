@@ -1,3 +1,3 @@
 # Google AdSense Ads.txt placeholder
 # Replace with your actual publisher information once approved
-google.com, pub-xxxxxxxxxxxxxxxx, DIRECT, f08c47fec0942fa0
+google.com, pub-8927401111255619, DIRECT, f08c47fec0942fa0

@@ -42,7 +42,7 @@ export default function AdUnit({
                 <ins
                     className="adsbygoogle"
                     style={style}
-                    data-ad-client="ca-pub-xxxxxxxxxxxxxxxx"
+                    data-ad-client="ca-pub-8927401111255619"
                     data-ad-slot={slot}
                     data-ad-format={format}
                     data-full-width-responsive={responsive}
