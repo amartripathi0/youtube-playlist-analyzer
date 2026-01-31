@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     "Analyze YouTube playlist duration instantly. Calculate total watch time at 1.25x, 1.5x, 1.75x, and 2x speeds. Optimize your learning and binge-watching with precise insights.",
   authors: [{ name: "Amar Tripathi" }],
   keywords: siteKeywordsArray,
-  metadataBase: new URL("https://youtube-playlist-analyzer.amartripathi.com/"),
+  metadataBase: new URL("https://youtube-analyzer.amartripathi.com/"),
   alternates: {
     canonical: "/",
   },
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "YouTube Playlist Analyzer",
     description: "Calculate total watch time and speed savings for any YouTube playlist.",
-    url: "https://youtube-playlist-analyzer.amartripathi.com/",
+    url: "https://youtube-analyzer.amartripathi.com/",
     siteName: "YouTube Playlist Analyzer",
     locale: "en_US",
     type: "website",
