@@ -157,6 +157,11 @@ function HomePage() {
           Enter a YouTube playlist link below to calculate total watch time (up to 250 videos):
         </p>
 
+        <div className="flex gap-2 mb-1">
+          <span className="text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-700 border border-green-200">100% Free</span>
+          <span className="text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 border border-blue-200">No Login Required</span>
+        </div>
+
         {/* Input field and Analyze button */}
         <div className="flex items-center justify-between rounded border-neutral-400 focus-within:border-purple-800 border-2 overflow-hidden shadow-sm">
           <input
