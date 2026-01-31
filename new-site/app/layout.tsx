@@ -157,8 +157,8 @@ export default function RootLayout({
           <Analytics />
         </ThemeProvider>
 
-        {/* Sticky Anchor Ad Unit */}
-        <div className="fixed bottom-0 left-0 right-0 z-[100] bg-background/80 backdrop-blur-md border-t border-white/5 h-24 flex items-center justify-center pointer-events-auto">
+        {/* Sticky Anchor Ad Unit (Mobile/Tablet) */}
+        <div className="xl:hidden fixed bottom-0 left-0 right-0 z-[100] bg-background/80 backdrop-blur-md border-t border-white/5 h-24 flex items-center justify-center pointer-events-auto">
           <AdUnit
             slot="0987654321"
             format="rectangle"
@@ -166,6 +166,25 @@ export default function RootLayout({
             className="my-0 px-4 max-w-4xl"
           />
         </div>
+
+        {/* Sticky Skyscraper Sidebars (Wide Screens Only) */}
+        <aside className="hidden xl:flex fixed left-4 top-1/2 -translate-y-1/2 z-[100] w-[160px] h-[600px] pointer-events-auto">
+          <AdUnit
+            slot="1111111111"
+            format="auto"
+            minHeight="600px"
+            className="my-0"
+          />
+        </aside>
+
+        <aside className="hidden xl:flex fixed right-4 top-1/2 -translate-y-1/2 z-[100] w-[160px] h-[600px] pointer-events-auto">
+          <AdUnit
+            slot="2222222222"
+            format="auto"
+            minHeight="600px"
+            className="my-0"
+          />
+        </aside>
       </body>
     </html>
   );
