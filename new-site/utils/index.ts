@@ -1,5 +1,5 @@
-import { TotalTimeDurationType, VidPlaybackTimeInDiffSpeedType } from "@/types";
-import { getPlaylistVideosAction, getVideoDurationsAction } from "@/app/actions";
+import { TotalTimeDurationType, VidPlaybackTimeInDiffSpeedType, VideoMetadata, PlaylistInsights } from "@/types";
+import { getPlaylistVideosAction, getVideoMetadataAction } from "@/app/actions";
 
 export function getPlaylistId(playlistLink: string): string {
   const playlistIDIndex = playlistLink.indexOf("list=") + 5;
@@ -12,14 +12,14 @@ export async function getAllVideosIdInPlaylist(
   return await getPlaylistVideosAction(playlistId);
 }
 
-export async function getEachVideoDurationArray(
+export async function getEachVideoMetadataArray(
   playlistAllVideosIdArray: string[]
-): Promise<string[]> {
-  return await getVideoDurationsAction(playlistAllVideosIdArray);
+): Promise<VideoMetadata[]> {
+  return await getVideoMetadataAction(playlistAllVideosIdArray);
 }
 
 export function getTotalTimeDuration(
-  eachVideoDurationArray: string[],
+  eachVideoMetadataArray: VideoMetadata[],
   fromVidNum: number,
   toVidNum: number,
   totalVideosInPlaylist: number
@@ -34,10 +34,10 @@ export function getTotalTimeDuration(
   const durationRegex = /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/;
 
   for (let i = lowerIndxFrom; i <= upperIndexTo; i++) {
-    const time = eachVideoDurationArray[i];
-    if (!time) continue;
+    const video = eachVideoMetadataArray[i];
+    if (!video || !video.duration) continue;
 
-    const matches = time.match(durationRegex);
+    const matches = video.duration.match(durationRegex);
     if (!matches) continue;
 
     const hours = parseInt(matches[1] || "0", 10);
@@ -48,7 +48,6 @@ export function getTotalTimeDuration(
     totalMin += minutes;
     totalSec += seconds;
 
-    // Normalize on each iteration to prevent large number overflow (though unlikely here)
     totalMin += Math.floor(totalSec / 60);
     totalSec %= 60;
     totalHr += Math.floor(totalMin / 60);
@@ -56,6 +55,53 @@ export function getTotalTimeDuration(
   }
 
   return { hr: totalHr, min: totalMin, sec: totalSec };
+}
+
+export function getPlaylistInsights(
+  eachVideoMetadataArray: VideoMetadata[],
+  fromVidNum: number,
+  toVidNum: number,
+  totalVideosInPlaylist: number
+): PlaylistInsights {
+  const upperIndexTo = (toVidNum > 0 && toVidNum <= totalVideosInPlaylist) ? toVidNum - 1 : totalVideosInPlaylist - 1;
+  const lowerIndxFrom = (fromVidNum > 0 && fromVidNum <= totalVideosInPlaylist) ? fromVidNum - 1 : 0;
+
+  let totalSec = 0;
+  let hdCount = 0;
+  let captionCount = 0;
+  let processedCount = 0;
+
+  const durationRegex = /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/;
+
+  for (let i = lowerIndxFrom; i <= upperIndexTo; i++) {
+    const video = eachVideoMetadataArray[i];
+    if (!video) continue;
+
+    processedCount++;
+    if (video.definition === "hd") hdCount++;
+    if (video.caption) captionCount++;
+
+    const matches = video.duration.match(durationRegex);
+    if (matches) {
+      const hours = parseInt(matches[1] || "0", 10);
+      const minutes = parseInt(matches[2] || "0", 10);
+      const seconds = parseInt(matches[3] || "0", 10);
+      totalSec += hours * 3600 + minutes * 60 + seconds;
+    }
+  }
+
+  const avgTotalSec = processedCount > 0 ? totalSec / processedCount : 0;
+
+  return {
+    totalSec,
+    avgDuration: {
+      hr: Math.floor(avgTotalSec / 3600),
+      min: Math.floor((avgTotalSec % 3600) / 60),
+      sec: Math.floor(avgTotalSec % 60),
+    },
+    hdPercentage: processedCount > 0 ? (hdCount / processedCount) * 100 : 0,
+    captionPercentage: processedCount > 0 ? (captionCount / processedCount) * 100 : 0,
+  };
 }
 
 export function getVideoDurationInDiffSpeed(timeObj: {
