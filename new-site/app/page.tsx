@@ -16,32 +16,7 @@ export default function Home() {
       <div className="relative z-10 flex flex-col min-h-screen">
         <NavBar />
 
-        <div className="flex-grow py-8 md:py-12 relative">
-          {/* Sticky Skyscraper Sidebars (Wide Screens Only) */}
-          {/* Left Sidebar */}
-          <aside className="hidden xl:block absolute left-4 h-full">
-            <div className="sticky top-24 w-[160px] h-[600px]">
-              <AdUnit
-                slot="6315446429"
-                format="auto"
-                minHeight="600px"
-                className="my-0"
-              />
-            </div>
-          </aside>
-
-          {/* Right Sidebar */}
-          <aside className="hidden xl:block absolute right-4 h-full">
-            <div className="sticky top-24 w-[160px] h-[600px]">
-              <AdUnit
-                slot="1239213715"
-                format="auto"
-                minHeight="600px"
-                className="my-0"
-              />
-            </div>
-          </aside>
-
+        <div className="flex-grow py-8 md:py-12">
           <HomePage />
         </div>
 
