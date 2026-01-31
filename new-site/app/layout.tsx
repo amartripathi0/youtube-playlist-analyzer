@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Montserrat, Raleway } from "next/font/google";
+import { Montserrat, Raleway, Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@vercel/analytics/next";
 import { siteKeywordsArray } from "@/constants";
 
@@ -15,9 +16,13 @@ const raleway = Raleway({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-raleway",
 });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
 
 export const viewport: Viewport = {
-  themeColor: "#fdf2f2", // rose-50
+  themeColor: "#4f46e5",
   width: "device-width",
   initialScale: 1,
 };
@@ -125,17 +130,24 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${montserrat.variable} ${raleway.variable} font-montserrat antialiased`}
+        className={`${montserrat.variable} ${raleway.variable} ${inter.variable} font-inter antialiased border-none outline-none`}
       >
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-        {children}
-        <Toaster richColors closeButton theme="dark" />
-        <Analytics />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          />
+          {children}
+          <Toaster richColors closeButton />
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   );
