@@ -30,7 +30,7 @@ function Footer() {
       </div>
 
       <div className="mt-12 text-center text-[10px] font-black tracking-[0.3em] uppercase opacity-20 select-none">
-        Crafted with pride by <a href="https://amartripathi.com" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors">Amar Tripathi</a>
+        Crafted with pride by <a href="https://amartripathi.com?ref=yt-analyzer" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors">Amar Tripathi</a>
       </div>
     </footer>
   );

@@ -35,7 +35,7 @@ export default function NavBar() {
           <div className="h-4 w-px bg-border/60 mx-1" />
           <ThemeToggle />
           <Link
-            href="https://amartripathi.com"
+            href="https://amartripathi.com?ref=yt-analyzer"
             target="_blank"
             rel="noreferrer"
             className="hidden md:flex px-5 py-2 text-xs font-black uppercase tracking-widest rounded-full bg-foreground text-background hover:bg-primary hover:text-white transition-all duration-300 items-center gap-2 group shadow-lg shadow-black/5 dark:shadow-white/5"
