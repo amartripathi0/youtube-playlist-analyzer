@@ -6,6 +6,8 @@
  * Secrets: YT_API_KEY is isolated here and never exposed to the client.
  */
 
+import { YoutubeTranscript } from "youtube-transcript";
+
 const API_KEY = process.env.YT_API_KEY;
 
 // Strict Regex for YouTube IDs to prevent injection/malformed requests
@@ -32,6 +34,8 @@ export async function getPlaylistVideosAction(playlistId: string) {
 
             const response = await fetch(url);
             const data = await response.json();
+            console.log("[YT_RAW_DATA][PLAYLIST_ITEMS]", JSON.stringify(data, null, 2));
+
 
             if (!response.ok) {
                 // Internal logging for the developer
@@ -68,17 +72,13 @@ export async function getPlaylistVideosAction(playlistId: string) {
     }
 }
 
-export async function getVideoDurationsAction(playlistAllVideosIdArray: string[]) {
+export async function getVideoMetadataAction(playlistAllVideosIdArray: string[]) {
     try {
-        // 1. Strict Input Validation
         if (!playlistAllVideosIdArray || !Array.isArray(playlistAllVideosIdArray)) {
             throw new Error("Invalid Input: Array expected");
         }
 
-        // 2. Deep Sanitization of IDs
         const safeIds = playlistAllVideosIdArray.filter(id => typeof id === 'string' && isValidId(id));
-
-        // 3. Enforcement of Limits (Server-side)
         const limitedIds = safeIds.slice(0, 250);
 
         const batches: string[][] = [];
@@ -86,26 +86,94 @@ export async function getVideoDurationsAction(playlistAllVideosIdArray: string[]
             batches.push(limitedIds.slice(i, i + 50));
         }
 
-        const fetchDurations = async (idBatch: string[]) => {
+        const fetchMetadata = async (idBatch: string[]) => {
             const ids = idBatch.join(",");
-            const url = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${ids}&key=${API_KEY}`;
+            // Added snippet to part for thumbnails and titles
+            const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${ids}&key=${API_KEY}`;
             const response = await fetch(url);
             const data = await response.json();
+
+            console.log("[YT_RAW_DATA][VIDEO_DETAILS]", JSON.stringify(data, null, 2));
 
             if (!response.ok) {
                 console.error(`[SECURITY][YT_API_ERROR] ${data?.error?.message || "Unknown error"}`);
                 throw new Error("YouTube API communication failure.");
             }
 
-            return data.items.map(
-                ({ contentDetails: { duration } }: { contentDetails: { duration: string } }) => duration
-            );
+            return data.items.map((item: any) => ({
+                id: item.id,
+                title: item.snippet.title,
+                thumbnail: item.snippet.thumbnails?.maxres?.url ||
+                    item.snippet.thumbnails?.standard?.url ||
+                    item.snippet.thumbnails?.high?.url ||
+                    item.snippet.thumbnails?.medium?.url ||
+                    item.snippet.thumbnails?.default?.url,
+                duration: item.contentDetails.duration,
+                definition: item.contentDetails.definition,
+                caption: item.contentDetails.caption === "true" || item.contentDetails.caption === true,
+            }));
         };
 
-        const results = await Promise.all(batches.map(fetchDurations));
+        const results = await Promise.all(batches.map(fetchMetadata));
         return results.flat();
     } catch (error: any) {
         console.error("[SECURITY][INTERNAL_ERROR]", error.message);
         throw new Error("Security check failed: Data processing stopped.");
+    }
+}
+
+export async function getTranscriptAction(videoId: string) {
+    try {
+        const transcript = await YoutubeTranscript.fetchTranscript(videoId);
+        return transcript;
+    } catch (error: any) {
+        console.error("[SECURITY][TRANSCRIPT_ERROR]", error.message);
+        // If transcript is disabled or not found, return null so the UI can handle it gracefully.
+        return null;
+    }
+}
+
+export async function getBulkTranscriptsAction(videoIds: { id: string, title: string }[]) {
+    try {
+        console.log(`[BULK_TRANSCRIPT] Starting fetch for ${videoIds.length} videos`);
+
+        const results: { title: string, transcript: string }[] = [];
+
+        // Processing in batches of 5 to avoid triggering YouTube's anti-bot protections/rate limits
+        const BATCH_SIZE = 5;
+        for (let i = 0; i < videoIds.length; i += BATCH_SIZE) {
+            const batch = videoIds.slice(i, i + BATCH_SIZE);
+            console.log(`[BULK_TRANSCRIPT] Processing batch ${i / BATCH_SIZE + 1} (${batch.length} videos)`);
+
+            const batchResults = await Promise.all(batch.map(async (video) => {
+                try {
+                    const transcript = await YoutubeTranscript.fetchTranscript(video.id);
+
+                    if (!transcript || transcript.length === 0) {
+                        return { title: video.title, transcript: "Transcript empty or not provided by YouTube." };
+                    }
+
+                    return {
+                        title: video.title,
+                        transcript: transcript.map(t => `[${Math.floor(t.offset / 1000)}s] ${t.text}`).join("\n")
+                    };
+                } catch (error: any) {
+                    console.error(`[BULK_TRANSCRIPT][ERROR] Video: ${video.id} (${video.title})`, error.message);
+                    return { title: video.title, transcript: `Transcript not available. (${error.message || "Unknown error"})` };
+                }
+            }));
+
+            results.push(...batchResults);
+
+            // Subtle delay between batches if it's a large playlist
+            if (i + BATCH_SIZE < videoIds.length) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+        }
+
+        return results;
+    } catch (error: any) {
+        console.error("[SECURITY][BULK_TRANSCRIPT_ERROR]", error.message);
+        throw new Error("Failed to fetch bulk transcripts.");
     }
 }
