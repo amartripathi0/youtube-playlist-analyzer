@@ -1,5 +1,5 @@
 import { TotalTimeDurationType, VidPlaybackTimeInDiffSpeedType } from "@/types";
-import axios from "axios";
+import { getPlaylistVideosAction, getVideoDurationsAction } from "@/app/actions";
 
 export function getPlaylistId(playlistLink: string): string {
   const playlistIDIndex = playlistLink.indexOf("list=") + 5;
@@ -9,24 +9,13 @@ export function getPlaylistId(playlistLink: string): string {
 export async function getAllVideosIdInPlaylist(
   playlistId: string
 ): Promise<{ playlistAllVideosIdArray: string[]; channelTitle: string }> {
-  const response = await axios.post(`/api/playlistData`, { playlistId });
-
-  //return an array containing Id of all the videos present in the playlist
-  const playlistAllVideosIdArray: string[] =
-    response.data?.playlistAllVideosIdArray;
-  const channelTitle: string = response.data?.channelTitle;
-  return { playlistAllVideosIdArray, channelTitle };
+  return await getPlaylistVideosAction(playlistId);
 }
 
 export async function getEachVideoDurationArray(
   playlistAllVideosIdArray: string[]
 ): Promise<string[]> {
-  const response = await axios.post(`/api/videoData`, {
-    playlistAllVideosIdArray,
-  });
-
-  const { allVideosTimeDurationArray } = await response.data;
-  return allVideosTimeDurationArray;
+  return await getVideoDurationsAction(playlistAllVideosIdArray);
 }
 
 export function getTotalTimeDuration(
@@ -35,62 +24,38 @@ export function getTotalTimeDuration(
   toVidNum: number,
   totalVideosInPlaylist: number
 ): TotalTimeDurationType {
-  let hr = 0,
-    min = 0,
-    sec = 0;
-  let upperIndexTo = totalVideosInPlaylist - 1; // Default case: last video
-  let lowerIndxFrom = 0; // Default case: first video
+  let totalHr = 0,
+    totalMin = 0,
+    totalSec = 0;
 
-  // Adjusting for user-defined range
-  if (toVidNum !== 0 && toVidNum <= totalVideosInPlaylist && toVidNum > 0) {
-    upperIndexTo = toVidNum - 1;
-  }
+  const upperIndexTo = (toVidNum > 0 && toVidNum <= totalVideosInPlaylist) ? toVidNum - 1 : totalVideosInPlaylist - 1;
+  const lowerIndxFrom = (fromVidNum > 0 && fromVidNum <= totalVideosInPlaylist) ? fromVidNum - 1 : 0;
 
-  if (
-    fromVidNum !== 0 &&
-    fromVidNum <= totalVideosInPlaylist &&
-    fromVidNum > 0
-  ) {
-    lowerIndxFrom = fromVidNum - 1;
-  }
+  const durationRegex = /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/;
 
   for (let i = lowerIndxFrom; i <= upperIndexTo; i++) {
     const time = eachVideoDurationArray[i];
-    if (time !== undefined) {
-      const hrsidx = time.indexOf("H");
-      const mindx = time.indexOf("M");
-      const secidx = time.indexOf("S");
-      const tidx = time.indexOf("T");
+    if (!time) continue;
 
-      if (hrsidx !== -1) {
-        hr += parseInt(time.slice(tidx + 1, hrsidx), 10);
-      }
+    const matches = time.match(durationRegex);
+    if (!matches) continue;
 
-      if (mindx !== -1) {
-        min += parseInt(
-          time.slice(hrsidx !== -1 ? hrsidx + 1 : tidx + 1, mindx),
-          10
-        );
-      }
+    const hours = parseInt(matches[1] || "0", 10);
+    const minutes = parseInt(matches[2] || "0", 10);
+    const seconds = parseInt(matches[3] || "0", 10);
 
-      if (secidx !== -1) {
-        sec += parseInt(
-          time.slice(
-            mindx !== -1 ? mindx + 1 : hrsidx !== -1 ? hrsidx + 1 : tidx + 1,
-            secidx
-          ),
-          10
-        );
-      }
-      // Converting excess seconds to minutes and excess minutes to hours
-      min += Math.floor(sec / 60);
-      sec = sec % 60;
+    totalHr += hours;
+    totalMin += minutes;
+    totalSec += seconds;
 
-      hr += Math.floor(min / 60);
-      min = min % 60;
-    } else continue;
+    // Normalize on each iteration to prevent large number overflow (though unlikely here)
+    totalMin += Math.floor(totalSec / 60);
+    totalSec %= 60;
+    totalHr += Math.floor(totalMin / 60);
+    totalMin %= 60;
   }
-  return { hr, min, sec };
+
+  return { hr: totalHr, min: totalMin, sec: totalSec };
 }
 
 export function getVideoDurationInDiffSpeed(timeObj: {
@@ -102,62 +67,20 @@ export function getVideoDurationInDiffSpeed(timeObj: {
 
   const totalSec = hr * 3600 + min * 60 + sec;
 
-  const onePointTwoFIve = totalSec / 1.25;
-  const onePointFIve = totalSec / 1.5;
-  const onePointSevenFIve = totalSec / 1.75;
-  const twoX = totalSec / 2;
+  const calculateForSpeed = (multiplier: number) => {
+    const adjustedSecs = totalSec / multiplier;
+    return {
+      hr: Math.floor(adjustedSecs / 3600),
+      min: Math.floor((adjustedSecs % 3600) / 60),
+      sec: Math.floor(adjustedSecs % 60),
+    };
+  };
 
   return {
-    1.25: {
-      hr: Math.floor(onePointTwoFIve / 3600),
-      min: Math.floor(
-        (onePointTwoFIve / 3600 - Math.floor(onePointTwoFIve / 3600)) * 60
-      ),
-      sec: Math.floor(
-        ((onePointTwoFIve / 3600 - Math.floor(onePointTwoFIve / 3600)) * 60 -
-          Math.floor(
-            (onePointTwoFIve / 3600 - Math.floor(onePointTwoFIve / 3600)) * 60
-          )) *
-          60
-      ),
-    },
-    1.5: {
-      hr: Math.floor(onePointFIve / 3600),
-      min: Math.floor(
-        (onePointFIve / 3600 - Math.floor(onePointFIve / 3600)) * 60
-      ),
-      sec: Math.floor(
-        ((onePointFIve / 3600 - Math.floor(onePointFIve / 3600)) * 60 -
-          Math.floor(
-            (onePointFIve / 3600 - Math.floor(onePointFIve / 3600)) * 60
-          )) *
-          60
-      ),
-    },
-    1.75: {
-      hr: Math.floor(onePointSevenFIve / 3600),
-      min: Math.floor(
-        (onePointSevenFIve / 3600 - Math.floor(onePointSevenFIve / 3600)) * 60
-      ),
-      sec: Math.floor(
-        ((onePointSevenFIve / 3600 - Math.floor(onePointSevenFIve / 3600)) *
-          60 -
-          Math.floor(
-            (onePointSevenFIve / 3600 - Math.floor(onePointSevenFIve / 3600)) *
-              60
-          )) *
-          60
-      ),
-    },
-    2: {
-      hr: Math.floor(twoX / 3600),
-      min: Math.floor((twoX / 3600 - Math.floor(twoX / 3600)) * 60),
-      sec: Math.floor(
-        ((twoX / 3600 - Math.floor(twoX / 3600)) * 60 -
-          Math.floor((twoX / 3600 - Math.floor(twoX / 3600)) * 60)) *
-          60
-      ),
-    },
+    1.25: calculateForSpeed(1.25),
+    1.5: calculateForSpeed(1.5),
+    1.75: calculateForSpeed(1.75),
+    2: calculateForSpeed(2),
   };
 }
 

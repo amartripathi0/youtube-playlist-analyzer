@@ -26,16 +26,15 @@ export default function NavBar() {
       </Link>
       <div className="flex">
         <SocialHandles additionalStyles={"max-sm:hidden"} />
-        <button>
-          <a
-            href="https://amartripathi.vercel.app"
-            target="_blank"
-            rel="noreferrer"
-            className="ml-4 text-sm bg-purple-200 hover:text-neutral-900 border-pink-300 hover:opacity-100  hover:scale-105 border p-2 py-1.5 rounded duration-150 flex justify-center items-center gap-1 "
-          >
-            My Portfolio <BsArrowRight className="-rotate-45" />{" "}
-          </a>
-        </button>
+        <a
+          href="https://amartripathi.vercel.app"
+          target="_blank"
+          rel="noreferrer"
+          title="Visit Creator's Portfolio - Amar Tripathi"
+          className="ml-4 text-sm bg-purple-200 hover:text-neutral-900 border-pink-300 hover:opacity-100 font-bold hover:scale-105 border p-2 py-1.5 rounded duration-150 flex justify-center items-center gap-1 shadow-sm transition-all"
+        >
+          Creator Portfolio <BsArrowRight className="-rotate-45" />{" "}
+        </a>
       </div>
     </nav>
   );
