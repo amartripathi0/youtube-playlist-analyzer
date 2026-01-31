@@ -177,7 +177,7 @@ function HomePage() {
   }
 
   return (
-    <div className="flex flex-col gap-20 max-w-5xl mx-auto px-6 lg:px-8 mt-24 md:mt-40">
+    <div className="flex flex-col gap-20 max-w-4xl 2xl:max-w-5xl mx-auto px-6 lg:px-8 mt-24 md:mt-40">
       {/* Centered Hero Section */}
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}

@@ -130,7 +130,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${montserrat.variable} ${raleway.variable} ${inter.variable} font-inter antialiased border-none outline-none pb-24 2xl:pb-0`}
+        className={`${montserrat.variable} ${raleway.variable} ${inter.variable} font-inter antialiased border-none outline-none`}
       >
         <Script
           async
@@ -153,18 +153,9 @@ export default function RootLayout({
           <Analytics />
         </ThemeProvider>
 
-        {/* Sticky Anchor Ad Unit (Mobile/Tablet/Small Desktop) */}
-        <div className="2xl:hidden fixed bottom-0 left-0 right-0 z-[100] bg-background/80 backdrop-blur-md border-t border-white/5 h-24 flex items-center justify-center pointer-events-auto">
-          <AdUnit
-            slot="0987654321"
-            format="rectangle"
-            minHeight="90px"
-            className="my-0 px-4 max-w-4xl"
-          />
-        </div>
 
-        {/* Sticky Skyscraper Sidebars (Ultra-Wide Screens Only) */}
-        <aside className="hidden 2xl:flex fixed left-4 top-1/2 -translate-y-1/2 z-[100] w-[160px] h-[600px] pointer-events-auto">
+        {/* Sticky Skyscraper Sidebars (Wide Screens) */}
+        <aside className="hidden xl:flex fixed left-4 top-1/2 -translate-y-1/2 z-[100] w-[160px] h-[600px] pointer-events-auto">
           <AdUnit
             slot="6315446429"
             format="auto"
@@ -173,7 +164,7 @@ export default function RootLayout({
           />
         </aside>
 
-        <aside className="hidden 2xl:flex fixed right-4 top-1/2 -translate-y-1/2 z-[100] w-[160px] h-[600px] pointer-events-auto">
+        <aside className="hidden xl:flex fixed right-4 top-1/2 -translate-y-1/2 z-[100] w-[160px] h-[600px] pointer-events-auto">
           <AdUnit
             slot="1239213715"
             format="auto"
