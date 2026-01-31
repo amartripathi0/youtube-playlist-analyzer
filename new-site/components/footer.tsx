@@ -19,6 +19,11 @@ function Footer() {
         </div>
       </div>
 
+      <div className="flex justify-center gap-8 mb-8 text-[10px] font-black tracking-[0.2em] uppercase opacity-40">
+        <a href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</a>
+        <a href="/terms-of-service" className="hover:text-primary transition-colors">Terms of Service</a>
+      </div>
+
       <div className="mt-12 text-center text-[10px] font-black tracking-[0.3em] uppercase opacity-20 select-none">
         Crafted with pride by <a href="https://amartripathi.com" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors">Amar Tripathi</a>
       </div>
