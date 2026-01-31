@@ -4,7 +4,7 @@ import SocialHandles from "./SocialHandles";
 function Footer() {
   return (
     <footer className=" bg-neutral-900 h-10 sm:h-12 flex items-center justify-center gap-4 fixed w-screen bottom-0 text-white">
-      <h1 className="font-medium text-xs sm:text-sm opacity-80 hover:opacity-100">
+      <span className="font-medium text-xs sm:text-sm opacity-80 hover:opacity-100">
         Made By -{" "}
         <Link
           href="https://amartripathi.vercel.app"
@@ -14,8 +14,8 @@ function Footer() {
         >
           {" "}
           Amar Tripathi
-        </Link> 
-      </h1> |   
+        </Link>
+      </span> |
       <SocialHandles />
     </footer>
   );
