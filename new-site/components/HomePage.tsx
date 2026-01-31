@@ -208,6 +208,7 @@ function HomePage() {
                 <input
                   type="text"
                   onChange={handlePlaylistLinkInputChange}
+                  aria-label="YouTube playlist URL"
                   className="w-full h-16 pl-12 pr-4 text-lg font-bold bg-transparent outline-none text-foreground placeholder:text-muted-foreground/20 transition-all font-inter"
                   placeholder="Paste YouTube playlist URL..."
                   onKeyUp={(e) => e.key === "Enter" && handleFetchAndStoreVideoId()}
@@ -217,6 +218,7 @@ function HomePage() {
                 type="button"
                 onClick={handleFetchAndStoreVideoId}
                 disabled={isLoading}
+                aria-label="Analyze YouTube playlist"
                 className="w-full md:w-auto px-12 h-16 flex items-center justify-center gap-3 text-sm font-black bg-foreground text-background rounded-full hover:scale-[1.03] active:scale-[0.98] transition-all duration-500 shadow-xl disabled:opacity-50 group/btn"
               >
                 {isLoading ? (

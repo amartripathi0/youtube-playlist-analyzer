@@ -30,9 +30,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "YouTube Playlist Analyzer | Calculate Total Watch Time",
+  title: "YouTube Playlist Analyzer | Watch Time & Length Calculator (2026)",
   description:
-    "Analyze YouTube playlist duration instantly. Calculate total watch time at 1.25x, 1.5x, 1.75x, and 2x speeds. Optimize your learning and binge-watching with precise insights.",
+    "Free YouTube playlist duration calculator. Check total watch time at 1.25x, 1.5x, 1.75x, and 2x speeds. Get professional playlist insights, download transcripts, and optimize your study sessions instantly.",
   authors: [{ name: "Amar Tripathi" }],
   keywords: siteKeywordsArray,
   metadataBase: new URL("https://youtube-analyzer.amartripathi.com/"),
@@ -43,8 +43,8 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
   },
   openGraph: {
-    title: "YouTube Playlist Analyzer",
-    description: "Calculate total watch time and speed savings for any YouTube playlist.",
+    title: "YouTube Playlist Analyzer | Professional Watch Time Insights",
+    description: "Calculate total watch time and optimize your learning speed with our free YouTube playlist duration tool.",
     url: "https://youtube-analyzer.amartripathi.com/",
     siteName: "YouTube Playlist Analyzer",
     locale: "en_US",
@@ -52,8 +52,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "YouTube Playlist Analyzer",
-    description: "Calculate total watch time and speed savings for any YouTube playlist.",
+    title: "YouTube Playlist Analyzer | Watch Time Calculator",
+    description: "Calculate total watch time and speed savings for any YouTube playlist instantly.",
     creator: "@amartripathi_",
   },
 };
@@ -70,60 +70,56 @@ export default function RootLayout({
         "@type": "SoftwareApplication",
         "name": "YouTube Playlist Analyzer",
         "operatingSystem": "All",
-        "applicationCategory": "MultimediaApplication",
-        "description": "The best tool to calculate total length and watch time for YouTube playlists up to 250 videos at various speeds (1.25x - 2x).",
+        "applicationCategory": "UtilitiesApplication, EducationalApplication",
+        "description": "A professional tool to calculate the total duration and watch time of any YouTube playlist at various playback speeds.",
         "offers": {
           "@type": "Offer",
           "price": "0",
           "priceCurrency": "USD"
         },
-        "featureList": [
-          "Analyze up to 250 videos per playlist",
-          "Calculate duration at multiple playback speeds",
-          "Custom video range selection",
-          "No login required"
-        ],
         "author": {
           "@type": "Person",
-          "name": "Amar Tripathi",
-          "url": "https://amartripathi.com"
+          "name": "Amar Tripathi"
         }
       },
       {
-        "@type": "HowTo",
-        "name": "How to Analyze YouTube Playlist Duration",
-        "step": [
-          {
-            "@type": "HowToStep",
-            "text": "Paste your YouTube playlist URL into the input field."
+        "@type": "WebSite",
+        "name": "YouTube Playlist Analyzer",
+        "url": "https://youtube-analyzer.amartripathi.com/",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://youtube-analyzer.amartripathi.com/?q={search_term_string}"
           },
-          {
-            "@type": "HowToStep",
-            "text": "Click ANALYZE to fetch all video data."
-          },
-          {
-            "@type": "HowToStep",
-            "text": "Review total durations and speed-adjusted watch times."
-          }
-        ]
+          "query-input": "required name=search_term_string"
+        }
       },
       {
         "@type": "FAQPage",
         "mainEntity": [
           {
             "@type": "Question",
-            "name": "What is the maximum number of videos this tool can analyze?",
+            "name": "How do I calculate the total duration of a YouTube playlist?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "This tool can analyze up to 250 videos per YouTube playlist."
+              "text": "Simply paste the YouTube playlist URL into our analyzer tool. It will instantly calculate the total length and show you how much time you save at different playback speeds like 1.5x or 2x."
             }
           },
           {
             "@type": "Question",
-            "name": "Can I calculate the duration for a specific range of videos in a playlist?",
+            "name": "Can I download transcripts from a YouTube playlist?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Yes, you can use the 'From' and 'To' video range inputs to analyze a specific segment of any playlist."
+              "text": "Yes, our tool allows you to download individual video transcripts or bulk download all captions from a playlist for easy studying and reference."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the maximum number of videos this tool can analyze?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "This tool can analyze up to 250 videos per YouTube playlist."
             }
           }
         ]
