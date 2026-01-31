@@ -18,9 +18,10 @@ By leveraging Next.js, I was able to handle the YouTube API requests on the serv
 - #### old-site: React VITE codebase
 ## Features
 
-- The YouTube Playlist Analyzer simplifies playlist consumption by calculating the total duration of videos within a given YouTube playlist.
-
-- Additionally, users can preview the time required to watch the playlist at various YouTube playback speeds, offering flexibility and convenience in managing viewing preferences.
+- **100% Free & No Login Required**: Start analyzing immediately without any account setup.
+- **Large Playlist Support**: Process up to 250 videos per analysis (previously 50).
+- **Speed Insights**: Preview watch time at various playback speeds (1.25x, 1.5x, 1.75x, 2x).
+- **Security-First**: Built with Next.js Server Actions to protect API secrets.
 
 ## Getting Started
 
@@ -66,8 +67,7 @@ Navigate to to explore the application.
 
 ## Limitations
 
-- Minor UI issues with input fields.
-- Optimized for playlists with up to 50 videos.
+- Optimized for playlists with up to 250 videos.
 
 ## Contributing
 
