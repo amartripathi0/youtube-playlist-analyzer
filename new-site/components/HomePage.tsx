@@ -352,7 +352,7 @@ function HomePage() {
                     Ads keep us free. Thanks for your support!
                   </span>
                   <AdUnit
-                    slot="1234567890"
+                    slot="6045157144"
                     className="mt-0"
                     minHeight="100px"
                   />
