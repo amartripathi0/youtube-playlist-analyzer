@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
             allow: '/',
             disallow: '/api/',
         },
-        sitemap: 'https://yt-playlist-analyzer.vercel.app/sitemap.xml',
+        sitemap: 'https://youtube-playlist-analyzer.amartripathi.com/sitemap.xml',
     };
 }
