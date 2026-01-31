@@ -170,7 +170,7 @@ export default function RootLayout({
         {/* Sticky Skyscraper Sidebars (Wide Screens Only) */}
         <aside className="hidden xl:flex fixed left-4 top-1/2 -translate-y-1/2 z-[100] w-[160px] h-[600px] pointer-events-auto">
           <AdUnit
-            slot="1111111111"
+            slot="6315446429"
             format="auto"
             minHeight="600px"
             className="my-0"
@@ -179,7 +179,7 @@ export default function RootLayout({
 
         <aside className="hidden xl:flex fixed right-4 top-1/2 -translate-y-1/2 z-[100] w-[160px] h-[600px] pointer-events-auto">
           <AdUnit
-            slot="2222222222"
+            slot="1239213715"
             format="auto"
             minHeight="600px"
             className="my-0"
