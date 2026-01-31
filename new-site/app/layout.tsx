@@ -84,7 +84,7 @@ export default function RootLayout({
         "author": {
           "@type": "Person",
           "name": "Amar Tripathi",
-          "url": "https://amartripathi.vercel.app"
+          "url": "https://amartripathi.com"
         }
       },
       {
