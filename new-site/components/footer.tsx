@@ -2,7 +2,7 @@ import SocialHandles from "./SocialHandles";
 
 function Footer() {
   return (
-    <footer className="w-full py-16 px-6 border-t border-border/40 bg-secondary/10 relative overflow-hidden">
+    <footer className="w-full py-24 px-6 border-t border-border/40 bg-secondary/10 relative overflow-hidden">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
         <div className="flex flex-col items-center md:items-start gap-2">
           <p className="text-sm font-black tracking-widest text-foreground opacity-60 uppercase">Playlist Analyzer</p>
