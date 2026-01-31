@@ -5,8 +5,8 @@ import { BsSearch, BsSortDown, BsShieldCheck, BsCcSquare, BsDownload, BsFileEarm
 import { getTranscriptAction, getBulkTranscriptsAction } from "@/app/actions";
 import { toast } from "sonner";
 import { BeatLoader } from "react-spinners";
-import AdUnit from "./AdUnit";
 import Image from "next/image";
+import AdUnit from "./AdUnit";
 
 interface VideoExplorerProps {
     videos: VideoMetadata[];
@@ -252,7 +252,6 @@ export default function VideoExplorer({ videos, sortOrder, onSortChange }: Video
                             <React.Fragment key={video.id}>
                                 <motion.div
                                     layout
-                                    key={video.id}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, scale: 0.9 }}
@@ -264,6 +263,7 @@ export default function VideoExplorer({ videos, sortOrder, onSortChange }: Video
                                             src={video.thumbnail}
                                             alt={video.title}
                                             fill
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
                                         />
                                         <div className="absolute top-2 right-2 flex gap-2 translate-y-[-10px] opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
@@ -325,33 +325,35 @@ export default function VideoExplorer({ videos, sortOrder, onSortChange }: Video
                                                     </>
                                                 )}
                                             </button>
+                                        ) : (
+                                            <div className="mt-2 w-full flex items-center justify-center gap-2 py-2 bg-secondary/10 text-muted-foreground/40 rounded-lg border border-white/5 text-[9px] font-black uppercase tracking-widest cursor-default">
+                                                <BsFileText size={12} className="opacity-20" />
+                                                Captions not available
                                             </div>
                                         )}
-                                </div>
-                            </motion.div>
+                                    </div>
+                                </motion.div>
                                 {(index + 1) % 8 === 0 && (
-                                <div className="md:col-span-1 border border-white/5 bg-white/[0.02] rounded-3xl p-4 flex flex-col items-center justify-center min-h-[250px]">
-                                    <AdUnit
-                                        slot="1122334455"
-                                        format="fluid"
-                                        minHeight="180px"
-                                        className="my-0"
-                                    />
-                                </div>
-                            )}
-                    </React.Fragment>
+                                    <div className="md:col-span-1 border border-white/5 bg-white/[0.02] rounded-3xl p-4 flex flex-col items-center justify-center min-h-[250px]">
+                                        <AdUnit
+                                            slot="1122334455"
+                                            format="fluid"
+                                            minHeight="180px"
+                                            className="my-0"
+                                        />
+                                    </div>
+                                )}
+                            </React.Fragment>
                         ))}
-                </AnimatePresence>
-            </motion.div>
-        </div>
-
-            {
-        filteredAndSortedVideos.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-20 text-muted-foreground gap-4">
-                <p className="text-sm font-medium">No videos found matching your search.</p>
+                    </AnimatePresence>
+                </motion.div>
             </div>
-        )
-    }
-        </div >
+
+            {filteredAndSortedVideos.length === 0 && (
+                <div className="flex flex-col items-center justify-center py-20 text-muted-foreground gap-4">
+                    <p className="text-sm font-medium">No videos found matching your search.</p>
+                </div>
+            )}
+        </div>
     );
 }

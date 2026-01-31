@@ -21,7 +21,7 @@ export default function AdUnit({
 }: AdUnitProps) {
     useEffect(() => {
         try {
-            // @ts-ignore
+            // @ts-expect-error adsbygoogle is not defined on window
             (window.adsbygoogle = window.adsbygoogle || []).push({});
         } catch (err) {
             console.error("AdSense error:", err);

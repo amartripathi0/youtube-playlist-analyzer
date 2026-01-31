@@ -46,7 +46,7 @@ export default function TermsOfService() {
 
                     <h2 className="text-2xl font-black tracking-tight text-foreground">2. Description of Service</h2>
                     <p className="text-muted-foreground leading-relaxed">
-                        YouTube Playlist Analyzer provides tools for analyzing metadata and watch-time statistics for public YouTube playlists. This service is provided "as is" and "as available."
+                        YouTube Playlist Analyzer provides tools for analyzing metadata and watch-time statistics for public YouTube playlists. This service is provided &quot;as is&quot; and &quot;as available.&quot;
                     </p>
 
                     <h2 className="text-2xl font-black tracking-tight text-foreground">3. User Conduct</h2>
