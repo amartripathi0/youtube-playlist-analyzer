@@ -179,9 +179,9 @@ export default function VideoExplorer({ videos, sortOrder, onSortChange }: Video
 
     return (
         <div className="flex flex-col gap-8 w-full">
-            <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-secondary/10 p-4 rounded-2xl border border-white/5 backdrop-blur-sm">
-                <div className="flex flex-1 gap-4 items-center">
-                    <div className="relative w-full md:w-96">
+            <div className="flex flex-col md:flex-row flex-wrap gap-4 items-center justify-between bg-secondary/10 p-4 rounded-2xl border border-white/5 backdrop-blur-sm">
+                <div className="flex flex-1 flex-wrap gap-4 items-center min-w-0 w-full">
+                    <div className="relative w-full md:flex-grow lg:max-w-md min-w-[200px]">
                         <BsSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
                         <input
                             type="text"

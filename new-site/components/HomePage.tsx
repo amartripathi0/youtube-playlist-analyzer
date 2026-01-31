@@ -279,12 +279,14 @@ function HomePage() {
           >
             <div ref={resultsRef} className="glass rounded-[3.5rem] p-10 md:p-20 relative overflow-hidden">
               <div className="relative z-10 flex flex-col gap-16">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-                  <div className="flex flex-col gap-4">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 flex-wrap">
+                  <div className="flex flex-col gap-4 min-w-0 flex-1">
                     <p className="text-xs font-black text-primary tracking-[0.4em] uppercase">Results Generated</p>
-                    <h2 className="text-5xl md:text-7xl font-black text-foreground tracking-tightest leading-tight">{channelName || "Playlist Analyzer"}</h2>
+                    <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-foreground tracking-tightest leading-tight break-words">
+                      {channelName || "Playlist Analyzer"}
+                    </h2>
                   </div>
-                  <div className="px-8 py-4 rounded-3xl bg-secondary/50 border border-border/40 text-xs font-black text-muted-foreground tracking-widest uppercase">
+                  <div className="px-8 py-4 rounded-3xl bg-secondary/50 border border-border/40 text-xs font-black text-muted-foreground tracking-widest uppercase self-start md:self-end shrink-0">
                     {totalVideosInPlaylist} VIDEOS
                   </div>
                 </div>
