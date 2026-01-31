@@ -3,42 +3,47 @@ import { ChangeEvent, useEffect, useState } from "react";
 import {
   checkPlaylistLinkValidity,
   getAllVideosIdInPlaylist,
-  getEachVideoDurationArray,
+  getEachVideoMetadataArray,
   getPlaylistId,
+  getPlaylistInsights,
   getTotalTimeDuration,
   getVideoDurationInDiffSpeed,
 } from "@/utils";
 import { IoMdTime } from "react-icons/io";
 import { PiVideoLight } from "react-icons/pi";
+import { BsArrowRight, BsYoutube, BsLightningCharge, BsShieldCheck, BsCcSquare, BsGrid3X3Gap } from "react-icons/bs";
 import PlaybackSpeedWatchtime from "./playback-speed-watchtime";
-import SemiboldSpanContainer from "./Container";
 import VideoRangeInput from "./video-range-input";
+import VideoExplorer from "./VideoExplorer";
 import { toast } from "sonner";
 import { ScaleLoader } from "react-spinners";
-import { TotalTimeDurationType, VidPlaybackTimeInDiffSpeedType } from "@/types";
+import { TotalTimeDurationType, VidPlaybackTimeInDiffSpeedType, VideoMetadata, PlaylistInsights, SortOrder } from "@/types";
+import { motion, AnimatePresence } from "framer-motion";
 
 function HomePage() {
   const [playlistLink, setPlaylistLink] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [channelName, setChannelName] = useState<string>("");
   const [allVideosId, setAllVideosId] = useState<string[]>([]);
-  const [startVideoNumber, setStartVideoNumber] = useState(1);
-  const [endVideoNumber, setEndVideoNumber] = useState(1);
-  const [totalVideosInPlaylist, setTotalVideosInPlaylist] = useState(0);
+  const [allVideosMetadata, setAllVideosMetadata] = useState<VideoMetadata[]>([]);
+  const [startVideoNumber, setStartVideoNumber] = useState<number>(1);
+  const [endVideoNumber, setEndVideoNumber] = useState<number>(1);
+  const [totalVideosInPlaylist, setTotalVideosInPlaylist] = useState<number>(0);
   const [totalTimeDurationOfPlaylist, setTotalTimeDurationOfPlaylist] =
     useState<TotalTimeDurationType>({ hr: 0, min: 0, sec: 0 });
   const [vidPlaybackTimeInDiffSpeed, setVidPlaybackTimeInDiffSpeed] =
     useState<VidPlaybackTimeInDiffSpeedType>({});
+  const [playlistInsights, setPlaylistInsights] = useState<PlaylistInsights | null>(null);
   const [showVideoPlaybackDuration, setShowVideoPlaybackDuration] =
     useState<boolean>(false);
   const [playlistInputChanged, setPlaylistInputChanged] =
     useState<boolean>(false);
   const [endVideoInputChanged, setEndVideoInputChanged] =
     useState<boolean>(false);
+  const [sortOrder, setSortOrder] = useState<SortOrder>("default");
 
   async function handleFetchAndStoreVideoId() {
     setIsLoading(true);
-    // check for invalid playlist link
     const isPlayListLinkValid = checkPlaylistLinkValidity(playlistLink);
     if (!isPlayListLinkValid) {
       toast.error("Please enter a valid youtube playlist link.");
@@ -46,19 +51,15 @@ function HomePage() {
       return;
     }
 
-    // check for : lower and upper limit video number
     if (startVideoNumber > endVideoNumber) {
       toast.error("From Video Number cannot be greater than To Video Number.");
       setIsLoading(false);
       return;
     }
 
-    // extract playlistID from input playlist link by user
     const playlistId = getPlaylistId(playlistLink);
 
-    // check if the data is fetched for the 1st time or is there any new input to playlist link
     if (allVideosId.length === 0 || playlistInputChanged) {
-      // storing array having videoId of all videos in the playlist
       try {
         const { playlistAllVideosIdArray, channelTitle } =
           await getAllVideosIdInPlaylist(playlistId);
@@ -75,21 +76,19 @@ function HomePage() {
         setIsLoading(false);
       }
     } else {
-      handlePlaylistDataProcessing();
+      handlePlaylistDataProcessing(allVideosId.length);
     }
   }
 
   useEffect(() => {
     if (allVideosId.length !== 0) {
       setTotalVideosInPlaylist(allVideosId.length);
-
+      const total = allVideosId.length;
       if (!endVideoInputChanged) {
-        // default case : no user input for (upper range / to range) of video
-        setEndVideoNumber(allVideosId.length);
+        setEndVideoNumber(total);
       }
-
-      if (allVideosId.length > 0) {
-        handlePlaylistDataProcessing();
+      if (total > 0) {
+        handlePlaylistDataProcessing(total, 1, total);
       }
     }
   }, [allVideosId]);
@@ -101,6 +100,7 @@ function HomePage() {
     setEndVideoNumber(1);
     setEndVideoInputChanged(false);
   }
+
   function handleLowerRangeFromInput(e: ChangeEvent<HTMLInputElement>) {
     const val = parseInt(e.target.value, 10);
     if (val <= 0) {
@@ -112,6 +112,7 @@ function HomePage() {
       setStartVideoNumber(val);
     }
   }
+
   function handleUpperRangeToInput(e: ChangeEvent<HTMLInputElement>) {
     const val = parseInt(e.target.value, 10);
     if (val <= 0) {
@@ -125,16 +126,33 @@ function HomePage() {
     }
   }
 
-  async function handlePlaylistDataProcessing() {
+  async function handlePlaylistDataProcessing(
+    totalVideosUnits: number,
+    startOverride?: number,
+    endOverride?: number
+  ) {
     try {
-      const eachVideoDurationArray = await getEachVideoDurationArray(allVideosId);
+      const metadataArray = await getEachVideoMetadataArray(allVideosId);
+      setAllVideosMetadata(metadataArray);
+
+      const start = startOverride ?? startVideoNumber;
+      const end = endOverride ?? endVideoNumber;
+
       const totalTimeDuration = getTotalTimeDuration(
-        eachVideoDurationArray,
-        startVideoNumber,
-        endVideoNumber,
-        totalVideosInPlaylist
+        metadataArray,
+        start,
+        end,
+        totalVideosUnits
       );
       setTotalTimeDurationOfPlaylist(totalTimeDuration);
+
+      const insights = getPlaylistInsights(
+        metadataArray,
+        start,
+        end,
+        totalVideosUnits
+      );
+      setPlaylistInsights(insights);
 
       const playbackTimeInDiffSpeed =
         getVideoDurationInDiffSpeed(totalTimeDuration);
@@ -146,176 +164,223 @@ function HomePage() {
       setIsLoading(false);
     }
   }
+
   return (
-    <div className="mt-4 md:mt-6 lg:mt-10 text-black  mx-6 md:mx-28 lg:mx-64 font-medium flex flex-col gap-4 sm:gap-5 ">
-      <div className="flex flex-col gap-2">
-        {/* Input Heading:Enter a YouTube playlist link below :-  */}
-        <h1 className=" text-base sm:text-lg font-semibold">
-          YouTube Playlist Duration Analyzer
-        </h1>
-        <p className="text-sm font-normal opacity-80">
-          Enter a YouTube playlist link below to calculate total watch time (up to 250 videos):
-        </p>
-
-        <div className="flex gap-2 mb-1">
-          <span className="text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-700 border border-green-200">100% Free</span>
-          <span className="text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 border border-blue-200">No Login Required</span>
+    <div className="flex flex-col gap-20 max-w-5xl mx-auto px-6 lg:px-8 mt-24 md:mt-40">
+      {/* Centered Hero Section */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+        className="flex flex-col items-center text-center gap-12"
+      >
+        <div className="flex flex-col gap-6">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tightest leading-[0.9] text-foreground">
+            YouTube Playlist <br />
+            <span className="text-primary italic">Analyzer.</span>
+          </h1>
+          <p className="max-w-xl mx-auto text-lg md:text-xl text-muted-foreground font-semibold opacity-70">
+            Professional watch-time analytics for any playlist.
+            <br className="hidden md:block" />
+            No login. No tracking. Pure speed.
+          </p>
         </div>
 
-        {/* Input field and Analyze button */}
-        <div className="flex items-center justify-between rounded border-neutral-400 focus-within:border-purple-800 border-2 overflow-hidden shadow-sm">
-          <input
-            type="text"
-            onChange={handlePlaylistLinkInputChange}
-            className="outline-none w-full h-10 sm:h-12 text-xs sm:text-sm px-4 rounded-l-md font-normal text-clip bg-neutral-100"
-            placeholder="https://www.youtube.com/playlist?list=..."
-          />
-          <button
-            type="button"
-            className="px-6 sm:px-8 flex items-center gap-2 h-full text-sm font-bold bg-gradient-to-b from-purple-500 to-pink-400 hover:from-purple-600 hover:to-pink-500 transition-all duration-300 text-white"
-            onKeyUp={(e) => e.key === "Enter" && handleFetchAndStoreVideoId()}
-            onClick={handleFetchAndStoreVideoId}
+        {/* Focused Input Area */}
+        <div className="w-full max-w-3xl relative">
+          <div className="absolute inset-x-0 -top-20 -bottom-20 bg-primary/5 blur-[100px] -z-10" />
+
+          <div className="relative group p-1.5 rounded-[2.5rem] bg-border/40 dark:bg-white/5 transition-all duration-700">
+            <div className="flex flex-col md:flex-row items-center gap-3 p-2.5 bg-background/95 backdrop-blur-3xl rounded-[2.2rem] shadow-premium">
+              <div className="relative flex-grow w-full flex items-center px-6">
+                <BsYoutube className="absolute left-6 text-[#FF0000]" size={24} />
+                <input
+                  type="text"
+                  onChange={handlePlaylistLinkInputChange}
+                  className="w-full h-16 pl-12 pr-4 text-lg font-bold bg-transparent outline-none text-foreground placeholder:text-muted-foreground/20 transition-all font-inter"
+                  placeholder="Paste YouTube playlist URL..."
+                  onKeyUp={(e) => e.key === "Enter" && handleFetchAndStoreVideoId()}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={handleFetchAndStoreVideoId}
+                disabled={isLoading}
+                className="w-full md:w-auto px-12 h-16 flex items-center justify-center gap-3 text-sm font-black bg-foreground text-background rounded-full hover:scale-[1.03] active:scale-[0.98] transition-all duration-500 shadow-xl disabled:opacity-50 group/btn"
+              >
+                {isLoading ? (
+                  <ScaleLoader color="currentColor" height={15} width={2} radius={2} margin={1} />
+                ) : (
+                  <>
+                    ANALYZE
+                    <BsArrowRight size={22} className="group-hover/btn:translate-x-1 transition-transform" />
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Minimal Controls */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+            className="flex items-center justify-center gap-8 mt-10"
           >
-            ANALYZE{" "}
-            <span className="flex gap-1">
-              <IoMdTime size={20} />
-            </span>
-          </button>
+            <div className="flex flex-col items-center gap-1 group/range">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/50">From</span>
+              <VideoRangeInput
+                id="from"
+                placeholder="1"
+                onChange={handleLowerRangeFromInput}
+                min={1}
+                max={250}
+              />
+            </div>
+
+            <div className="w-px h-6 bg-border/50" />
+
+            <div className="flex flex-col items-center gap-1 group/range">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/50">To</span>
+              <VideoRangeInput
+                id="to"
+                min={1}
+                max={250}
+                placeholder={totalVideosInPlaylist ? totalVideosInPlaylist.toString() : "250"}
+                onChange={handleUpperRangeToInput}
+              />
+            </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="flex items-center text-sm sm:text-base gap-10">
-        <div className="flex gap-6 max-sm:justify-between max-sm:w-full pr-5">
-          <div className=" flex items-center gap-2 sm:gap-3 ">
-            <label htmlFor="from" className="whitespace-nowrap cursor-pointer">From Video:</label>
-            <VideoRangeInput
-              id="from"
-              placeholder="1"
-              onChange={handleLowerRangeFromInput}
-              min={1}
-              max={250}
-            />
-          </div>
+      {/* Dynamic Results Display */}
+      <AnimatePresence mode="wait">
+        {showVideoPlaybackDuration ? (
+          <motion.div
+            key="results"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 40 }}
+            className="pb-32"
+          >
+            <div className="glass rounded-[3.5rem] p-10 md:p-20 relative overflow-hidden">
+              <div className="relative z-10 flex flex-col gap-16">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+                  <div className="flex flex-col gap-4">
+                    <p className="text-xs font-black text-primary tracking-[0.4em] uppercase">Results Generated</p>
+                    <h2 className="text-5xl md:text-7xl font-black text-foreground tracking-tightest leading-tight">{channelName || "Playlist Analyzer"}</h2>
+                  </div>
+                  <div className="px-8 py-4 rounded-3xl bg-secondary/50 border border-border/40 text-xs font-black text-muted-foreground tracking-widest uppercase">
+                    {totalVideosInPlaylist} VIDEOS
+                  </div>
+                </div>
 
-          <div className="flex items-center gap-2 sm:gap-3">
-            <label htmlFor="to" className="whitespace-nowrap cursor-pointer">To Video:</label>
-            <VideoRangeInput
-              id="to"
-              min={1}
-              max={250}
-              placeholder={totalVideosInPlaylist ? totalVideosInPlaylist.toString() : "250"}
-              onChange={handleUpperRangeToInput}
-            />
-          </div>
-        </div>
-      </div>
+                <div className="flex flex-col gap-6">
+                  <p className="text-xs font-black text-muted-foreground/50 uppercase tracking-[0.4em]">Total Runtime</p>
+                  <div className="flex flex-wrap items-baseline gap-x-12 gap-y-6 text-foreground tracking-tight">
+                    <div className="flex items-baseline gap-3">
+                      <span className="text-6xl md:text-8xl font-black">{totalTimeDurationOfPlaylist.hr}</span>
+                      <span className="text-xs font-black text-muted-foreground/40 uppercase tracking-widest">HR</span>
+                    </div>
+                    <div className="flex items-baseline gap-3">
+                      <span className="text-6xl md:text-8xl font-black">{totalTimeDurationOfPlaylist.min}</span>
+                      <span className="text-xs font-black text-muted-foreground/40 uppercase tracking-widest">MIN</span>
+                    </div>
+                    <div className="flex items-baseline gap-3">
+                      <span className="text-6xl md:text-8xl font-black">{totalTimeDurationOfPlaylist.sec}</span>
+                      <span className="text-xs font-black text-muted-foreground/40 uppercase tracking-widest">SEC</span>
+                    </div>
+                  </div>
+                </div>
 
-      {showVideoPlaybackDuration ? (
-        <div className="font-normal flex flex-col gap-4 sm:gap-5 text-sm sm:text-base min-h-64">
-          <div className="flex flex-col gap-1 md:gap-2">
-            <h2 className="text-base sm:text-lg">
-              Channel Name: <SemiboldSpanContainer text={`${channelName}`} />
-            </h2>
-            <h2 className="text-base sm:text-lg">
-              Total videos analyzed:{" "}
-              <SemiboldSpanContainer text={`${totalVideosInPlaylist} videos`} />
-            </h2>
+                {playlistInsights && (
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4 border-t border-white/5">
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      className="flex flex-col gap-2"
+                    >
+                      <div className="flex items-center gap-2 text-primary">
+                        <BsLightningCharge size={14} />
+                        <span className="text-[10px] font-black uppercase tracking-widest">Average Length</span>
+                      </div>
+                      <p className="text-xl font-bold">
+                        {playlistInsights.avgDuration.hr > 0 && `${playlistInsights.avgDuration.hr}h `}
+                        {playlistInsights.avgDuration.min}m {playlistInsights.avgDuration.sec}s
+                      </p>
+                    </motion.div>
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      className="flex flex-col gap-2"
+                    >
+                      <div className="flex items-center gap-2 text-blue-400">
+                        <BsShieldCheck size={14} />
+                        <span className="text-[10px] font-black uppercase tracking-widest">HD CONTENT</span>
+                      </div>
+                      <p className="text-xl font-bold">{Math.round(playlistInsights.hdPercentage)}%</p>
+                    </motion.div>
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      className="flex flex-col gap-2"
+                    >
+                      <div className="flex items-center gap-2 text-green-400">
+                        <BsCcSquare size={14} />
+                        <span className="text-[10px] font-black uppercase tracking-widest">CAPTIONS</span>
+                      </div>
+                      <p className="text-xl font-bold">{Math.round(playlistInsights.captionPercentage)}%</p>
+                    </motion.div>
+                  </div>
+                )}
 
-            <h2 className="text-base sm:text-lg">
-              Length of segment ({startVideoNumber} to {endVideoNumber}):{" "}
-              <SemiboldSpanContainer
-                text={`${totalTimeDurationOfPlaylist.hr} hours, ${totalTimeDurationOfPlaylist.min} minutes, ${totalTimeDurationOfPlaylist.sec} seconds.`}
-              />
-            </h2>
-          </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <PlaybackSpeedWatchtime speed="1.25" vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed} />
+                  <PlaybackSpeedWatchtime speed="1.5" vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed} />
+                  <PlaybackSpeedWatchtime speed="1.75" vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed} />
+                  <PlaybackSpeedWatchtime speed="2" vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed} />
+                </div>
 
-          {/*Watchtime at various Playback Speeds */}
-          <div className="flex flex-col gap-2 pt-2">
-            <h3 className="font-semibold opacity-70">Watch time at different speeds:</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              <PlaybackSpeedWatchtime
-                speed="1.25"
-                vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed}
-              />
-              <PlaybackSpeedWatchtime
-                speed="1.5"
-                vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed}
-              />
-              <PlaybackSpeedWatchtime
-                speed="1.75"
-                vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed}
-              />
-              <PlaybackSpeedWatchtime
-                speed="2"
-                vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed}
-              />
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="h-64 flex justify-center items-center">
-          {isLoading ? (
-            <div className="opacity-70 flex flex-col items-center">
-              <ScaleLoader color="#6b21a8" />
-              <p className="text-purple-900 mt-2 font-medium">Analyzing playlist...</p>
-            </div>
-          ) : (
-            <div className="text-center text-neutral-500 max-w-sm">
-              <p>Ready to analyze. Paste a link above to get started.</p>
-            </div>
-          )}
-        </div>
-      )}
-      {/* NEW: SEO/GEO Optimization Section */}
-      <section className="mt-16 mb-24 border-t border-neutral-200 pt-12 text-neutral-800">
-        <div className="flex flex-col gap-10">
-          {/* How it Works - Targeted for AI 'How-to' summaries */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="flex flex-col gap-4">
-              <h2 className="text-2xl font-bold text-purple-900">How to Calculate YouTube Playlist Duration?</h2>
-              <ol className="list-decimal list-inside flex flex-col gap-2 opacity-90 leading-relaxed font-normal">
-                <li>Copy the URL of any public YouTube playlist.</li>
-                <li>Paste the link into the analyzer input above.</li>
-                <li>Click <strong>ANALYZE</strong> to fetch all video durations.</li>
-                <li>Adjust the <strong>From</strong> and <strong>To</strong> range if you only need to analyze a segment.</li>
-                <li>Instantly see the total time and adjusted watch times for different playback speeds.</li>
-              </ol>
-            </div>
-            <div className="flex flex-col gap-4">
-              <h2 className="text-2xl font-bold text-purple-900">Why use this Analyzer?</h2>
-              <ul className="list-disc list-inside flex flex-col gap-2 opacity-90 leading-relaxed font-normal">
-                <li><strong>250 Video Support:</strong> Most tools are limited to 50 videos; we process up to 250 in seconds.</li>
-                <li><strong>Speed Savings:</strong> See exactly how much time you save by watching at 1.5x or 2x speed.</li>
-                <li><strong>Precision:</strong> Uses batch-processed YouTube API calls for the most accurate data.</li>
-                <li><strong>Privacy:</strong> No login or data collection required.</li>
-              </ul>
-            </div>
-          </div>
-
-          {/* FAQ Section - Targeted for Google 'People Also Ask' and chatbot answers */}
-          <div className="flex flex-col gap-6">
-            <h2 className="text-2xl font-bold text-center text-purple-900">Frequently Asked Questions</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-5 bg-white rounded-lg shadow-sm border border-neutral-100">
-                <h3 className="font-bold text-lg mb-2">Can I analyze private playlists?</h3>
-                <p className="font-normal opacity-80 text-sm">No, the analyzer only works with public or unlisted playlists that are accessible via the YouTube API.</p>
-              </div>
-              <div className="p-5 bg-white rounded-lg shadow-sm border border-neutral-100">
-                <h3 className="font-bold text-lg mb-2">Does it count the length of "Shorts"?</h3>
-                <p className="font-normal opacity-80 text-sm">Yes, if a Short is part of the playlist, its full duration is included in the total calculation.</p>
-              </div>
-              <div className="p-5 bg-white rounded-lg shadow-sm border border-neutral-100">
-                <h3 className="font-bold text-lg mb-2">Is there an API limit?</h3>
-                <p className="font-normal opacity-80 text-sm">The free tool supports up to 250 videos per analysis to ensure fast responses and API quota efficiency.</p>
-              </div>
-              <div className="p-5 bg-white rounded-lg shadow-sm border border-neutral-100">
-                <h3 className="font-bold text-lg mb-2">How do speed calculations work?</h3>
-                <p className="font-normal opacity-80 text-sm">We divide the total seconds by the speed multiplier (e.g., 1.5) to give you the exact minutes you'll spend watching.</p>
+                {allVideosMetadata.length > 0 && (
+                  <div className="flex flex-col gap-8 pt-12 mt-12 border-t border-white/5">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
+                        <BsGrid3X3Gap size={20} />
+                      </div>
+                      <div className="flex flex-col">
+                        <h2 className="text-xl font-black tracking-tight">Video Explorer</h2>
+                        <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Browse and sort playlist content</p>
+                      </div>
+                    </div>
+                    <VideoExplorer
+                      videos={allVideosMetadata}
+                      sortOrder={sortOrder}
+                      onSortChange={setSortOrder}
+                    />
+                  </div>
+                )}
               </div>
             </div>
-          </div>
-        </div>
-      </section>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="placeholder"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex flex-col items-center justify-center min-h-[300px] pb-24"
+          >
+            {isLoading ? (
+              <div className="flex flex-col items-center gap-8">
+                <ScaleLoader color="var(--primary)" height={50} width={4} />
+                <p className="text-[10px] font-black text-primary tracking-[0.6em] uppercase animate-pulse">Processing metadata</p>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center gap-6 opacity-30 grayscale hover:grayscale-0 transition-all duration-700">
+                <PiVideoLight size={100} strokeWidth={1} />
+                <p className="text-xs font-black tracking-widest uppercase">Ready to crunch numbers</p>
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
