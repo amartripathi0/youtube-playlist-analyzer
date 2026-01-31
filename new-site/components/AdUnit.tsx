@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 interface AdUnitProps {
     slot: string;
@@ -19,17 +19,23 @@ export default function AdUnit({
     className = "",
     minHeight = "280px",
 }: AdUnitProps) {
+    const adRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
-        try {
-            // @ts-expect-error adsbygoogle is not defined on window
-            (window.adsbygoogle = window.adsbygoogle || []).push({});
-        } catch (err) {
-            console.error("AdSense error:", err);
+        // Only push if the component is mounted and the parent container is visible (width > 0)
+        if (adRef.current && adRef.current.offsetWidth > 0) {
+            try {
+                // @ts-expect-error adsbygoogle is not defined on window
+                (window.adsbygoogle = window.adsbygoogle || []).push({});
+            } catch (err) {
+                console.error("AdSense error:", err);
+            }
         }
     }, []);
 
     return (
         <div
+            ref={adRef}
             className={`ad-container w-full overflow-hidden flex flex-col items-center justify-center my-8 ${className}`}
             style={{ minHeight }}
         >
