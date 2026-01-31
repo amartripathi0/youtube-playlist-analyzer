@@ -9,7 +9,6 @@ import {
   getTotalTimeDuration,
   getVideoDurationInDiffSpeed,
 } from "@/utils";
-import { IoMdTime } from "react-icons/io";
 import { PiVideoLight } from "react-icons/pi";
 import { BsArrowRight, BsYoutube, BsLightningCharge, BsShieldCheck, BsCcSquare, BsGrid3X3Gap } from "react-icons/bs";
 import PlaybackSpeedWatchtime from "./playback-speed-watchtime";
@@ -71,8 +70,9 @@ function HomePage() {
         setAllVideosId(playlistAllVideosIdArray);
         setChannelName(channelTitle);
         setPlaylistInputChanged(false);
-      } catch (error: any) {
-        toast.error(error.message || "Error fetching video IDs. Please try again.");
+      } catch (error: unknown) {
+        const errMsg = error instanceof Error ? error.message : "Error fetching video IDs. Please try again.";
+        toast.error(errMsg);
         setIsLoading(false);
       }
     } else {
@@ -158,8 +158,9 @@ function HomePage() {
         getVideoDurationInDiffSpeed(totalTimeDuration);
       setVidPlaybackTimeInDiffSpeed(playbackTimeInDiffSpeed);
       setShowVideoPlaybackDuration(true);
-    } catch (error: any) {
-      toast.error(error.message || "Error processing playlist data.");
+    } catch (error: unknown) {
+      const errMsg = error instanceof Error ? error.message : "Error processing playlist data.";
+      toast.error(errMsg);
     } finally {
       setIsLoading(false);
     }

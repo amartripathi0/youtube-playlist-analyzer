@@ -24,7 +24,7 @@ export async function getPlaylistVideosAction(playlistId: string) {
             throw new Error("Invalid Playlist ID format");
         }
 
-        let playlistAllVideosIdArray: string[] = [];
+        const playlistAllVideosIdArray: string[] = [];
         let nextPageToken: string | undefined = undefined;
         let channelTitle = "";
 
@@ -64,11 +64,12 @@ export async function getPlaylistVideosAction(playlistId: string) {
         }
 
         return { playlistAllVideosIdArray, channelTitle };
-    } catch (error: any) {
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : "Internal Server Security Boundary: Request Failed";
         // Prevent sensitive info leakage by returning a generic message to the client
         // unless it's a validation error we threw ourselves.
-        const isValidationError = error.message === "Invalid Playlist ID format";
-        throw new Error(isValidationError ? error.message : "Internal Server Security Boundary: Request Failed");
+        const isValidationError = errorMessage === "Invalid Playlist ID format";
+        throw new Error(isValidationError ? errorMessage : "Internal Server Security Boundary: Request Failed");
     }
 }
 
@@ -100,7 +101,11 @@ export async function getVideoMetadataAction(playlistAllVideosIdArray: string[])
                 throw new Error("YouTube API communication failure.");
             }
 
-            return data.items.map((item: any) => ({
+            return data.items.map((item: {
+                id: string;
+                snippet: { title: string; thumbnails: Record<string, { url: string }> };
+                contentDetails: { duration: string; definition: string; caption: string | boolean };
+            }) => ({
                 id: item.id,
                 title: item.snippet.title,
                 thumbnail: item.snippet.thumbnails?.maxres?.url ||
@@ -116,8 +121,8 @@ export async function getVideoMetadataAction(playlistAllVideosIdArray: string[])
 
         const results = await Promise.all(batches.map(fetchMetadata));
         return results.flat();
-    } catch (error: any) {
-        console.error("[SECURITY][INTERNAL_ERROR]", error.message);
+    } catch (error: unknown) {
+        console.error("[SECURITY][INTERNAL_ERROR]", error instanceof Error ? error.message : String(error));
         throw new Error("Security check failed: Data processing stopped.");
     }
 }
@@ -126,8 +131,8 @@ export async function getTranscriptAction(videoId: string) {
     try {
         const transcript = await YoutubeTranscript.fetchTranscript(videoId);
         return transcript;
-    } catch (error: any) {
-        console.error("[SECURITY][TRANSCRIPT_ERROR]", error.message);
+    } catch (error: unknown) {
+        console.error("[SECURITY][TRANSCRIPT_ERROR]", error instanceof Error ? error.message : String(error));
         // If transcript is disabled or not found, return null so the UI can handle it gracefully.
         return null;
     }
@@ -157,9 +162,10 @@ export async function getBulkTranscriptsAction(videoIds: { id: string, title: st
                         title: video.title,
                         transcript: transcript.map(t => `[${Math.floor(t.offset / 1000)}s] ${t.text}`).join("\n")
                     };
-                } catch (error: any) {
-                    console.error(`[BULK_TRANSCRIPT][ERROR] Video: ${video.id} (${video.title})`, error.message);
-                    return { title: video.title, transcript: `Transcript not available. (${error.message || "Unknown error"})` };
+                } catch (error: unknown) {
+                    const errMsg = error instanceof Error ? error.message : "Unknown error";
+                    console.error(`[BULK_TRANSCRIPT][ERROR] Video: ${video.id} (${video.title})`, errMsg);
+                    return { title: video.title, transcript: `Transcript not available. (${errMsg})` };
                 }
             }));
 
@@ -172,8 +178,8 @@ export async function getBulkTranscriptsAction(videoIds: { id: string, title: st
         }
 
         return results;
-    } catch (error: any) {
-        console.error("[SECURITY][BULK_TRANSCRIPT_ERROR]", error.message);
+    } catch (error: unknown) {
+        console.error("[SECURITY][BULK_TRANSCRIPT_ERROR]", error instanceof Error ? error.message : String(error));
         throw new Error("Failed to fetch bulk transcripts.");
     }
 }
