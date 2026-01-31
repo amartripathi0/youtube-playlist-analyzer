@@ -1,5 +1,5 @@
 "use client";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState, useRef } from "react";
 import {
   checkPlaylistLinkValidity,
   getAllVideosIdInPlaylist,
@@ -40,6 +40,15 @@ function HomePage() {
   const [endVideoInputChanged, setEndVideoInputChanged] =
     useState<boolean>(false);
   const [sortOrder, setSortOrder] = useState<SortOrder>("default");
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (showVideoPlaybackDuration && resultsRef.current) {
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }
+  }, [showVideoPlaybackDuration]);
 
   async function handleFetchAndStoreVideoId() {
     setIsLoading(true);
@@ -265,7 +274,7 @@ function HomePage() {
             exit={{ opacity: 0, y: 40 }}
             className="pb-32"
           >
-            <div className="glass rounded-[3.5rem] p-10 md:p-20 relative overflow-hidden">
+            <div ref={resultsRef} className="glass rounded-[3.5rem] p-10 md:p-20 relative overflow-hidden">
               <div className="relative z-10 flex flex-col gap-16">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
                   <div className="flex flex-col gap-4">
