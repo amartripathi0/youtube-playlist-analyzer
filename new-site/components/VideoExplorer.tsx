@@ -334,11 +334,11 @@ export default function VideoExplorer({ videos, sortOrder, onSortChange }: Video
                                     </div>
                                 </motion.div>
                                 {(index + 1) % 8 === 0 && (
-                                    <div className="md:col-span-1 border border-white/5 bg-white/[0.02] rounded-3xl p-4 flex flex-col items-center justify-center min-h-[250px]">
+                                    <div className="md:col-span-1 border border-white/5 bg-white/[0.02] rounded-3xl p-4 flex flex-col items-center justify-center min-h-[150px] sm:min-h-[250px]">
                                         <AdUnit
                                             slot="1122334455"
                                             format="fluid"
-                                            minHeight="180px"
+                                            minHeight="150px"
                                             className="my-0"
                                         />
                                     </div>
