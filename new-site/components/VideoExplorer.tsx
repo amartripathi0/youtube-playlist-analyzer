@@ -336,9 +336,9 @@ export default function VideoExplorer({ videos, sortOrder, onSortChange }: Video
                                 {(index + 1) % 8 === 0 && (
                                     <div className="md:col-span-1 border border-white/5 bg-white/[0.02] rounded-3xl p-4 flex flex-col items-center justify-center min-h-[150px] sm:min-h-[250px]">
                                         <AdUnit
-                                            slot="1122334455"
-                                            format="fluid"
-                                            minHeight="150px"
+                                            slot={((index + 1) / 8) % 2 === 0 ? "9249565677" : "7736738685"}
+                                            format="rectangle"
+                                            minHeight="250px"
                                             className="my-0"
                                         />
                                     </div>
