@@ -345,11 +345,16 @@ function HomePage() {
                   </div>
                 )}
 
-                <AdUnit
-                  slot="1234567890"
-                  className="mt-4"
-                  minHeight="100px"
-                />
+                <div className="flex flex-col gap-2">
+                  <span className="text-[9px] font-black text-muted-foreground/30 uppercase tracking-[0.3em] ml-2">
+                    Ads keep us free. Thanks for your support!
+                  </span>
+                  <AdUnit
+                    slot="1234567890"
+                    className="mt-0"
+                    minHeight="100px"
+                  />
+                </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                   <PlaybackSpeedWatchtime speed="1.25" vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed} />
