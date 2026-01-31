@@ -9,13 +9,26 @@ function PlaybackSpeedWatchtime({
   vidPlaybackTimeInDiffSpeed: VidPlaybackTimeInDiffSpeedType;
 }) {
   return (
-    <div className="flex py-1.5 px-3 sm:w-1/2 xl:w-1/3 font-medium hover:font-semibold hover:bg-slate-300 transition-all rounded bg-slate-200 w-full justify-between hover:scale-105 duration-200">
-      <h3>At {speed}x :</h3>
-      <span>
-        {vidPlaybackTimeInDiffSpeed[speed]?.hr} hrs,{" "}
-        {vidPlaybackTimeInDiffSpeed[speed]?.min} min,{" "}
-        {vidPlaybackTimeInDiffSpeed[speed]?.sec} sec
-      </span>
+    <div className="flex p-6 rounded-3xl bg-secondary/20 border border-border/40 hover:border-primary/40 hover:bg-secondary/40 transition-all duration-500 group relative overflow-hidden">
+      <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+        <span className="text-4xl font-black">{speed}X</span>
+      </div>
+      <div className="flex flex-col gap-3 w-full relative z-10">
+        <div className="flex items-center gap-2">
+          <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+          <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] group-hover:text-primary transition-colors">
+            {speed}X SPEED
+          </h3>
+        </div>
+        <div className="flex items-baseline gap-1.5 text-foreground leading-none">
+          <span className="text-2xl font-black">{vidPlaybackTimeInDiffSpeed[speed]?.hr}</span>
+          <span className="text-[10px] font-black text-muted-foreground/50 mr-1">H</span>
+          <span className="text-2xl font-black">{vidPlaybackTimeInDiffSpeed[speed]?.min}</span>
+          <span className="text-[10px] font-black text-muted-foreground/50 mr-1">M</span>
+          <span className="text-2xl font-black">{vidPlaybackTimeInDiffSpeed[speed]?.sec}</span>
+          <span className="text-[10px] font-black text-muted-foreground/50">S</span>
+        </div>
+      </div>
     </div>
   );
 }

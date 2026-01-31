@@ -10,7 +10,7 @@ interface SocialHandlesProps {
 const SocialHandles: React.FC<SocialHandlesProps> = ({ additionalStyles }: SocialHandlesProps) => {
   return (
     <div
-      className={`${additionalStyles} flex sm:gap-4 gap-3 justify-between items-center`}
+      className={`flex items-center gap-4 ${additionalStyles}`}
     >
       {socialMediaIconWithLinks.map((link) => (
         <Link
@@ -18,16 +18,17 @@ const SocialHandles: React.FC<SocialHandlesProps> = ({ additionalStyles }: Socia
           target="_blank"
           key={link.label}
           rel="noopener noreferrer"
-          className="hover:scale-110 hover:transition-all opacity-80 hover:opacity-100 hover:shadow-sm ease-in-out duration-200"
+          title={link.label}
+          className="hover:scale-110 transition-all duration-300 hover:text-primary"
         >
           {link.label === "LinkedIn" ? (
-            <FaLinkedin size={18} />
+            <FaLinkedin size={20} />
           ) : link.label === "Email" ? (
-            <MdOutlineMail size={21} />
+            <MdOutlineMail size={22} />
           ) : link.label === "Twitter" ? (
-            <FaTwitter size={18} />
+            <FaTwitter size={20} />
           ) : (
-            <FaGithub size={18} />
+            <FaGithub size={20} />
           )}
         </Link>
       ))}
