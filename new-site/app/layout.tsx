@@ -4,6 +4,8 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@vercel/analytics/next";
+import Script from "next/script";
+import AdUnit from "@/components/AdUnit";
 import { siteKeywordsArray } from "@/constants";
 
 const montserrat = Montserrat({
@@ -134,6 +136,12 @@ export default function RootLayout({
       <body
         className={`${montserrat.variable} ${raleway.variable} ${inter.variable} font-inter antialiased border-none outline-none`}
       >
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxxxxxxxx"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -148,6 +156,16 @@ export default function RootLayout({
           <Toaster richColors closeButton />
           <Analytics />
         </ThemeProvider>
+
+        {/* Sticky Anchor Ad Unit */}
+        <div className="fixed bottom-0 left-0 right-0 z-[100] bg-background/80 backdrop-blur-md border-t border-white/5 h-24 flex items-center justify-center pointer-events-auto">
+          <AdUnit
+            slot="0987654321"
+            format="rectangle"
+            minHeight="90px"
+            className="my-0 px-4 max-w-4xl"
+          />
+        </div>
       </body>
     </html>
   );
