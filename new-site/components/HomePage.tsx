@@ -40,33 +40,42 @@ function HomePage() {
     setIsLoading(true);
     // check for invalid playlist link
     const isPlayListLinkValid = checkPlaylistLinkValidity(playlistLink);
-    if (!isPlayListLinkValid)
+    if (!isPlayListLinkValid) {
       toast.error("Please enter a valid youtube playlist link.");
+      setIsLoading(false);
+      return;
+    }
+
     // check for : lower and upper limit video number
-    else if (startVideoNumber > endVideoNumber) {
+    if (startVideoNumber > endVideoNumber) {
       toast.error("From Video Number cannot be greater than To Video Number.");
-    } else {
-      // extract playlistID from input playlist link by user
-      const playlistId = getPlaylistId(playlistLink);
+      setIsLoading(false);
+      return;
+    }
 
-      // check if the data is fetched for the 1st time or is there any new input to playlist link
-      if (allVideosId.length === 0 || playlistInputChanged) {
-        // storing array having videoId of all videos in the playlist
-        try {
-          const { playlistAllVideosIdArray, channelTitle } =
-            await getAllVideosIdInPlaylist(playlistId);
+    // extract playlistID from input playlist link by user
+    const playlistId = getPlaylistId(playlistLink);
 
-          setAllVideosId(playlistAllVideosIdArray);
-          setChannelName(channelTitle);
-        } catch {
-          toast.error("Error fetching video IDs. Please try again.");
+    // check if the data is fetched for the 1st time or is there any new input to playlist link
+    if (allVideosId.length === 0 || playlistInputChanged) {
+      // storing array having videoId of all videos in the playlist
+      try {
+        const { playlistAllVideosIdArray, channelTitle } =
+          await getAllVideosIdInPlaylist(playlistId);
+
+        if (playlistAllVideosIdArray.length === 250) {
+          toast.info("Limit reached: Analyzing the first 250 videos.");
         }
-      } else {
-        /*if there is already playlist data stored in the state then there is no need to 
-          fetch again, this reduces number of api calls
-        */
-        handlePlaylistDataProcessing();
+
+        setAllVideosId(playlistAllVideosIdArray);
+        setChannelName(channelTitle);
+        setPlaylistInputChanged(false);
+      } catch (error: any) {
+        toast.error(error.message || "Error fetching video IDs. Please try again.");
+        setIsLoading(false);
       }
+    } else {
+      handlePlaylistDataProcessing();
     }
   }
 
@@ -79,12 +88,11 @@ function HomePage() {
         setEndVideoNumber(allVideosId.length);
       }
 
-      if (totalVideosInPlaylist > 0) {
+      if (allVideosId.length > 0) {
         handlePlaylistDataProcessing();
-        // console.log("from" , startVideoNumber , endVideoNumber);
       }
     }
-  }, [allVideosId, totalVideosInPlaylist]);
+  }, [allVideosId]);
 
   function handlePlaylistLinkInputChange(e: ChangeEvent<HTMLInputElement>) {
     setPlaylistLink(e.target.value);
@@ -94,71 +102,78 @@ function HomePage() {
     setEndVideoInputChanged(false);
   }
   function handleLowerRangeFromInput(e: ChangeEvent<HTMLInputElement>) {
-    if (parseInt(e.target.value) <= 0) {
+    const val = parseInt(e.target.value, 10);
+    if (val <= 0) {
       toast.error("Please enter a valid lower limit.");
-    } else if (parseInt(e.target.value) > 50) {
-      toast.error("Maximum video limit is 50 :(");
-      setStartVideoNumber(50);
+    } else if (val > 250) {
+      toast.error("Maximum video limit is 250 :(");
+      setStartVideoNumber(250);
     } else {
-      setStartVideoNumber(parseInt(e.target.value, 10));
+      setStartVideoNumber(val);
     }
   }
   function handleUpperRangeToInput(e: ChangeEvent<HTMLInputElement>) {
-    if (parseInt(e.target.value) <= 0) {
-      // toast.error("Please enter a valid upper limit.", {});
-    } else if (parseInt(e.target.value) > 50) {
-      // toast.error("Maximum video limit is 50 :(", {});
-      setEndVideoNumber(50);
+    const val = parseInt(e.target.value, 10);
+    if (val <= 0) {
+      // ignore
+    } else if (val > 250) {
+      toast.error("Maximum video limit is 250 :(");
+      setEndVideoNumber(250);
     } else {
-      setEndVideoNumber(parseInt(e.target.value, 10));
+      setEndVideoNumber(val);
       setEndVideoInputChanged(true);
     }
   }
 
   async function handlePlaylistDataProcessing() {
-    const eachVideoDurationArray = await getEachVideoDurationArray(allVideosId);
-    const totalTimeDuration = getTotalTimeDuration(
-      eachVideoDurationArray,
-      startVideoNumber,
-      endVideoNumber,
-      totalVideosInPlaylist
-    );
-    setTotalTimeDurationOfPlaylist(totalTimeDuration);
+    try {
+      const eachVideoDurationArray = await getEachVideoDurationArray(allVideosId);
+      const totalTimeDuration = getTotalTimeDuration(
+        eachVideoDurationArray,
+        startVideoNumber,
+        endVideoNumber,
+        totalVideosInPlaylist
+      );
+      setTotalTimeDurationOfPlaylist(totalTimeDuration);
 
-    const playbackTimeInDiffSpeed =
-      getVideoDurationInDiffSpeed(totalTimeDuration);
-    setVidPlaybackTimeInDiffSpeed(playbackTimeInDiffSpeed);
-    setShowVideoPlaybackDuration(true);
-    setIsLoading(false);
-    // console.log(showVideoPlaybackDuration);
-    // console.log(endVideoNumber);
-    // console.log(setTotalTimeDurationOfPlaylist);
+      const playbackTimeInDiffSpeed =
+        getVideoDurationInDiffSpeed(totalTimeDuration);
+      setVidPlaybackTimeInDiffSpeed(playbackTimeInDiffSpeed);
+      setShowVideoPlaybackDuration(true);
+    } catch (error: any) {
+      toast.error(error.message || "Error processing playlist data.");
+    } finally {
+      setIsLoading(false);
+    }
   }
   return (
     <div className="mt-4 md:mt-6 lg:mt-10 text-black  mx-6 md:mx-28 lg:mx-64 font-medium flex flex-col gap-4 sm:gap-5 ">
       <div className="flex flex-col gap-2">
         {/* Input Heading:Enter a YouTube playlist link below :-  */}
-        <h1 className=" text-sm sm:text-base">
-          Enter a YouTube playlist link below:-
+        <h1 className=" text-base sm:text-lg font-semibold">
+          YouTube Playlist Duration Analyzer
         </h1>
+        <p className="text-sm font-normal opacity-80">
+          Enter a YouTube playlist link below to calculate total watch time (up to 250 videos):
+        </p>
 
         {/* Input field and Analyze button */}
-        <div className="flex items-center justify-between  rounded border-neutral-400 focus-within:border-purple-800 border-2">
+        <div className="flex items-center justify-between rounded border-neutral-400 focus-within:border-purple-800 border-2 overflow-hidden shadow-sm">
           <input
             type="text"
             onChange={handlePlaylistLinkInputChange}
-            className="outline-none w-full h-8 sm:h-10 text-xs sm:text-sm px-2 sm:px-3 rounded-md font-normal text-clip bg-neutral-100"
-            placeholder="https://www.youtube.com/playlist?list=PL3Y15344T8045DroPBjkYJQCz9tndR17tSSmG"
+            className="outline-none w-full h-10 sm:h-12 text-xs sm:text-sm px-4 rounded-l-md font-normal text-clip bg-neutral-100"
+            placeholder="https://www.youtube.com/playlist?list=..."
           />
           <button
-            className="p-2.5 sm:px-4 flex items-center gap-1 sm:gap-2 h-full text-sm bg-gradient-to-b from-purple-400 to-pink-300 hover:from-purple-500 hover:to-pink-400 transition-all duration-300 text-neutral-800 hover-text-neutral-950"
+            type="button"
+            className="px-6 sm:px-8 flex items-center gap-2 h-full text-sm font-bold bg-gradient-to-b from-purple-500 to-pink-400 hover:from-purple-600 hover:to-pink-500 transition-all duration-300 text-white"
             onKeyUp={(e) => e.key === "Enter" && handleFetchAndStoreVideoId()}
             onClick={handleFetchAndStoreVideoId}
           >
-            Analyze{" "}
+            ANALYZE{" "}
             <span className="flex gap-1">
-              <PiVideoLight size={20} className="max-sm:hidden" />{" "}
-              <IoMdTime size={18} />
+              <IoMdTime size={20} />
             </span>
           </button>
         </div>
@@ -167,21 +182,23 @@ function HomePage() {
       <div className="flex items-center text-sm sm:text-base gap-10">
         <div className="flex gap-6 max-sm:justify-between max-sm:w-full pr-5">
           <div className=" flex items-center gap-2 sm:gap-3 ">
-            <label htmlFor="from">From : </label>
+            <label htmlFor="from" className="whitespace-nowrap cursor-pointer">From Video:</label>
             <VideoRangeInput
+              id="from"
               placeholder="1"
               onChange={handleLowerRangeFromInput}
               min={1}
-              max={50}
+              max={250}
             />
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            <label htmlFor="to">To : </label>
+            <label htmlFor="to" className="whitespace-nowrap cursor-pointer">To Video:</label>
             <VideoRangeInput
+              id="to"
               min={1}
-              max={50}
-              placeholder={totalVideosInPlaylist.toString() || "50"}
+              max={250}
+              placeholder={totalVideosInPlaylist ? totalVideosInPlaylist.toString() : "250"}
               onChange={handleUpperRangeToInput}
             />
           </div>
@@ -189,64 +206,111 @@ function HomePage() {
       </div>
 
       {showVideoPlaybackDuration ? (
-        <div className="font-normal flex flex-col gap-4 sm:gap-5  text-sm sm:text-base h-64 md:h-80">
+        <div className="font-normal flex flex-col gap-4 sm:gap-5 text-sm sm:text-base min-h-64">
           <div className="flex flex-col gap-1 md:gap-2">
-            <h1>
-              Channel Name : <SemiboldSpanContainer text={`${channelName}`} />
-            </h1>
-            <h1>
-              Total videos in the playlist :{" "}
+            <h2 className="text-base sm:text-lg">
+              Channel Name: <SemiboldSpanContainer text={`${channelName}`} />
+            </h2>
+            <h2 className="text-base sm:text-lg">
+              Total videos analyzed:{" "}
               <SemiboldSpanContainer text={`${totalVideosInPlaylist} videos`} />
-            </h1>
+            </h2>
 
-            <h1>
-              Length of playlist from video no.{" "}
-              <SemiboldSpanContainer text={startVideoNumber.toString()} /> to{" "}
-              <SemiboldSpanContainer text={endVideoNumber.toString()} /> is :{" "}
+            <h2 className="text-base sm:text-lg">
+              Length of segment ({startVideoNumber} to {endVideoNumber}):{" "}
               <SemiboldSpanContainer
                 text={`${totalTimeDurationOfPlaylist.hr} hours, ${totalTimeDurationOfPlaylist.min} minutes, ${totalTimeDurationOfPlaylist.sec} seconds.`}
               />
-            </h1>
+            </h2>
           </div>
 
           {/*Watchtime at various Playback Speeds */}
-          <div className="flex flex-col gap-1 sm:gap-2">
-            <PlaybackSpeedWatchtime
-              speed="1.25"
-              vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed}
-            />
-            <PlaybackSpeedWatchtime
-              speed="1.5"
-              vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed}
-            />
-            <PlaybackSpeedWatchtime
-              speed="1.75"
-              vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed}
-            />
-            <PlaybackSpeedWatchtime
-              speed="2"
-              vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed}
-            />
+          <div className="flex flex-col gap-2 pt-2">
+            <h3 className="font-semibold opacity-70">Watch time at different speeds:</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <PlaybackSpeedWatchtime
+                speed="1.25"
+                vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed}
+              />
+              <PlaybackSpeedWatchtime
+                speed="1.5"
+                vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed}
+              />
+              <PlaybackSpeedWatchtime
+                speed="1.75"
+                vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed}
+              />
+              <PlaybackSpeedWatchtime
+                speed="2"
+                vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed}
+              />
+            </div>
           </div>
-
-          {/* mob screen about */}
-          {/* <p className="p-2 rounded-md bg-slate-200 font-normal text-sm sm:text-base text-neutral-950 mb-14 sm:mb-16 xl:hidden">
-            YouTube Playlist Analyzer evaluates your playlist&apos;s total
-            duration, then breaks down viewing times at speeds of 1.25x, 1.5x,
-            1.75x, and 2x. Streamline your viewing experience and optimize your
-            binge-watching sessions with precise insights!
-          </p> */}
         </div>
       ) : (
-        <div className="h-80 flex justify-center pt-16">
-          {isLoading &&
-          <div className="opacity-70 flex flex-col">
-            <ScaleLoader className="mx-auto w-fit" />
-            <p className="text-purple-900">Fetching data..</p>
-          </div>
-          }
+        <div className="h-64 flex justify-center items-center">
+          {isLoading ? (
+            <div className="opacity-70 flex flex-col items-center">
+              <ScaleLoader color="#6b21a8" />
+              <p className="text-purple-900 mt-2 font-medium">Analyzing playlist...</p>
+            </div>
+          ) : (
+            <div className="text-center text-neutral-500 max-w-sm">
+              <p>Ready to analyze. Paste a link above to get started.</p>
+            </div>
+          )}
         </div>
       )}
+      {/* NEW: SEO/GEO Optimization Section */}
+      <section className="mt-16 mb-24 border-t border-neutral-200 pt-12 text-neutral-800">
+        <div className="flex flex-col gap-10">
+          {/* How it Works - Targeted for AI 'How-to' summaries */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="flex flex-col gap-4">
+              <h2 className="text-2xl font-bold text-purple-900">How to Calculate YouTube Playlist Duration?</h2>
+              <ol className="list-decimal list-inside flex flex-col gap-2 opacity-90 leading-relaxed font-normal">
+                <li>Copy the URL of any public YouTube playlist.</li>
+                <li>Paste the link into the analyzer input above.</li>
+                <li>Click <strong>ANALYZE</strong> to fetch all video durations.</li>
+                <li>Adjust the <strong>From</strong> and <strong>To</strong> range if you only need to analyze a segment.</li>
+                <li>Instantly see the total time and adjusted watch times for different playback speeds.</li>
+              </ol>
+            </div>
+            <div className="flex flex-col gap-4">
+              <h2 className="text-2xl font-bold text-purple-900">Why use this Analyzer?</h2>
+              <ul className="list-disc list-inside flex flex-col gap-2 opacity-90 leading-relaxed font-normal">
+                <li><strong>250 Video Support:</strong> Most tools are limited to 50 videos; we process up to 250 in seconds.</li>
+                <li><strong>Speed Savings:</strong> See exactly how much time you save by watching at 1.5x or 2x speed.</li>
+                <li><strong>Precision:</strong> Uses batch-processed YouTube API calls for the most accurate data.</li>
+                <li><strong>Privacy:</strong> No login or data collection required.</li>
+              </ul>
+            </div>
+          </div>
+
+          {/* FAQ Section - Targeted for Google 'People Also Ask' and chatbot answers */}
+          <div className="flex flex-col gap-6">
+            <h2 className="text-2xl font-bold text-center text-purple-900">Frequently Asked Questions</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="p-5 bg-white rounded-lg shadow-sm border border-neutral-100">
+                <h3 className="font-bold text-lg mb-2">Can I analyze private playlists?</h3>
+                <p className="font-normal opacity-80 text-sm">No, the analyzer only works with public or unlisted playlists that are accessible via the YouTube API.</p>
+              </div>
+              <div className="p-5 bg-white rounded-lg shadow-sm border border-neutral-100">
+                <h3 className="font-bold text-lg mb-2">Does it count the length of "Shorts"?</h3>
+                <p className="font-normal opacity-80 text-sm">Yes, if a Short is part of the playlist, its full duration is included in the total calculation.</p>
+              </div>
+              <div className="p-5 bg-white rounded-lg shadow-sm border border-neutral-100">
+                <h3 className="font-bold text-lg mb-2">Is there an API limit?</h3>
+                <p className="font-normal opacity-80 text-sm">The free tool supports up to 250 videos per analysis to ensure fast responses and API quota efficiency.</p>
+              </div>
+              <div className="p-5 bg-white rounded-lg shadow-sm border border-neutral-100">
+                <h3 className="font-bold text-lg mb-2">How do speed calculations work?</h3>
+                <p className="font-normal opacity-80 text-sm">We divide the total seconds by the speed multiplier (e.g., 1.5) to give you the exact minutes you'll spend watching.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

@@ -1,0 +1,16 @@
+{
+    "name": "YouTube Playlist Analyzer",
+    "short_name": "YT Analyzer",
+    "description": "Calculate total duration and watch time for YouTube playlists up to 250 videos.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#fdf2f2",
+    "theme_color": "#fdf2f2",
+    "icons": [
+        {
+            "src": "/logo.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ]
+}

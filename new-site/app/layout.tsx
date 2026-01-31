@@ -1,9 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Montserrat, Raleway } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { Analytics } from "@vercel/analytics/next";
-import Head from "next/head";
 import { siteKeywordsArray } from "@/constants";
 
 const montserrat = Montserrat({
@@ -16,12 +15,40 @@ const raleway = Raleway({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-raleway",
 });
+
+export const viewport: Viewport = {
+  themeColor: "#fdf2f2", // rose-50
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
-  title: "YouTube Playlist Analyzer",
+  title: "YouTube Playlist Analyzer | Calculate Total Watch Time",
   description:
-    "YouTube Playlist Length Analyzer evaluates your playlist's total duration, then breaks down viewing times at speeds of 1.25x, 1.5x, 1.75x, and 2x. Streamline your viewing experience and optimize your binge-watching sessions with precise insights!",
+    "Analyze YouTube playlist duration instantly. Calculate total watch time at 1.25x, 1.5x, 1.75x, and 2x speeds. Optimize your learning and binge-watching with precise insights.",
   authors: [{ name: "Amar Tripathi" }],
   keywords: siteKeywordsArray,
+  metadataBase: new URL("https://yt-playlist-analyzer.vercel.app/"),
+  alternates: {
+    canonical: "/",
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
+  openGraph: {
+    title: "YouTube Playlist Analyzer",
+    description: "Calculate total watch time and speed savings for any YouTube playlist.",
+    url: "https://yt-playlist-analyzer.vercel.app/",
+    siteName: "YouTube Playlist Analyzer",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "YouTube Playlist Analyzer",
+    description: "Calculate total watch time and speed savings for any YouTube playlist.",
+    creator: "@amartripathi_",
+  },
 };
 
 export default function RootLayout({
@@ -29,14 +56,83 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "YouTube Playlist Analyzer",
+        "operatingSystem": "All",
+        "applicationCategory": "MultimediaApplication",
+        "description": "The best tool to calculate total length and watch time for YouTube playlists up to 250 videos at various speeds (1.25x - 2x).",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "featureList": [
+          "Analyze up to 250 videos per playlist",
+          "Calculate duration at multiple playback speeds",
+          "Custom video range selection",
+          "No login required"
+        ],
+        "author": {
+          "@type": "Person",
+          "name": "Amar Tripathi",
+          "url": "https://amartripathi.vercel.app"
+        }
+      },
+      {
+        "@type": "HowTo",
+        "name": "How to Analyze YouTube Playlist Duration",
+        "step": [
+          {
+            "@type": "HowToStep",
+            "text": "Paste your YouTube playlist URL into the input field."
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Click ANALYZE to fetch all video data."
+          },
+          {
+            "@type": "HowToStep",
+            "text": "Review total durations and speed-adjusted watch times."
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is the maximum number of videos this tool can analyze?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "This tool can analyze up to 250 videos per YouTube playlist."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I calculate the duration for a specific range of videos in a playlist?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, you can use the 'From' and 'To' video range inputs to analyze a specific segment of any playlist."
+            }
+          }
+        ]
+      }
+    ]
+  };
+
   return (
     <html lang="en">
-      <Head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />;
-      </Head>
       <body
         className={`${montserrat.variable} ${raleway.variable} font-montserrat antialiased`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         {children}
         <Toaster richColors closeButton theme="dark" />
         <Analytics />
