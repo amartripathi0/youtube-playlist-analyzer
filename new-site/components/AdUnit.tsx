@@ -20,6 +20,9 @@ export default function AdUnit({
     minHeight = "280px",
 }: AdUnitProps) {
     const adRef = useRef<HTMLDivElement>(null);
+    const shouldDisplayAds = process.env.NEXT_PUBLIC_DISPLAY_ADS === 'true';
+
+    if (!shouldDisplayAds) return null;
 
     useEffect(() => {
         // Only push if the component is mounted and the parent container is visible (width > 0)

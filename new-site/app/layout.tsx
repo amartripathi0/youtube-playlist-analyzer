@@ -110,17 +110,21 @@ export default function RootLayout({
     ]
   };
 
+  const shouldDisplayAds = process.env.NEXT_PUBLIC_DISPLAY_ADS === 'true';
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${montserrat.variable} ${raleway.variable} ${inter.variable} font-inter antialiased border-none outline-none`}
       >
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8927401111255619"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+        {shouldDisplayAds && (
+          <Script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8927401111255619"
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
+        )}
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -137,23 +141,27 @@ export default function RootLayout({
         </ThemeProvider>
 
         {/* Sticky Skyscraper Sidebars (Wide Screens) */}
-        <aside className="hidden 2xl:flex fixed left-4 top-1/2 -translate-y-1/2 z-[100] w-[160px] h-[600px] pointer-events-auto">
-          <AdUnit
-            slot="6315446429"
-            format="auto"
-            minHeight="600px"
-            className="my-0"
-          />
-        </aside>
+        {shouldDisplayAds && (
+          <>
+            <aside className="hidden 2xl:flex fixed left-4 top-1/2 -translate-y-1/2 z-[100] w-[160px] h-[600px] pointer-events-auto">
+              <AdUnit
+                slot="6315446429"
+                format="auto"
+                minHeight="600px"
+                className="my-0"
+              />
+            </aside>
 
-        <aside className="hidden 2xl:flex fixed right-4 top-1/2 -translate-y-1/2 z-[100] w-[160px] h-[600px] pointer-events-auto">
-          <AdUnit
-            slot="1239213715"
-            format="auto"
-            minHeight="600px"
-            className="my-0"
-          />
-        </aside>
+            <aside className="hidden 2xl:flex fixed right-4 top-1/2 -translate-y-1/2 z-[100] w-[160px] h-[600px] pointer-events-auto">
+              <AdUnit
+                slot="1239213715"
+                format="auto"
+                minHeight="600px"
+                className="my-0"
+              />
+            </aside>
+          </>
+        )}
       </body>
     </html>
   );
