@@ -7,6 +7,7 @@ import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
 import AdUnit from "@/components/AdUnit";
 import { siteKeywordsArray } from "@/constants";
+import { SITE_DATA } from "@/constants/site-data";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -97,32 +98,14 @@ export default function RootLayout({
       },
       {
         "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "How do I calculate the total duration of a YouTube playlist?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Simply paste the YouTube playlist URL into our analyzer tool. It will instantly calculate the total length and show you how much time you save at different playback speeds like 1.5x or 2x."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can I download transcripts from a YouTube playlist?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes, our tool allows you to download individual video transcripts or bulk download all captions from a playlist for easy studying and reference."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What is the maximum number of videos this tool can analyze?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "This tool can analyze up to 250 videos per YouTube playlist."
-            }
+        "mainEntity": SITE_DATA.faqs.map(faq => ({
+          "@type": "Question",
+          "name": faq.question,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": faq.answer
           }
-        ]
+        }))
       }
     ]
   };
@@ -154,7 +137,7 @@ export default function RootLayout({
         </ThemeProvider>
 
         {/* Sticky Skyscraper Sidebars (Wide Screens) */}
-        <aside className="hidden xl:flex fixed left-4 top-1/2 -translate-y-1/2 z-[100] w-[160px] h-[600px] pointer-events-auto">
+        <aside className="hidden 2xl:flex fixed left-4 top-1/2 -translate-y-1/2 z-[100] w-[160px] h-[600px] pointer-events-auto">
           <AdUnit
             slot="6315446429"
             format="auto"
@@ -163,7 +146,7 @@ export default function RootLayout({
           />
         </aside>
 
-        <aside className="hidden xl:flex fixed right-4 top-1/2 -translate-y-1/2 z-[100] w-[160px] h-[600px] pointer-events-auto">
+        <aside className="hidden 2xl:flex fixed right-4 top-1/2 -translate-y-1/2 z-[100] w-[160px] h-[600px] pointer-events-auto">
           <AdUnit
             slot="1239213715"
             format="auto"

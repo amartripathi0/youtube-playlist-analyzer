@@ -1,6 +1,9 @@
 import Footer from "@/components/footer";
 import HomePage from "@/components/HomePage";
 import NavBar from "@/components/navbar";
+import Features from "@/components/Features";
+import HowItWorks from "@/components/HowItWorks";
+import FAQSection from "@/components/FAQSection";
 
 export default function Home() {
   return (
@@ -15,8 +18,11 @@ export default function Home() {
       <div className="relative z-10 flex flex-col min-h-screen">
         <NavBar />
 
-        <div className="flex-grow py-8 md:py-12">
+        <div className="flex-grow py-8 md:py-12 flex flex-col gap-0">
           <HomePage />
+          <Features />
+          <HowItWorks />
+          <FAQSection />
         </div>
 
         <Footer />
