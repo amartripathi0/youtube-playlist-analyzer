@@ -160,7 +160,7 @@ function HomePage() {
     } finally {
       setIsLoading(false);
     }
-  }, [allVideosId, startVideoNumber, endVideoNumber]);
+  }, [allVideosId, startVideoNumber, endVideoNumber, addToHistory, channelName, playlistLink]);
 
   const handleFetchAndStoreVideoId = useCallback(async () => {
     setIsLoading(true);

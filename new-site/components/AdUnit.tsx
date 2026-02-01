@@ -22,11 +22,10 @@ export default function AdUnit({
     const adRef = useRef<HTMLDivElement>(null);
     const shouldDisplayAds = process.env.NEXT_PUBLIC_DISPLAY_ADS === 'true';
 
-    if (!shouldDisplayAds) return null;
-
     useEffect(() => {
         // Only push if the component is mounted and the parent container is visible (width > 0)
-        if (adRef.current && adRef.current.offsetWidth > 0) {
+        // And if ads are enabled
+        if (shouldDisplayAds && adRef.current && adRef.current.offsetWidth > 0) {
             try {
                 // @ts-expect-error adsbygoogle is not defined on window
                 (window.adsbygoogle = window.adsbygoogle || []).push({});
@@ -34,7 +33,10 @@ export default function AdUnit({
                 console.error("AdSense error:", err);
             }
         }
-    }, []);
+    }, [shouldDisplayAds]);
+
+    if (!shouldDisplayAds) return null;
+
 
     return (
         <div

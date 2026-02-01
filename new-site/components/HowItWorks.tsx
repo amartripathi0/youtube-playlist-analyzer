@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { SITE_DATA } from "@/constants/site-data";
-import { BsArrowRight } from "react-icons/bs";
 
 export default function HowItWorks() {
     return (
