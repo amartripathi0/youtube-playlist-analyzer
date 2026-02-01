@@ -10,7 +10,7 @@ import {
   getVideoDurationInDiffSpeed,
 } from "@/utils";
 import { PiVideoLight } from "react-icons/pi";
-import { BsArrowRight, BsYoutube, BsLightningCharge, BsShieldCheck, BsCcSquare, BsGrid3X3Gap } from "react-icons/bs";
+import { BsArrowRight, BsYoutube, BsLightningCharge, BsShieldCheck, BsCcSquare, BsGrid3X3Gap, BsX } from "react-icons/bs";
 import PlaybackSpeedWatchtime from "./playback-speed-watchtime";
 import VideoRangeInput from "./video-range-input";
 import VideoExplorer from "./VideoExplorer";
@@ -41,7 +41,63 @@ function HomePage() {
   const [endVideoInputChanged, setEndVideoInputChanged] =
     useState<boolean>(false);
   const [sortOrder, setSortOrder] = useState<SortOrder>("default");
+  const [isLoadedFromHistory, setIsLoadedFromHistory] = useState<boolean>(false);
   const resultsRef = useRef<HTMLDivElement>(null);
+
+  interface HistoryItem {
+    id: string;
+    title: string;
+    count: number;
+    url: string;
+    timestamp: number;
+    allVideosMetadata: VideoMetadata[];
+    playlistInsights: PlaylistInsights;
+    totalTimeDuration: TotalTimeDurationType;
+    vidPlaybackTime: VidPlaybackTimeInDiffSpeedType;
+  }
+
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("yt_playlist_history");
+    if (saved) {
+      try {
+        const parsed: HistoryItem[] = JSON.parse(saved);
+        const now = Date.now();
+        const validHistory = parsed.filter(item => {
+          const isExpired = now - item.timestamp > 24 * 60 * 60 * 1000;
+          return !isExpired;
+        });
+
+        // Update local storage if we filtered out expired items
+        if (validHistory.length !== parsed.length) {
+          localStorage.setItem("yt_playlist_history", JSON.stringify(validHistory));
+        }
+        setHistory(validHistory);
+      } catch (e) {
+        console.error("Failed to parse history", e);
+      }
+    }
+  }, []);
+
+  const addToHistory = useCallback((item: HistoryItem) => {
+    setHistory((prev) => {
+      const filtered = prev.filter((i) => i.id !== item.id);
+      const newHistory = [item, ...filtered].slice(0, 5);
+      localStorage.setItem("yt_playlist_history", JSON.stringify(newHistory));
+      return newHistory;
+    });
+  }, []);
+
+  const deleteFromHistory = useCallback((e: React.MouseEvent, id: string) => {
+    e.stopPropagation(); // Prevent triggering the load click
+    setHistory((prev) => {
+      const newHistory = prev.filter((item) => item.id !== id);
+      localStorage.setItem("yt_playlist_history", JSON.stringify(newHistory));
+      return newHistory;
+    });
+    toast.success("Removed from history");
+  }, []);
 
   useEffect(() => {
     if (showVideoPlaybackDuration && resultsRef.current) {
@@ -83,6 +139,21 @@ function HomePage() {
         getVideoDurationInDiffSpeed(totalTimeDuration);
       setVidPlaybackTimeInDiffSpeed(playbackTimeInDiffSpeed);
       setShowVideoPlaybackDuration(true);
+
+      // Save to history
+      if (allVideosId.length > 0 && insights) {
+        addToHistory({
+          id: getPlaylistId(playlistLink) || "unknown",
+          title: channelName || "Playlist",
+          count: allVideosId.length,
+          url: playlistLink,
+          timestamp: Date.now(),
+          allVideosMetadata: metadataArray,
+          playlistInsights: insights,
+          totalTimeDuration: totalTimeDuration,
+          vidPlaybackTime: playbackTimeInDiffSpeed,
+        });
+      }
     } catch (error: unknown) {
       const errMsg = error instanceof Error ? error.message : "Error processing playlist data.";
       toast.error(errMsg);
@@ -110,6 +181,7 @@ function HomePage() {
 
     if (allVideosId.length === 0 || playlistInputChanged) {
       try {
+        setIsLoadedFromHistory(false); // Reset history flag for fresh analysis
         const { playlistAllVideosIdArray, channelTitle } =
           await getAllVideosIdInPlaylist(playlistId);
 
@@ -207,6 +279,7 @@ function HomePage() {
                 <BsYoutube className="absolute left-6 text-[#FF0000]" size={24} />
                 <input
                   type="text"
+                  value={playlistLink}
                   onChange={handlePlaylistLinkInputChange}
                   aria-label="YouTube playlist URL"
                   className="w-full h-16 pl-12 pr-4 text-lg font-bold bg-transparent outline-none text-foreground placeholder:text-muted-foreground/20 transition-all font-inter"
@@ -265,6 +338,58 @@ function HomePage() {
             </div>
           </motion.div>
         </div>
+
+        {/* Recent History & Privacy Note */}
+        {history.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+            className="mt-12 flex flex-col items-center gap-4"
+          >
+            <div className="flex flex-wrap justify-center gap-3">
+              {history.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    setPlaylistLink(item.url);
+                    setChannelName(item.title);
+                    // Use fallbacks for backward compatibility with old history items
+                    setAllVideosMetadata(item.allVideosMetadata || []);
+                    setPlaylistInsights(item.playlistInsights || null);
+                    setTotalTimeDurationOfPlaylist(item.totalTimeDuration || { hr: 0, min: 0, sec: 0 });
+                    setVidPlaybackTimeInDiffSpeed(item.vidPlaybackTime || {});
+                    setTotalVideosInPlaylist(item.count);
+                    if (item.allVideosMetadata) {
+                      setAllVideosId(item.allVideosMetadata.map(v => v.id));
+                    }
+                    setEndVideoNumber(item.count);
+                    setShowVideoPlaybackDuration(true);
+                    setPlaylistInputChanged(false);
+                    setIsLoadedFromHistory(true);
+                    toast.success("Restored from local history!");
+                  }}
+                  className="group flex items-center gap-2 pl-4 pr-2 py-2 rounded-full bg-secondary/10 hover:bg-secondary/20 border border-white/5 hover:border-primary/20 transition-all text-[10px] font-bold uppercase tracking-wider text-muted-foreground hover:text-primary"
+                >
+                  <span className="truncate max-w-[100px]">{item.title}</span>
+                  <span className="opacity-50">({item.count})</span>
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    onClick={(e) => deleteFromHistory(e, item.id)}
+                    className="ml-1 p-1 rounded-full hover:bg-red-500/20 hover:text-red-400 transition-colors"
+                  >
+                    <BsX size={14} />
+                  </div>
+                </button>
+              ))}
+            </div>
+            <p className="text-[9px] text-muted-foreground/30 font-black uppercase tracking-[0.2em] flex items-center gap-1.5">
+              <BsShieldCheck size={10} />
+              History stored locally (Auto-expires in 24h)
+            </p>
+          </motion.div>
+        )}
       </motion.div>
 
       {/* Dynamic Results Display */}
@@ -281,7 +406,28 @@ function HomePage() {
               <div className="relative z-10 flex flex-col gap-16">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 flex-wrap">
                   <div className="flex flex-col gap-4 min-w-0 flex-1">
-                    <p className="text-xs font-black text-primary tracking-[0.4em] uppercase">Results Generated</p>
+                    <div className="flex items-center gap-3">
+                      <p className="text-xs font-black text-primary tracking-[0.4em] uppercase">Results Generated</p>
+                      {isLoadedFromHistory && (
+                        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/30 border border-primary/20 backdrop-blur-sm animate-in fade-in slide-in-from-bottom-2">
+                          <span className="flex items-center gap-1.5 text-[9px] font-bold text-primary uppercase tracking-wider">
+                            <BsShieldCheck size={10} />
+                            Saved Snapshot
+                          </span>
+                          <div className="w-[1px] h-3 bg-primary/20 mx-1" />
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleFetchAndStoreVideoId();
+                            }}
+                            className="text-[9px] font-bold text-muted-foreground hover:text-primary transition-colors uppercase tracking-wider flex items-center gap-1"
+                            title="Fetch latest data from YouTube"
+                          >
+                            Refresh
+                          </button>
+                        </div>
+                      )}
+                    </div>
                     <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-foreground tracking-tightest leading-tight break-words">
                       {channelName || "Playlist Analyzer"}
                     </h2>
@@ -385,7 +531,7 @@ function HomePage() {
                 )}
               </div>
             </div>
-          </motion.div>
+          </motion.div >
         ) : (
           <motion.div
             key="placeholder"
@@ -406,8 +552,8 @@ function HomePage() {
             )}
           </motion.div>
         )}
-      </AnimatePresence>
-    </div>
+      </AnimatePresence >
+    </div >
   );
 }
 
