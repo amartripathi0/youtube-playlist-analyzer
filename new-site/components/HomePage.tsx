@@ -10,7 +10,7 @@ import {
   getVideoDurationInDiffSpeed,
 } from "@/utils";
 import { PiVideoLight } from "react-icons/pi";
-import { BsArrowRight, BsYoutube, BsLightningCharge, BsShieldCheck, BsCcSquare, BsGrid3X3Gap, BsX } from "react-icons/bs";
+import { BsArrowRight, BsYoutube, BsLightningCharge, BsShieldCheck, BsCcSquare, BsGrid3X3Gap, BsX, BsJournalText, BsLightbulb } from "react-icons/bs";
 import PlaybackSpeedWatchtime from "./playback-speed-watchtime";
 import VideoRangeInput from "./video-range-input";
 import VideoExplorer from "./VideoExplorer";
@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { ScaleLoader } from "react-spinners";
 import { TotalTimeDurationType, VidPlaybackTimeInDiffSpeedType, VideoMetadata, PlaylistInsights, SortOrder } from "@/types";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 function HomePage() {
   const [playlistLink, setPlaylistLink] = useState<string>("");
@@ -394,7 +395,7 @@ function HomePage() {
 
       {/* Dynamic Results Display */}
       <AnimatePresence mode="wait">
-        {showVideoPlaybackDuration ? (
+        {showVideoPlaybackDuration && (
           <motion.div
             key="results"
             initial={{ opacity: 0, y: 40 }}
@@ -511,6 +512,42 @@ function HomePage() {
                   <PlaybackSpeedWatchtime speed="2" vidPlaybackTimeInDiffSpeed={vidPlaybackTimeInDiffSpeed} />
                 </div>
 
+                {/* Knowledge Hub Preview (Bounce Rate Reduction) */}
+                <div className="pt-12 mt-4 border-t border-white/5">
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8 text-center md:text-left">
+                    <div className="space-y-1">
+                      <h3 className="text-xl font-black uppercase tracking-tight">Optimize Your Learning</h3>
+                      <p className="text-xs text-muted-foreground font-medium">Expert guides to help you master your study schedule.</p>
+                    </div>
+                    <Link href="/guides" className="text-[10px] font-black uppercase tracking-[0.2em] px-6 py-2.5 rounded-full bg-secondary/50 border border-white/5 hover:border-primary/40 transition-colors">View All Guides</Link>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Link href="/guides/youtube-playlist-duration-calculator" className="group glass p-6 rounded-3xl border border-white/5 hover:border-primary/20 transition-all">
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 rounded-2xl bg-primary/10 text-primary group-hover:scale-110 transition-transform">
+                          <BsJournalText size={20} />
+                        </div>
+                        <div className="space-y-1">
+                          <h4 className="text-sm font-bold group-hover:text-primary transition-colors">Analyzer Masterclass</h4>
+                          <p className="text-[10px] text-muted-foreground line-clamp-1">Learn every feature of our duration tool.</p>
+                        </div>
+                      </div>
+                    </Link>
+                    <Link href="/guides/optimize-study-sessions" className="group glass p-6 rounded-3xl border border-white/5 hover:border-primary/20 transition-all">
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 rounded-2xl bg-primary/10 text-primary group-hover:scale-110 transition-transform">
+                          <BsLightbulb size={20} />
+                        </div>
+                        <div className="space-y-1">
+                          <h4 className="text-sm font-bold group-hover:text-primary transition-colors">Study Optimization</h4>
+                          <p className="text-[10px] text-muted-foreground line-clamp-1">Data-driven strategies for student success.</p>
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+
                 {allVideosMetadata.length > 0 && (
                   <div className="flex flex-col gap-8 pt-12 mt-12 border-t border-white/5">
                     <div className="flex items-center gap-3">
@@ -532,27 +569,66 @@ function HomePage() {
               </div>
             </div>
           </motion.div >
-        ) : (
-          <motion.div
-            key="placeholder"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex flex-col items-center justify-center min-h-[300px] pb-24"
-          >
-            {isLoading ? (
-              <div className="flex flex-col items-center gap-8">
-                <ScaleLoader color="var(--primary)" height={50} width={4} />
-                <p className="text-[10px] font-black text-primary tracking-[0.6em] uppercase animate-pulse">Processing metadata</p>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center gap-6 opacity-30 grayscale hover:grayscale-0 transition-all duration-700">
-                <PiVideoLight size={100} strokeWidth={1} />
-                <p className="text-xs font-black tracking-widest uppercase">Ready to crunch numbers</p>
-              </div>
-            )}
-          </motion.div>
         )}
       </AnimatePresence >
+
+      {/* New Informational Section for Value (Below Results) */}
+      <section className="mt-20 border-t border-white/5 pt-20 pb-32">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <h2 className="text-3xl md:text-4xl font-black tracking-tightest leading-tight uppercase">
+                Why use our <br />
+                <span className="text-primary italic">Playlist Analyzer?</span>
+              </h2>
+              <p className="text-muted-foreground leading-relaxed">
+                Unlock deeper insights into your learning materials. Whether it's a technical course or a content audit, we provide the metrics that matter.
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              {[
+                {
+                  title: "Educational Planning",
+                  desc: "Calculate the total time required for certifications and bootcamps to stay on track with your study schedule."
+                },
+                {
+                  title: "Learning Speed Optimization",
+                  desc: "Instantly see time variations at 1.5x and 2x speeds, allowing you to fit 10 hours of learning into 6.6 hours."
+                },
+                {
+                  title: "Content Quality Audit",
+                  desc: "Visualize HD distribution and caption availability across large playlists (up to 250 videos)."
+                }
+              ].map((point, i) => (
+                <div key={i} className="flex gap-4">
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 shrink-0" />
+                  <div className="space-y-1">
+                    <h4 className="font-bold text-sm uppercase tracking-wider">{point.title}</h4>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{point.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="glass p-10 md:p-12 rounded-[3.5rem] border border-white/5 space-y-8">
+            <h3 className="text-xl font-black uppercase tracking-widest text-primary/60">Professional Grade Data</h3>
+            <div className="prose prose-invert text-xs text-muted-foreground leading-loose">
+              <p>
+                Our platform leverages the official YouTube Data API v3 to ensure high-fidelity metadata retrieval. Unlike basic counters, we analyze content definitions (HD/SD) and internal caption flags to give you a complete picture of the learning material.
+              </p>
+              <p>
+                Trusted by students at major universities and independent creators, our tool remains 100% free and privacy-focused. We don't store your history; we just crunch the numbers so you can focus on building your skills.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-4 pt-4">
+              <Link href="/about" className="text-[10px] font-black uppercase tracking-widest px-6 py-2 rounded-full border border-white/10 hover:border-primary/40 transition-colors">Learn More</Link>
+              <Link href="/guides" className="text-[10px] font-black uppercase tracking-widest px-6 py-2 rounded-full border border-white/10 hover:border-primary/40 transition-colors">Study Guides</Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </div >
   );
 }

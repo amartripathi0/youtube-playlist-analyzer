@@ -13,7 +13,7 @@ const SocialHandles: React.FC<SocialHandlesProps> = ({ additionalStyles }: Socia
       className={`flex items-center gap-4 ${additionalStyles}`}
     >
       {socialMediaIconWithLinks.map((link) => (
-        <Link
+        <a
           href={link.link}
           target="_blank"
           key={link.label}
@@ -30,7 +30,7 @@ const SocialHandles: React.FC<SocialHandlesProps> = ({ additionalStyles }: Socia
           ) : (
             <FaGithub size={20} />
           )}
-        </Link>
+        </a>
       ))}
     </div>
   );

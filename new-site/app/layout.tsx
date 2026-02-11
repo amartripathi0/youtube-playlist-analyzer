@@ -59,6 +59,8 @@ export const metadata: Metadata = {
   },
 };
 
+import AdVisibilityWrapper from "@/components/AdVisibilityWrapper";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -140,28 +142,8 @@ export default function RootLayout({
           <Analytics />
         </ThemeProvider>
 
-        {/* Sticky Skyscraper Sidebars (Wide Screens) */}
-        {shouldDisplayAds && (
-          <>
-            <aside className="hidden 2xl:flex fixed left-4 top-1/2 -translate-y-1/2 z-[100] w-[160px] h-[600px] pointer-events-auto">
-              <AdUnit
-                slot="6315446429"
-                format="auto"
-                minHeight="600px"
-                className="my-0"
-              />
-            </aside>
-
-            <aside className="hidden 2xl:flex fixed right-4 top-1/2 -translate-y-1/2 z-[100] w-[160px] h-[600px] pointer-events-auto">
-              <AdUnit
-                slot="1239213715"
-                format="auto"
-                minHeight="600px"
-                className="my-0"
-              />
-            </aside>
-          </>
-        )}
+        {/* Sticky Skyscraper Sidebars (Wide Screens) - Managed by client wrapper */}
+        <AdVisibilityWrapper />
       </body>
     </html>
   );

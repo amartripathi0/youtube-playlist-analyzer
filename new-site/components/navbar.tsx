@@ -28,6 +28,11 @@ export default function NavBar() {
           </span>
         </Link>
 
+        <div className="hidden md:flex items-center gap-6">
+          <Link href="/about" className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground hover:text-primary transition-colors">About</Link>
+          <Link href="/guides" className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground hover:text-primary transition-colors">Guides</Link>
+        </div>
+
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5 mr-2">
             <SocialHandles additionalStyles="text-muted-foreground/60 hover:text-foreground transition-all gap-1.5" />

@@ -24,6 +24,8 @@ function Footer() {
           Free & Open for everyone. Powered by subtle ads.
         </p>
         <div className="flex justify-center gap-8 text-[10px] font-black tracking-[0.2em] uppercase opacity-40">
+          <a href="/about" className="hover:text-primary transition-colors">About</a>
+          <a href="/guides" className="hover:text-primary transition-colors">Guides</a>
           <a href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</a>
           <a href="/terms-of-service" className="hover:text-primary transition-colors">Terms of Service</a>
         </div>
