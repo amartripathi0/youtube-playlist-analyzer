@@ -1,8 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
-import { BsArrowLeft, BsGraphUp, BsHourglassSplit, BsCheck2Circle, BsBook } from "react-icons/bs";
+import { BsArrowLeft, BsGraphUp, BsHourglassSplit, BsCheck2Circle } from "react-icons/bs";
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
 
@@ -35,7 +34,7 @@ export default function StudyGuide() {
                     {/* Intro */}
                     <section className="prose prose-invert max-w-none text-muted-foreground leading-loose text-lg">
                         <p>
-                            Studying from YouTube courses can be a double-edged sword. While the quality of free education is at an all-time high, the lack of structure can often lead to "tutorial hell"—a state where you consume content without actually retaining it. To break free, you need a data-driven approach to your study sessions.
+                            Studying from YouTube courses can be a double-edged sword. While the quality of free education is at an all-time high, the lack of structure can often lead to &quot;tutorial hell&quot;&mdash;a state where you consume content without actually retaining it. To break free, you need a data-driven approach to your study sessions.
                         </p>
                     </section>
 
@@ -65,7 +64,7 @@ export default function StudyGuide() {
 
                     {/* Deep Dive */}
                     <section className="glass p-10 md:p-16 rounded-[3rem] border border-white/5 space-y-8">
-                        <h2 className="text-3xl font-black">The "Active Recall" Workflow</h2>
+                        <h2 className="text-3xl font-black">The &quot;Active Recall&quot; Workflow</h2>
                         <div className="space-y-6">
                             <div className="flex gap-4">
                                 <BsCheck2Circle className="text-primary shrink-0 mt-1" size={20} />
@@ -90,10 +89,10 @@ export default function StudyGuide() {
                     <section className="prose prose-invert max-w-none text-muted-foreground leading-loose space-y-6">
                         <h3 className="text-foreground font-black text-xl">Conclusion: Data Beats Guesswork</h3>
                         <p>
-                            Educational psychology proves that students who set specific goals are 2.5x more likely to complete a course. "I will study for 2 hours" is a weak goal. "I will complete the first 6 videos of this playlist (Totaling 1 hour 45 mins at 1.25x speed)" is a powerful, data-backed commitment.
+                            Educational psychology proves that students who set specific goals are 2.5x more likely to complete a course. &quot;I will study for 2 hours&quot; is a weak goal. &quot;I will complete the first 6 videos of this playlist (Totaling 1 hour 45 mins at 1.25x speed)&quot; is a powerful, data-backed commitment.
                         </p>
                         <p>
-                            Our tool isn't just a calculator; it's a strategic partner in your education. By quantifying the invisible parts of YouTube playlists, we give you the control you need to succeed in the digital-first world.
+                            Our tool isn&apos;t just a calculator; it&apos;s a strategic partner in your education. By quantifying the invisible parts of YouTube playlists, we give you the control you need to succeed in the digital-first world.
                         </p>
                     </section>
 

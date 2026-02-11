@@ -30,9 +30,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "YouTube Playlist Analyzer | Watch Time & Length Calculator (2026)",
+  title: "Free YouTube Playlist Analyzer | Watch Time & Length Calculator (2026)",
   description:
-    "Free YouTube playlist duration calculator. Check total watch time at 1.25x, 1.5x, 1.75x, and 2x speeds. Get professional playlist insights, download transcripts, and optimize your study sessions instantly.",
+    "The best free YouTube playlist duration calculator. Check total watch time at 1.25x, 1.5x, 1.75x, and 2x speeds. Get professional playlist insights, download transcripts, and optimize your study sessions 100% free.",
   authors: [{ name: "Amar Tripathi" }],
   keywords: siteKeywordsArray,
   metadataBase: new URL("https://youtube-analyzer.amartripathi.com/"),
@@ -43,8 +43,8 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
   },
   openGraph: {
-    title: "YouTube Playlist Analyzer | Professional Watch Time Insights",
-    description: "Calculate total watch time and optimize your learning speed with our free YouTube playlist duration tool.",
+    title: "Free YouTube Playlist Analyzer | Professional Watch Time Insights",
+    description: "The best free YouTube playlist duration calculator. Optimize your learning speed 100% free.",
     url: "https://youtube-analyzer.amartripathi.com/",
     siteName: "YouTube Playlist Analyzer",
     locale: "en_US",
@@ -52,8 +52,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "YouTube Playlist Analyzer | Watch Time Calculator",
-    description: "Calculate total watch time and speed savings for any YouTube playlist instantly.",
+    title: "Free YouTube Playlist Analyzer | Watch Time Calculator",
+    description: "Calculate total watch time and speed savings for any YouTube playlist 100% free.",
     creator: "@amartripathi_",
   },
 };

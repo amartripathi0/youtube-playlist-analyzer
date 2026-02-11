@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { BsArrowRight, BsJournalText, BsLightbulb, BsClockHistory } from "react-icons/bs";
+import { BsArrowRight, BsJournalText, BsLightbulb } from "react-icons/bs";
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
 

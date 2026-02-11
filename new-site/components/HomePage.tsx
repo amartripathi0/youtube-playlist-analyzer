@@ -270,7 +270,7 @@ function HomePage() {
           <p className="max-w-xl mx-auto text-lg md:text-xl text-muted-foreground font-semibold opacity-70">
             Professional watch-time analytics for any playlist.
             <br className="hidden md:block" />
-            No login. No tracking. Pure speed.
+            100% Free. No login. No tracking. Pure speed.
           </p>
         </div>
 

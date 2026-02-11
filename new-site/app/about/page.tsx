@@ -33,7 +33,7 @@ export default function AboutPage() {
                                 <span className="text-primary italic">Time-Optimized Learning.</span>
                             </h1>
                             <p className="text-lg md:text-xl text-muted-foreground font-medium max-w-2xl mx-auto leading-relaxed">
-                                We build tools that help students, creators, and lifelong learners navigate the vast sea of digital content with precision and speed.
+                                We build professional, 100% free tools that help students, creators, and lifelong learners navigate the vast sea of digital content with precision and speed.
                             </p>
                         </motion.header>
 
@@ -91,10 +91,10 @@ export default function AboutPage() {
                                         YouTube Playlist Analyzer was born out of a simple frustration: the inability to see the total duration of a course or playlist without manually adding up dozens of videos. What started as a viral experimental tool at <code>yt-playlist-analyzer.vercel.app</code> has now evolved into this comprehensive, professional-grade suite.
                                     </p>
                                     <p>
-                                        Developed by <strong>Amar Tripathi</strong>, this platform focuses on high-performance analytics with a "no-fluff" approach. We believe that tools should stay out of your way and provide value instantly. By calculating playback durations at speeds up to 2x, we empower users to fit more learning into their busy schedules.
+                                        Developed by <strong>Amar Tripathi</strong>, this platform focuses on high-performance analytics with a &quot;no-fluff&quot; approach. We believe that tools should stay out of your way and provide value instantly. By calculating playback durations at speeds up to 2x, we empower users to fit more learning into their busy schedules.
                                     </p>
                                     <p>
-                                        Today, the tool serves thousands of users who want to optimize their digital consumption. Whether you're a student planning a revision weekend or a creator auditing your own content, we're here to provide the insights you need to succeed.
+                                        Today, the tool serves thousands of users who want to optimize their digital consumption. Whether you&apos;re a student planning a revision weekend or a creator auditing your own content, we&apos;re here to provide the insights you need to succeed.
                                     </p>
                                 </div>
                             </div>
