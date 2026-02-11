@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { BsClockHistory, BsShieldCheck, BsLightningCharge, BsCodeSquare } from "react-icons/bs";
+import { BsShieldCheck, BsLightningCharge, BsCodeSquare, BsClockHistory } from "react-icons/bs";
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
 

@@ -9,7 +9,6 @@ import {
   getTotalTimeDuration,
   getVideoDurationInDiffSpeed,
 } from "@/utils";
-import { PiVideoLight } from "react-icons/pi";
 import { BsArrowRight, BsYoutube, BsLightningCharge, BsShieldCheck, BsCcSquare, BsGrid3X3Gap, BsX, BsJournalText, BsLightbulb } from "react-icons/bs";
 import PlaybackSpeedWatchtime from "./playback-speed-watchtime";
 import VideoRangeInput from "./video-range-input";
@@ -587,7 +586,7 @@ function HomePage() {
                 <span className="text-primary italic">Playlist Analyzer?</span>
               </h2>
               <p className="text-muted-foreground leading-relaxed">
-                Unlock deeper insights into your learning materials. Whether it's a technical course or a content audit, we provide the metrics that matter.
+                Unlock deeper insights into your learning materials. Whether it&apos;s a technical course or a content audit, we provide the metrics that matter.
               </p>
             </div>
 
@@ -624,7 +623,7 @@ function HomePage() {
                 Our platform leverages the official YouTube Data API v3 to ensure high-fidelity metadata retrieval. Unlike basic counters, we analyze content definitions (HD/SD) and internal caption flags to give you a complete picture of the learning material.
               </p>
               <p>
-                Trusted by students at major universities and independent creators, our tool remains 100% free and privacy-focused. We don't store your history; we just crunch the numbers so you can focus on building your skills.
+                Trusted by students at major universities and independent creators, our tool remains 100% free and privacy-focused. We don&apos;t store your history; we just crunch the numbers so you can focus on building your skills.
               </p>
             </div>
             <div className="flex flex-wrap gap-4 pt-4">

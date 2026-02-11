@@ -1,7 +1,6 @@
 import { FaLinkedin, FaGithub, FaTwitter } from "react-icons/fa";
 import { MdOutlineMail } from "react-icons/md";
 import { socialMediaIconWithLinks } from "../constants";
-import Link from 'next/link';
 
 interface SocialHandlesProps {
   additionalStyles?: string;

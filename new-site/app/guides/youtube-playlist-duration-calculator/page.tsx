@@ -1,8 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
-import { BsArrowLeft, BsYoutube, BsClock, BsLightning, BsShieldCheck } from "react-icons/bs";
+import { BsArrowLeft, BsClock, BsLightning } from "react-icons/bs";
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
 
@@ -35,7 +34,7 @@ export default function CalculatorGuide() {
                     {/* Intro */}
                     <section className="prose prose-invert max-w-none text-muted-foreground leading-loose text-lg">
                         <p>
-                            In an era of endless digital learning, time management is the most critical skill. Whether you're working through a 40-hour coding bootcamp on YouTube or revising for final exams, knowing exactly how much time you need to commit is essential. Our <strong>YouTube Playlist Duration Calculator</strong> is designed to provide those insights instantly.
+                            In an era of endless digital learning, time management is the most critical skill. Whether you&apos;re working through a 40-hour coding bootcamp on YouTube or revising for final exams, knowing exactly how much time you need to commit is essential. Our <strong>YouTube Playlist Duration Calculator</strong> is designed to provide those insights instantly.
                         </p>
                     </section>
 
@@ -103,7 +102,7 @@ export default function CalculatorGuide() {
                     <section className="prose prose-invert max-w-none text-muted-foreground leading-loose py-8 border-y border-white/5 space-y-6">
                         <h3 className="text-foreground font-black text-xl">Why Knowing Playlist Length Matters</h3>
                         <p>
-                            Research shows that "batch learning" or "time-blocking" is significantly more effective when the learner has clear expectations of the time commitment. By using a YouTube length calculator, you can effectively schedule your learning blocks. For example, if you know a playlist is 4 hours long, you can plan to finish it in a single afternoon at 1.5x speed (approx. 2 hours 40 mins) with periodic breaks.
+                            Research shows that &quot;batch learning&quot; or &quot;time-blocking&quot; is significantly more effective when the learner has clear expectations of the time commitment. By using a YouTube length calculator, you can effectively schedule your learning blocks. For example, if you know a playlist is 4 hours long, you can plan to finish it in a single afternoon at 1.5x speed (approx. 2 hours 40 mins) with periodic breaks.
                         </p>
                         <p>
                             Additionally, our tool provides <strong>Average Video Length</strong>. This is a crucial metric for micro-learners who only have 10-15 minutes between tasks. If the average video is 8 minutes, you know you can reliably clear at least one video during your commute.

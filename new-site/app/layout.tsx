@@ -5,7 +5,6 @@ import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
-import AdUnit from "@/components/AdUnit";
 import { siteKeywordsArray } from "@/constants";
 import { SITE_DATA } from "@/constants/site-data";
 
