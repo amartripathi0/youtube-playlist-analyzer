@@ -88,7 +88,7 @@ export default function AboutPage() {
                                 <h2 className="text-2xl font-black uppercase tracking-widest text-primary/60">The Story Behind the Tool</h2>
                                 <div className="prose prose-invert max-w-none text-muted-foreground leading-loose space-y-6">
                                     <p>
-                                        YouTube Playlist Analyzer was born out of a simple frustration: the inability to see the total duration of a course or playlist without manually adding up dozens of videos. For students tackling complex certifications or developers learning new frameworks, knowing the time commitment is crucial for effective planning.
+                                        YouTube Playlist Analyzer was born out of a simple frustration: the inability to see the total duration of a course or playlist without manually adding up dozens of videos. What started as a viral experimental tool at <code>yt-playlist-analyzer.vercel.app</code> has now evolved into this comprehensive, professional-grade suite.
                                     </p>
                                     <p>
                                         Developed by <strong>Amar Tripathi</strong>, this platform focuses on high-performance analytics with a "no-fluff" approach. We believe that tools should stay out of your way and provide value instantly. By calculating playback durations at speeds up to 2x, we empower users to fit more learning into their busy schedules.

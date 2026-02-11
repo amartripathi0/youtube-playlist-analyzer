@@ -179,6 +179,11 @@ function HomePage() {
     }
 
     const playlistId = getPlaylistId(playlistLink);
+    if (!playlistId) {
+      toast.error("Could not extract playlist ID from the link.");
+      setIsLoading(false);
+      return;
+    }
 
     if (allVideosId.length === 0 || playlistInputChanged) {
       try {

@@ -1,9 +1,23 @@
 import { TotalTimeDurationType, VidPlaybackTimeInDiffSpeedType, VideoMetadata, PlaylistInsights } from "@/types";
 import { getPlaylistVideosAction, getVideoMetadataAction } from "@/app/actions";
 
-export function getPlaylistId(playlistLink: string): string {
-  const playlistIDIndex = playlistLink.indexOf("list=") + 5;
-  return playlistLink.slice(playlistIDIndex);
+export function getPlaylistId(playlistLink: string): string | null {
+  try {
+    const url = new URL(playlistLink);
+    return url.searchParams.get("list");
+  } catch (e) {
+    const match = playlistLink.match(/[?&]list=([a-zA-Z0-9_-]+)/);
+    return match ? match[1] : null;
+  }
+}
+
+export function checkPlaylistLinkValidity(playlistLink: string): boolean {
+  const id = getPlaylistId(playlistLink);
+  return !!id && (
+    playlistLink.includes("youtube.com/playlist") ||
+    playlistLink.includes("youtube.com/watch") ||
+    playlistLink.includes("youtu.be/")
+  );
 }
 
 export async function getAllVideosIdInPlaylist(
@@ -128,15 +142,4 @@ export function getVideoDurationInDiffSpeed(timeObj: {
     1.75: calculateForSpeed(1.75),
     2: calculateForSpeed(2),
   };
-}
-
-export function checkPlaylistLinkValidity(playlistLink: string): boolean {
-  if (
-    playlistLink.length === 0 ||
-    !/https?:\/\/(www\.)?youtube\.com\/playlist\?list=[a-zA-Z0-9_-]+/.test(
-      playlistLink
-    )
-  )
-    return false;
-  return true;
 }
